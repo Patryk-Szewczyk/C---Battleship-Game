@@ -1,0 +1,14 @@
+C:\Users\zielo\OneDrive\Pulpit\Backend\C#\Battleship Game\btshGame\btshGame\bin\Debug\net6.0\btshGame.exe
+C:\Users\zielo\OneDrive\Pulpit\Backend\C#\Battleship Game\btshGame\btshGame\bin\Debug\net6.0\btshGame.deps.json
+C:\Users\zielo\OneDrive\Pulpit\Backend\C#\Battleship Game\btshGame\btshGame\bin\Debug\net6.0\btshGame.runtimeconfig.json
+C:\Users\zielo\OneDrive\Pulpit\Backend\C#\Battleship Game\btshGame\btshGame\bin\Debug\net6.0\btshGame.dll
+C:\Users\zielo\OneDrive\Pulpit\Backend\C#\Battleship Game\btshGame\btshGame\bin\Debug\net6.0\btshGame.pdb
+C:\Users\zielo\OneDrive\Pulpit\Backend\C#\Battleship Game\btshGame\btshGame\obj\Debug\net6.0\btshGame.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\zielo\OneDrive\Pulpit\Backend\C#\Battleship Game\btshGame\btshGame\obj\Debug\net6.0\btshGame.AssemblyInfoInputs.cache
+C:\Users\zielo\OneDrive\Pulpit\Backend\C#\Battleship Game\btshGame\btshGame\obj\Debug\net6.0\btshGame.AssemblyInfo.cs
+C:\Users\zielo\OneDrive\Pulpit\Backend\C#\Battleship Game\btshGame\btshGame\obj\Debug\net6.0\btshGame.csproj.CoreCompileInputs.cache
+C:\Users\zielo\OneDrive\Pulpit\Backend\C#\Battleship Game\btshGame\btshGame\obj\Debug\net6.0\btshGame.dll
+C:\Users\zielo\OneDrive\Pulpit\Backend\C#\Battleship Game\btshGame\btshGame\obj\Debug\net6.0\refint\btshGame.dll
+C:\Users\zielo\OneDrive\Pulpit\Backend\C#\Battleship Game\btshGame\btshGame\obj\Debug\net6.0\btshGame.pdb
+C:\Users\zielo\OneDrive\Pulpit\Backend\C#\Battleship Game\btshGame\btshGame\obj\Debug\net6.0\btshGame.genruntimeconfig.cache
+C:\Users\zielo\OneDrive\Pulpit\Backend\C#\Battleship Game\btshGame\btshGame\obj\Debug\net6.0\ref\btshGame.dll
