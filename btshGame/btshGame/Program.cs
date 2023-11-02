@@ -1,8 +1,9 @@
-﻿// Battleship Game
+// Battleship Game
 
 using System;
 using OutputProgram;
 using InputWorkProgram;
+using System.Runtime.CompilerServices;
 
 namespace OutputProgram
 {
@@ -95,26 +96,46 @@ namespace InputWorkProgram
         }
         public void shipPositing_P1()
         {
+            int[] fullIndexArray = { 1, 2 };   // Osobna metoda z return
+            int[] availableFields = { 1, 2 };   // Osobna metoda z return
             int shipPage = 0;
             int shipPageIncrement = 0;
+            string[] shipTypeName_AR = { "submarine" , "submarine", "submarine", "destroyer", "destroyer", "battleship", "aircraft carrier"};
+            string[] shipLengthName_AR = { "2", "2", "2", "3", "3", "4", "5"};
             string selectDirection = "";
             //int selDirSwich = 0;
             bool isDirCoor = false;
             bool isDir = false;
-            bool isCoor = true;  // 0 - none | 1 - stop | 2 - yes
-            string selectCoordinates = "";
+            bool isBegAgn_FromDir = true;
+            bool isCoor = true;  // true - musi być niewidozne dopóki kierunke nie jest określony
+            string firstCoor = "";
+            string[] shipFullCoor = { };
             string wantSave = "none";
-            bool saveQuery = true;
             while (shipPage < 7)
             {
                 Console.Clear();
                 Console.WriteLine("PLAYER 1");
                 Console.WriteLine("");
-                Console.WriteLine("- - - - - - - - - - - - -");
+                Console.WriteLine("- - - - - - - - - - - - - -");
+                Console.WriteLine(" _________________________ ");
+                Console.WriteLine(" |                       |");
+                Console.WriteLine(" |  # # # # # # # # # #  | ");
+                Console.WriteLine(" |  # # # # # # # # # #  | ");
+                Console.WriteLine(" |  # # # # # # # # # #  | ");
+                Console.WriteLine(" |  # # # # # # # # # #  | ");
+                Console.WriteLine(" |  # # # # # # # # # #  | ");
+                Console.WriteLine(" |  # # # # # # # # # #  | ");
+                Console.WriteLine(" |  # # # # # # # # # #  | ");
+                Console.WriteLine(" |  # # # # # # # # # #  | ");
+                Console.WriteLine(" |  # # # # # # # # # #  | ");
+                Console.WriteLine(" |  # # # # # # # # # #  | ");
+                Console.WriteLine(" |_______________________| ");
+                Console.WriteLine("");
+                Console.WriteLine("- - - - - - - - - - - - - -");
                 Console.WriteLine("");
                 Console.WriteLine("Set " + (shipPage + 1).ToString() + "/7 ship:");
-                Console.WriteLine("Type: Submarine");
-                Console.WriteLine("Length: 2");
+                Console.WriteLine("Type: " + shipTypeName_AR[shipPage]);
+                Console.WriteLine("Length: " + shipLengthName_AR[shipPage]);
                 if (isDir == false)
                 {
                     Console.WriteLine("Direction: ?");
@@ -123,39 +144,61 @@ namespace InputWorkProgram
                 {
                     Console.WriteLine("Direction: " + selectDirection);
                 }
-                if (isCoor == false)
+                if (isCoor == true)
                 {
                     Console.WriteLine("Coordination: ?");
                 } 
-                else if (isCoor == true)
+                else if (isCoor == false)
                 {
-                    Console.WriteLine("Coordinates: " + selectCoordinates);
+                    Console.WriteLine("Coordinates:");
+                    for (int i = 0; i < shipFullCoor.Length; i++)
+                    {
+                        Console.Write(" | " + shipFullCoor[i] + " |");
+                    }
                 }
                 Console.WriteLine("");
-                Console.WriteLine("- - - - - - - - - - - - -");
+                Console.WriteLine("- - - - - - - - - - - - - -");
                 Console.WriteLine("");
+                if (isBegAgn_FromDir == true)
+                {
+                    Console.WriteLine("To set ship you must set him direction and coordinates depend to first coordinate area.");
+                    Console.WriteLine("To continue you must click ENTER key.");
+                    Console.WriteLine("");
+                    string toShipSet = Console.ReadLine();
+                } else { }
                 if (isDirCoor == false)
                 {
                     if (isDir == false)
                     {
                         Console.Clear();
                         Console.WriteLine("Set " + (shipPage + 1).ToString() + "/7 ship direction: ");
+                        Console.WriteLine("Type: " + shipTypeName_AR[shipPage]);
+                        Console.WriteLine("Length: " + shipLengthName_AR[shipPage]);
                         Console.WriteLine("");
-                        Console.WriteLine("\"B\" - vertical position");
-                        Console.WriteLine("\"R\" - horizontal position");
+                        Console.WriteLine("\"B\" - vertical position (from top to bottom: A2 -> A2, B2 , ...)");
+                        Console.WriteLine("\"R\" - horizontal position (from left to right)");
                         Console.WriteLine("");
                         selectDirection = Console.ReadLine();
                         if (selectDirection == "B" || selectDirection == "R")
                         {
                             shipPageIncrement = 0;
+                            isBegAgn_FromDir = false;
                             isDir = true;
                             isCoor = false;
+                            Console.WriteLine("");
+                            Console.WriteLine("- - - - - - - - - - - - - -");
+                            Console.WriteLine("");
+                            Console.WriteLine("Direction is set!");
+                            Console.WriteLine("To continue click ENTER key");
+                            Console.WriteLine("");
+                            string any = Console.ReadLine();
                         }
                         else if (selectDirection != "B" || selectDirection != "R")
                         {
                             shipPageIncrement = 0;
+                            isBegAgn_FromDir = false;
                             Console.WriteLine("");
-                            Console.WriteLine("- - - - - - - - - - - - -");
+                            Console.WriteLine("- - - - - - - - - - - - - -");
                             Console.WriteLine("");
                             Console.WriteLine("You write uncorrect value. Direction value must be \"B\" or \"R\" !");
                             Console.WriteLine("To continue click ENTER key");
@@ -167,36 +210,38 @@ namespace InputWorkProgram
                     {
                         Console.Clear();
                         Console.WriteLine("Set " + (shipPage + 1).ToString() + "/7 ship coordinates: ");
+                        Console.WriteLine("Type: " + shipTypeName_AR[shipPage]);
+                        Console.WriteLine("Length: " + shipLengthName_AR[shipPage]);
                         Console.WriteLine("");
                         Console.WriteLine("Value from A0 to J9:");
                         Console.WriteLine("");
-                        selectCoordinates = Console.ReadLine();
-                        if (selectCoordinates == null)   /// Sprawdzenie czy współrzędna początkowa nie jest pusta.
+                        firstCoor = Console.ReadLine();
+                        if (firstCoor == null)   /// Sprawdzenie czy współrzędna początkowa nie jest pusta.
                         {
                             Console.WriteLine("");
-                            Console.WriteLine("- - - - - - - - - - - - -");
+                            Console.WriteLine("- - - - - - - - - - - - - -");
                             Console.WriteLine("");
                             Console.WriteLine("You don\'t left empty value. You can write correct value.");
                             Console.WriteLine("Click ENTER key to continue:");
                             Console.WriteLine("");
                             string any = Console.ReadLine();
 
-                        } else if (selectCoordinates != null) {
-                            if (selectCoordinates.Length != 2)   /// Sprawdzenie czy współrzędna początkowa ma odpowiednią długość.
+                        } else if (firstCoor != null) {
+                            if (firstCoor.Length != 2)   /// Sprawdzenie czy współrzędna początkowa ma odpowiednią długość.
                             {
                                 Console.WriteLine("");
-                                Console.WriteLine("- - - - - - - - - - - - -");
+                                Console.WriteLine("- - - - - - - - - - - - - -");
                                 Console.WriteLine("");
                                 Console.WriteLine("Your value\'s length is uncorrect. You must change it.");
                                 Console.WriteLine("Click ENTER key to continue:");
                                 Console.WriteLine("");
                                 string any = Console.ReadLine();
                             }
-                            else if (selectCoordinates.Length == 2)   /// Jeżeli wartość i odpowiednia długość jest, wprawdź poprawność wartości.
+                            else if (firstCoor.Length == 2)   /// Jeżeli wartość i odpowiednia długość jest, wprawdź poprawność wartości.
                             {
                                 ///string validVal = selectCoordinates;
-                                string letter = selectCoordinates.Substring(0, 1);
-                                string number = selectCoordinates.Substring(1, 1);
+                                string letter = firstCoor.Substring(0, 1);
+                                string number = firstCoor.Substring(1, 1);
                                 string[] avalLet_AR = { "A", "B", "C", "D", "E", "F", "G", "H", "I", "J" };
                                 string[] avalNum_AR = { "0", "1", "2", "3", "4", "5", "6", "7", "8", "9" };
                                 bool isIn_avalLet_AR = false;
@@ -218,23 +263,28 @@ namespace InputWorkProgram
                                 }
                                 if (isIn_avalLet_AR == true && isIn_avalNum_AR == true)
                                 {
-                                    shipPageIncrement = 0;
-                                    isCoor = true;
+                                    isCoor = false;
                                     isDirCoor = true;
                                     Console.WriteLine("");
-                                    Console.WriteLine("- - - - - - - - - - - - -");
+                                    Console.WriteLine("- - - - - - - - - - - - - -");
                                     Console.WriteLine("");
-                                    Console.WriteLine("This point exitst in our board!");
+                                    Console.WriteLine("This area exitst in our board!");
                                     Console.WriteLine("Click ENTER key to continue:");
                                     Console.WriteLine("");
+                                    // Przekazywanie wszystkich potrzebnych argumaentów do medoty tworzącej statek i jednocześnie sprawdzającej
+                                    // czy ów statek wychodzi poza pole planszy oraz czy nakłada się na inny / inne statki:
+                                    // I jeszcze jedno - "this". Po co tworzyć zmienną z instancją tej klasy i za pomocą operatora elementu składowego (".")
+                                    // włączać metodę "shipCoorBuildChecker", jak można użyć słowa kluczowego "this", które reprezentuje aktualnie
+                                    // operowany obiekt? Jest mniej roboty i czytelniej...
+                                    shipFullCoor = this.shipCoorBuildChecker(firstCoor, selectDirection, shipLengthName_AR[shipPage], availableFields, fullIndexArray);
                                     string any = Console.ReadLine();
                                 }
-                                else if (isIn_avalLet_AR == false && isIn_avalNum_AR == false)
+                                else if (isIn_avalLet_AR == false || isIn_avalNum_AR == false)
                                 {
                                     Console.WriteLine("");
-                                    Console.WriteLine("- - - - - - - - - - - - -");
+                                    Console.WriteLine("- - - - - - - - - - - - - -");
                                     Console.WriteLine("");
-                                    Console.WriteLine("This point doesn\'t exists in our board!");
+                                    Console.WriteLine("This area NOT exists in our board!");
                                     Console.WriteLine("Click ENTER key to continue:");
                                     Console.WriteLine("");
                                     string any = Console.ReadLine();
@@ -245,44 +295,69 @@ namespace InputWorkProgram
                     }
                     else { }
                 }
-                else if (isDirCoor == true)   // JESTEŚ MNIEJ WIĘCEJ TUTAJ - ALE WIESZ.. MUSISZ OGARNĄĆ WSZYSTKO OD NOWA... XD
+                else if (isDirCoor == true)
                 {
-                    if (saveQuery == true)
+                    Console.WriteLine("Do you want save this ship data? Write \"yes\" or \"no\".");
+                    wantSave = Console.ReadLine();
+                    if (wantSave == "yes")
                     {
-                        Console.WriteLine("Do you want save this ship data?");
-                        wantSave = Console.ReadLine();
-                        if (wantSave == "yes")
-                        {
-                            // Reset wszytskich słiczów i przejście do kolejnego statku
-                            Console.WriteLine("");
-                            Console.WriteLine("- - - - - - - - - - - - -");
-                            Console.WriteLine("");
-                            Console.WriteLine("Your ship data is saved!");
-                            Console.WriteLine("Click ENTER key to continue:");
-                            Console.WriteLine("");
-                            string any = Console.ReadLine();
-                        }
-                        else if (wantSave == "no")
-                        {
-                            // Reset wszystkich słiczów i ponowne pozycjonowanie statku
-                            Console.WriteLine("");
-                            Console.WriteLine("- - - - - - - - - - - - -");
-                            Console.WriteLine("");
-                            Console.WriteLine("Your ship data is deleted. You must posite ship again.");
-                            Console.WriteLine("Click ENTER key to continue:");
-                            Console.WriteLine("");
-                            string any = Console.ReadLine();
-                        }
+                        // Reset wszytskich słiczów i przejście do kolejnego statku
+                        Console.WriteLine("");
+                        Console.WriteLine("- - - - - - - - - - - - - -");
+                        Console.WriteLine("");
+                        Console.WriteLine("Your ship data is saved!");
+                        Console.WriteLine("Click ENTER key to continue:");
+                        Console.WriteLine("");
+                        string any = Console.ReadLine();
+                        // Przejście do kolejnego statku:
+                        shipPageIncrement = 1;
+                        /// Reset zmiennych potrzebnych do wypełniania informacji o kolejnym statku i związanych z nimi przełączników:
+                        isDir = false;
+                        isBegAgn_FromDir = true;
+                        isCoor = true;   /// Niewidoczne, bo najpierw trzeba ogarnąć kierunek, a potem wyświetlić zapytanie o współrzędną początkową
+                        isDirCoor = false;
+                        firstCoor = "";
+                        Array.Clear(shipFullCoor, 0, shipFullCoor.Length);
+                        wantSave = "none";
+                        // TWORZENIE OBIEKTU STATKU - INSTANCJI KLASY FABRYKI STATKÓW - PRZEKAZUJĄC WSZYSTKIE POTRZEBNE DO TEGO PARAMERY:
+                        // kod
                     }
-                    else if (saveQuery == false)
+                    else if (wantSave == "no")
                     {
-                         //
+                        /// Reset wszystkich słiczów i ponowne pozycjonowanie statku
+                        Console.WriteLine("");
+                        Console.WriteLine("- - - - - - - - - - - - - -");
+                        Console.WriteLine("");
+                        Console.WriteLine("Your ship data is deleted. You must posite ship again.");
+                        Console.WriteLine("Click ENTER key to continue:");
+                        Console.WriteLine("");
+                        string any = Console.ReadLine();
+                        /// Reset zmiennych potrzebnych do wypełniania informacji o bieżącym statu i związanych z nimi przełączników:
+                        isDir = false;
+                        isBegAgn_FromDir = true;
+                        isCoor = true;   /// Niewidoczne, bo najpierw trzeba ogarnąć kierunek, a potem wyświetlić zapytanie o współrzędną początkową
+                        isDirCoor = false;
+                        firstCoor = "";
+                        Array.Clear(shipFullCoor, 0, shipFullCoor.Length);
+                        wantSave = "none";
                     }
-                    shipPageIncrement = 1;
-
                 }
                 shipPage += shipPageIncrement;
             }
+        }
+        public string[] shipCoorBuildChecker(string firstCor, string direction, string length, int[] availableFields, int[] fullIndexArray)
+        {
+            // Deklarowanie zmiennych na podstawie otrzymanych parametrów:
+            string fstCor = firstCor;
+            // Konwersja stringowej formy współrzędnej początkowej na formę intową: (B2 -> A = 0, B = 10, C = 20, ... więc B2 = 10 + 2 = 12)
+            string dir = direction;
+            string lgt = length;
+            string[] val = { fstCor };
+            // Sprawdzanie czy statek nie wyjdzie poza planszę na podstawie lokalizacji współrzędnej początkowej, względem jego długości i kierunku położenia
+            // (jedyne co mi jest tu potrzebne, to "STAŁA" tablica dostępnych pól, którą zreturnowałem wcześniej, żeby nie robić tu bałaganu)
+            // kod
+            // Sprawdzenie czy współrzędna początkowa istnieje w "RUCHOMEJ" tablicy współrzędnych
+            return val;
         }
     }
 }
