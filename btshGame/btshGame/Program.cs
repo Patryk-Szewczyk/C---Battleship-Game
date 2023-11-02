@@ -27,7 +27,7 @@ namespace OutputProgram   /// Przestrzeń wyjściowa - miejce deklaracji obiekt�
             // Jeżeli gracz wybierze napisy końcowe, zostaną puszczone napisy końcowe tak jak to sobie zaplanowałeś w głowie...
             // while (isCredits == false)
             //{
-                //
+            //
             //}
             //
             // Pozycjonowanie statków - gracz 1
@@ -101,7 +101,8 @@ namespace InputWorkProgram   /// Przestrzeń wykonawcza - miejsce deklaracji kla
             Console.WriteLine("");
         }
     }
-    public class Player_1 {
+    public class Player_1
+    {
         public void shipPositing_P1()
         {
             /// Komentarz do "this":
@@ -196,7 +197,8 @@ namespace InputWorkProgram   /// Przestrzeń wykonawcza - miejsce deklaracji kla
                     Console.WriteLine("To continue you must click ENTER key.");
                     Console.WriteLine("");
                     string toShipSet = Console.ReadLine();
-                } else { }
+                }
+                else { }
                 if (isDirCoor == false)
                 {
                     if (isDir == false)
@@ -236,7 +238,8 @@ namespace InputWorkProgram   /// Przestrzeń wykonawcza - miejsce deklaracji kla
                             Console.WriteLine("");
                             string any = Console.ReadLine();
                         }
-                    } else { }
+                    }
+                    else { }
                     if (isCoor == false)
                     {
                         Console.Clear();
@@ -257,7 +260,9 @@ namespace InputWorkProgram   /// Przestrzeń wykonawcza - miejsce deklaracji kla
                             Console.WriteLine("");
                             string any = Console.ReadLine();
 
-                        } else if (firstCoor != null) {
+                        }
+                        else if (firstCoor != null)
+                        {
                             if (firstCoor.Length != 2)   /// Sprawdzenie czy współrzędna początkowa ma odpowiednią długość.
                             {
                                 Console.WriteLine("");
@@ -400,12 +405,49 @@ namespace InputWorkProgram   /// Przestrzeń wykonawcza - miejsce deklaracji kla
         }
         public List<List<List<int>>> set_availableFields_AR()
         {
-            /// Deklaracja tablicy trójwymiarowej o nieznanej liczbie wszystkich indeksów
+            /// Deklaracja tablicy trójwymiarowej o nieznanej liczbie wszystkich indeksów mieszczącej
+            /// wszstkie zestawy dostępnych pól na daną długość w zależności od kierunku statku:
             List<List<List<int>>> mainArray = new List<List<List<int>>>();
+            /// Poszczególne zestawy dostępnych pól w danym kierunku statku w zależności od jego długości
+            List<List<int>> length_B = new List<List<int>>();
+            List<List<int>> length_R = new List<List<int>>();
+            /// Operacje na tablicach:
+            /// Kierunek: w dół:
+            int startToIncValue = 89;
+            for (int i = 0; i < 4; i++)
+            {
+                List<int> lengthType = new List<int>();   /// Miejsce na kolejne zagnieżdżone indeksy tworzymy w stylu documnet.createElement('div'), który później Appendujemy
+                /// do określonego kontenera, który tak samo jak w JavaScript ma być kontenerem na eleemnty zagnieżdżone.
+                int shipValue = 0;
+                shipValue = startToIncValue;
+                for (int j = 0; j < 10; j++)
+                {
+                    lengthType.Add(shipValue += 1);
+                    //length_B[i][j] = shipValue += 1;
+                }
+                length_B.Add(lengthType);
+                startToIncValue -= 10;
+            }
+            Console.Clear();
+            Console.WriteLine("Checking - B");
+            Console.WriteLine("");
+            for (int i = 0; i < length_B.Count; i++)
+            {
+                for (int j = 0; j < length_B[i].Count; j++)
+                {
+                    Console.WriteLine((length_B[i][j]).ToString());
+                }
+                Console.WriteLine();
+            }
+            Console.ReadLine();
+            // Kierunek w prawo:
+            mainArray.Add(length_B);
+            mainArray.Add(length_R);
             return mainArray;
         }
     }
-    public class ShipBuildChecker {
+    public class ShipBuildChecker
+    {
         public string[] shipCoorBuildChecker(string firstCor, string direction, string length, List<List<List<int>>> availableFields, int[] fullIndexArray)
         {
             // Deklarowanie zmiennych na podstawie otrzymanych parametrów:
