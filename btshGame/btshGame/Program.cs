@@ -1,13 +1,12 @@
 /// Battleship Game
 
 using System;
-using OutputProgram;
-/// Użycie przestrzeni wyjściowej
-using InputWorkProgram;
-/// Użycie przestrzeni wykonawczej
+using OutputProgram;   /// Użycie przestrzeni wyjściowej
+using InputWorkProgram;   /// Użycie przestrzeni wykonawczej
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using System.Collections.Generic;
+using System.Runtime.Versioning;
 
 namespace OutputProgram   /// Przestrzeń wyjściowa - miejce deklaracji obiektów z klas przestrzeni wykonawczej i aktywowania ich metod
 {
@@ -183,7 +182,7 @@ namespace InputWorkProgram   /// Przestrzeń wykonawcza - miejsce deklaracji kla
                 }
                 else if (isCoor == false)
                 {
-                    Console.Write("Coordinates:");
+                    Console.Write("Coordination:");
                     for (int i = 0; i < shipFullCoor.Length; i++)
                     {
                         Console.Write(" | " + shipFullCoor[i] + " |");
@@ -191,7 +190,7 @@ namespace InputWorkProgram   /// Przestrzeń wykonawcza - miejsce deklaracji kla
                     Console.WriteLine("");
                 }
                 Console.WriteLine("");
-                Console.WriteLine("- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -");
+                Console.WriteLine("- - - - - - - - - - - - - - - - - - -");
                 Console.WriteLine("");
                 if (isBegAgn_FromDir == true)
                 {
@@ -201,7 +200,7 @@ namespace InputWorkProgram   /// Przestrzeń wykonawcza - miejsce deklaracji kla
                     string toShipSet = Console.ReadLine();
                 }
                 else { }
-                if (isDirCoor == false)
+                if (isDirCoor == false || shipFullCoor[0] == "?")   /// {"?"} Specjalna wartość informująca o wykryciu umieszczenia statku w niedozowlonym miejscu. Jest to wartość RESETOWA ponownego wyznaczenia współrzędnej początkowej
                 {
                     if (isDir == false)
                     {
@@ -242,7 +241,7 @@ namespace InputWorkProgram   /// Przestrzeń wykonawcza - miejsce deklaracji kla
                         }
                     }
                     else { }
-                    if (isCoor == false)
+                    if (isCoor == false || shipFullCoor[0] == "?")   /// {"?"} Specjalna wartość informująca o wykryciu umieszczenia statku w niedozowlonym miejscu. Jest to wartość RESETOWA ponownego wyznaczenia współrzędnej początkowej
                     {
                         Console.Clear();
                         Console.WriteLine("Set " + (shipPage + 1).ToString() + "/7 ship coordinates: ");
@@ -255,7 +254,7 @@ namespace InputWorkProgram   /// Przestrzeń wykonawcza - miejsce deklaracji kla
                         if (firstCoor == null)   /// Sprawdzenie czy współrzędna początkowa nie jest pusta.
                         {
                             Console.WriteLine("");
-                            Console.WriteLine("- - - - - - - - - - - - - - - - -");
+                            Console.WriteLine("- - - - - - - - - - - - - - - - - - - - - - - - - - - - -");
                             Console.WriteLine("");
                             Console.WriteLine("You don\'t left empty value. You can write correct value.");
                             Console.WriteLine("Click ENTER key to continue:");
@@ -268,7 +267,7 @@ namespace InputWorkProgram   /// Przestrzeń wykonawcza - miejsce deklaracji kla
                             if (firstCoor.Length != 2)   /// Sprawdzenie czy współrzędna początkowa ma odpowiednią długość.
                             {
                                 Console.WriteLine("");
-                                Console.WriteLine("- - - - - - - - - - - - - - - - -");
+                                Console.WriteLine("- - - - - - - - - - - - - - - - - - - - - - - - - - - - -");
                                 Console.WriteLine("");
                                 Console.WriteLine("Your value\'s length is uncorrect. You must change it.");
                                 Console.WriteLine("Click ENTER key to continue:");
@@ -303,22 +302,25 @@ namespace InputWorkProgram   /// Przestrzeń wykonawcza - miejsce deklaracji kla
                                 {
                                     isCoor = false;
                                     isDirCoor = true;
-                                    Console.WriteLine("");
-                                    Console.WriteLine("- - - - - - - - - - - - - - - - -");
-                                    Console.WriteLine("");
-                                    Console.WriteLine("This area exitst in our board!");
-                                    Console.WriteLine("Click ENTER key to continue:");
-                                    Console.WriteLine("");
+                                    //Console.WriteLine("");
+                                    //Console.WriteLine("- - - - - - - - - - - - - - - - -");
+                                    //Console.WriteLine("");
+                                    //Console.WriteLine("This area exitst in our board!");
+                                    //Console.WriteLine("Click ENTER key to continue:");
+                                    //Console.WriteLine("");
                                     // Przekazywanie wszystkich potrzebnych argumaentów do medoty (obiektu danej klasy) tworzącej statek i jednocześnie sprawdzającej
                                     // czy ów statek wychodzi poza pole planszy oraz czy nakłada się na inny / inne statki:
                                     ShipBuildChecker shipBuildChecker_Obj = new ShipBuildChecker();
-                                    shipFullCoor = shipBuildChecker_Obj.shipCoorBuildChecker(firstCoor, selectDirection, shipLengthName_AR[shipPage], availableFields_AR, fullIndex_AR);
-                                    string any = Console.ReadLine();
+                                    /// Za każdym ułożeniem statku, tabela pozycji pól planszy ma skracać się o współrzędne statku i z tego powodu potrzebne było aktualizowanie
+                                    /// ów tabeli poza pętlą while, aby zachować jej zaktualizowany stan i ponownie ją przekazać do obróbki. W tym celu użyłem krotki ze standardu 7.0:
+                                    (string[], int[]) tuples_1 = shipBuildChecker_Obj.shipCoorBuildChecker(firstCoor, selectDirection, shipLengthName_AR[shipPage], availableFields_AR, fullIndex_AR, avalLet_AR, avalNum_AR);
+                                    shipFullCoor = tuples_1.Item1;
+                                    fullIndex_AR = tuples_1.Item2;
                                 }
                                 else if (isIn_avalLet_AR == false || isIn_avalNum_AR == false)
                                 {
                                     Console.WriteLine("");
-                                    Console.WriteLine("- - - - - - - - - - - - - - - - -");
+                                    Console.WriteLine("- - - - - - - - - - - - - - - - - -");
                                     Console.WriteLine("");
                                     Console.WriteLine("This area NOT exists in our board!");
                                     Console.WriteLine("Click ENTER key to continue:");
@@ -331,7 +333,7 @@ namespace InputWorkProgram   /// Przestrzeń wykonawcza - miejsce deklaracji kla
                     }
                     else { }
                 }
-                else if (isDirCoor == true)
+                else if (isDirCoor == true && shipFullCoor[0] != "?")   /// {"?"} Specjalna wartość informująca o wykryciu umieszczenia statku w niedozowlonym miejscu. Jest to wartość RESETOWA ponownego wyznaczenia współrzędnej początkowej
                 {
                     Console.WriteLine("Do you want save this ship data? Write \"yes\" or \"no\".");
                     wantSave = Console.ReadLine();
@@ -339,7 +341,7 @@ namespace InputWorkProgram   /// Przestrzeń wykonawcza - miejsce deklaracji kla
                     {
                         // Reset wszytskich słiczów i przejście do kolejnego statku
                         Console.WriteLine("");
-                        Console.WriteLine("- - - - - - - - - - - - - - - - -");
+                        Console.WriteLine("- - - - - - - - - - - - - - - -");
                         Console.WriteLine("");
                         Console.WriteLine("Your ship data is saved!");
                         Console.WriteLine("Click ENTER key to continue:");
@@ -357,6 +359,10 @@ namespace InputWorkProgram   /// Przestrzeń wykonawcza - miejsce deklaracji kla
                         wantSave = "none";
                         // TWORZENIE OBIEKTU STATKU - INSTANCJI KLASY FABRYKI STATKÓW - PRZEKAZUJĄC WSZYSTKIE POTRZEBNE DO TEGO PARAMERY:
                         // kod
+                        /// Aktualizacja planszy poprzez umieszczeni na niej nowego statku
+                        BoardContentMaker shipBuildChecker_Obj = new BoardContentMaker();
+                        string[,] updBrdData = shipBuildChecker_Obj.updateBoardContent(shipFullCoor, fieldAreaContent_AR);
+                        fieldAreaContent_AR = updBrdData;
                     }
                     else if (wantSave == "no")
                     {
@@ -465,7 +471,7 @@ namespace InputWorkProgram   /// Przestrzeń wykonawcza - miejsce deklaracji kla
             List<int> L3_DR = length_R[1].Concat(length_R[0]).ToList();   /// Ograniczenie dla statków o długości 3 i pozycji poziomej
             List<int> L4_DR = length_R[2].Concat(length_R[1]).Concat(length_R[0]).ToList();   /// Ograniczenie dla statków o długości 4 i pozycji poziomej
             List<int> L5_DR = length_R[3].Concat(length_R[2]).Concat(length_R[1]).Concat(length_R[0]).ToList();   /// Ograniczenie dla statków o długości 5 i pozycji poziomej
-            /// Sortowanie tablicy length_R, w celu zwiększenia estetyki:
+                                                                                                                  /// Sortowanie tablicy length_R, w celu zwiększenia estetyki:
             L3_DR.Sort();
             L4_DR.Sort();
             L5_DR.Sort();
@@ -502,39 +508,196 @@ namespace InputWorkProgram   /// Przestrzeń wykonawcza - miejsce deklaracji kla
 
             return mainArray;
         }
+        public string[,] updateBoardContent(string[] shipFullCoor, string[,] fieldAreaContent_AR)
+        {
+            string[,] outputBoardData = fieldAreaContent_AR;
+            /// Test poprawności danych:
+            Console.Clear();
+            for (int i = 0; i < 10; i++)
+            {
+                for (int j = 0; j < 10; j++)
+                {
+                    Console.Write(fieldAreaContent_AR[i, j]);
+                }
+                Console.Write("");
+                Console.WriteLine("");
+                if (i < 9)   /// w iteracji dobijamy maksymalnie do 9, bo [i] ma być < 10
+                {
+                    Console.Write("");
+                }
+                else if (i >= 9) { }
+            }
+            Console.ReadLine();
+            return outputBoardData;
+        }
     }
     public class ShipBuildChecker
     {
-        public string[] shipCoorBuildChecker(string firstCor, string direction, string length, List<List<List<int>>> availableFields, int[] fullIndexArray)
+        public (string[], int[]) shipCoorBuildChecker(string firstCor, string direction, string length, List<List<List<int>>> availableFields, int[] fullIndexArray, string[] avalLet_AR, string[] avalNum_AR)
         {
-            // Deklarowanie zmiennych na podstawie otrzymanych parametrów:
-            string fstCor = firstCor;
             // Konwersja stringowej formy współrzędnej początkowej na formę intową: (B2 -> A = 0, B = 10, C = 20, ... więc B2 = 10 + 2 = 12)
+            string[] brdLetCor_AR = avalLet_AR;
+            string[] brdNumCor_AR = avalNum_AR;
+            string fstCoor_string = firstCor;
+            string fstCoor_1_let = fstCoor_string.Substring(0, 1);
+            string fstCoor_2_num = fstCoor_string.Substring(1, 1);
+            string fstCoor_1_num = "";
+            for (int i = 0; i < avalLet_AR.Length; i++)
+            {
+                if (fstCoor_1_let == brdLetCor_AR[i])   /// Jeżeli np.: B == arr[i], to "wynik" = [i] | B jest wartością drugiego indeksu tablicy arr, więc instrukcja spełnia się
+                                                        ///na indeksie 2, tej tabeli, a więc [i] wynosi 1 (bo [i] inkrementuje się o jeden po zakończeniu wykonywania jedenj iteracji tej pętli) - wartość B to 1.
+                {
+                    fstCoor_1_num = i.ToString();
+                }
+                else { }
+            }
+            fstCoor_string = fstCoor_1_num + fstCoor_2_num;
+            int fstCoor = int.Parse(fstCoor_string);  
+            /// W sytuacji konwersji stringa "04" na int, C# zignoruje 0 i da samą 4, więc nie trzeba tworzyć nowej zmiennej z 
+            /// substringowaną wartością jeżeli pierwszym indeksem (wartości tego typu) "09" będzie "0". Kiedy mamy A0 nie będzie na szczęście błędu, a 0.
+            /// Test poprawności: OK
+            ///Console.WriteLine(firstCor + " = " + fstCoor);
+
+            /// Deklarowanie zmiennych na podstawie otrzymanych parametrów:
             string dir = direction;
             string lgt = length;
-            List<List<List<int>>> dangerFields_AR = availableFields;
-
-            /// Test poprawności danych pól zakazanych:
-            ///Console.Clear();
-            Console.WriteLine("Checking - R");
-            for (int i = 0; i < dangerFields_AR[1].Count; i++)   // 0 - B | 1 - R
+            int[] fullIndex_AR = fullIndexArray;
+            string[] result = { firstCor };   /// Inicjowanie wyniku z tymczasową wartością, byle tylko spełaniała wymóg returnowania przed ogarnięciem wartości wynikowej
+            List<List<List<int>>> dangerFieldsGroup_ARS = availableFields;
+            /// Wyznaczanie odpowiedniej tabeli zakazanych pól w zależności od długości i kierunku położenia statku:
+            int dngFldIdx = int.Parse(lgt) - 2;
+            List<List<int>> dangerFieldsGroup_B_ARS = dangerFieldsGroup_ARS[0];
+            List<List<int>> dangerFieldsGroup_R_ARS = dangerFieldsGroup_ARS[1];
+            List<int> dangerFields_AR = new List<int>();
+            if (dir == "B")
             {
-                Console.WriteLine("");
-                for (int j = 0; j < dangerFields_AR[1][i].Count; j++)
+                dangerFields_AR = dangerFieldsGroup_B_ARS[dngFldIdx];
+            }
+            else if (dir == "R")
+            {
+                dangerFields_AR = dangerFieldsGroup_R_ARS[dngFldIdx];
+            }
+            /// Test poprawności: OK
+            //for (int i = 0; i < dangerFields_AR.Count; i++)
+            //{
+            //    Console.Write(dangerFields_AR[i] + " | ");
+            //}
+            /// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+            List<int> shipCoordinates = new List<int>();
+            /// Jeżeli licznik dobije do 10 niespełnionych warunków - istnienia współrzędnej początkowej w  tablicy pól zakazanych, 
+            /// można przekazać ów współrzędną dalej, jeżeli nie, współrzędna zostaje zastąpiona zmienną RESETOWĄ "?".
+            int notIsIn_availableFields = 0;
+            /// Sprawdzanie czy statek nie wyjdzie poza planszę na podstawie lokalizacji współrzędnej początkowej, względem jego długości i kierunku położenia
+            /// (jedyne co mi jest tu potrzebne, to "STAŁA" tablica dostępnych pól, którą zreturnowałem wcześniej, żeby nie robić tu bałaganu)
+            for (int i = 0; i < dangerFields_AR.Count; i++)
+            {
+                if (fstCoor != dangerFields_AR[i])
                 {
-                    Console.WriteLine((dangerFields_AR[1][i][j]).ToString());
+                    notIsIn_availableFields += 1;
+                }
+                else if (fstCoor == dangerFields_AR[i])
+                {
+                    /// Sytuacja: Statek znajduje się poza planszą
                 }
             }
-            Console.WriteLine("");
-            //Console.ReadLine();
+            /// Sytuacja: Statek znajduje się poza planszą
+            if (notIsIn_availableFields == dangerFields_AR.Count)
+            {
+                // Sprawdzenie czy punkt początkowy statku jest dostępny w "fullIndex_AR": (tablica dostępnych pól, tablica ruchoma)
+                int notIsIn_fullAreasBoardAR = 0;
+                for (int j = 0; j < fullIndex_AR.Length; j++)
+                {
+                    if (fstCoor == fullIndex_AR[j])
+                    {
+                        // Dostępne pole do rozpoczęcie tworzenia statku
+                    }
+                    else if (fstCoor != fullIndex_AR[j])
+                    {
+                        /// Sytuacja: Statek nakłada się na inny statek lub statki
+                        notIsIn_fullAreasBoardAR += 1;
+                    }
+                }
+                if (notIsIn_fullAreasBoardAR < fullIndex_AR.Length)   /// Dostępne pole do rozpoczęcie tworzenia statku
+                {
+                    // Włożenie pierwszej współrzędnej
+                    shipCoordinates.Add(fstCoor);
+
+                    /// Tworzenie dalszych współrzędnych statku w zależnośći od jego długości i kierunku:
+                    /// Ustawianie wartości zmiennnej inkrementującej współrzędne statku, w zależności od kireunku jego położenia:
+                    int incrVal = 0;
+                    if (dir == "B")
+                    {
+                        incrVal = 10;
+                    }
+                    else if (dir == "R")
+                    {
+                        incrVal = 1;
+                    }
+                    // Tworzenie dalszych współrzędnych:
+                    int nextCoor = fstCoor;   // Utworzenie zmiennej przechowującej nową aktualną współrzędną (później w FORze)
+                    for (int k = 1; k < int.Parse(lgt); k++)
+                    {
+                        nextCoor += incrVal;
+                        shipCoordinates.Add(nextCoor);
+                    }
+                    /// Sprawdzenie czy aktualnie utworzone współrzędne istnieją już w RUCHOMEJ tablicy dostęppnych pół "fullIndex_AR"
 
 
-            string[] val = { fstCor };
-            // Sprawdzanie czy statek nie wyjdzie poza planszę na podstawie lokalizacji współrzędnej początkowej, względem jego długości i kierunku położenia
-            // (jedyne co mi jest tu potrzebne, to "STAŁA" tablica dostępnych pól, którą zreturnowałem wcześniej, żeby nie robić tu bałaganu)
-            // kod
-            // Sprawdzenie czy współrzędna początkowa istnieje w "RUCHOMEJ" tablicy współrzędnych
-            return val;
+                    /// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+                    /// DO TESTÓW:
+                    /// Konwertowanie cyfrowego int[] na string[], aby można było włożyć do go string[] resutl:
+                    int[] result_int = shipCoordinates.ToArray();
+                    string[] result_string = result_int.Select(x => x.ToString()).ToArray();
+                    result = result_string;
+                    /// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+                    Console.WriteLine("");
+                    Console.WriteLine("- - - - - - - - - - - - - - -");
+                    Console.WriteLine("");
+                    Console.Write("| ");
+                    for (int z = 0; z < shipCoordinates.Count; z++)
+                    {
+                        Console.Write(shipCoordinates[z] + " |");
+                    }
+                    Console.WriteLine("");
+                    Console.WriteLine("Ship coordinates are set!");
+                    Console.WriteLine("Click ENTER key to continue:");
+                    Console.WriteLine("");
+                    Console.ReadLine();
+                }
+                else if (notIsIn_fullAreasBoardAR == fullIndex_AR.Length)
+                {
+                    Console.WriteLine("");
+                    Console.WriteLine("- - - - - - - - - - - - - - - - - - - -");
+                    Console.WriteLine("");
+                    Console.WriteLine("Ship canNOT overlap other ship or ships!");
+                    Console.WriteLine("You must give new coordinates.");
+                    Console.WriteLine("Click ENTER key to continue:");
+                    Console.WriteLine("");
+                    Console.ReadLine();
+                    string[] result_STOP = {"?"};   /// {"?"} Specjalna wartość informująca o wykryciu umieszczenia statku w niedozowlonym miejscu. Jest to wartość RESETOWA ponownego wyznaczenia współrzędnej początkowej
+                    result = result_STOP;
+                }
+            }
+            else if (notIsIn_availableFields < dangerFields_AR.Count)   /// Sytuacja: Statek znajduje się poza planszą
+            {
+                Console.WriteLine("");
+                Console.WriteLine("- - - - - - - - - - - - - - - -");
+                Console.WriteLine("");
+                Console.WriteLine("Ship canNOT located over board!");
+                Console.WriteLine("You must give new coordinates.");
+                Console.WriteLine("Click ENTER key to continue:");
+                Console.WriteLine("");
+                Console.ReadLine();
+                string[] result_STOP = {"?"};   /// {"?"} Specjalna wartość informująca o wykryciu umieszczenia statku w niedozowlonym miejscu. Jest to wartość RESETOWA ponownego wyznaczenia współrzędnej początkowej
+                result = result_STOP;
+            }
+
+            /// Sprawdzenie czy współrzędna początkowa istnieje w "RUCHOMEJ" tablicy współrzędnych
+
+
+            // WEŻ PRZED "WŁAŚCIWYM" ZRETURNOWANIEM "result" SKONWERTUJ WPÓŁRZĘDNE W POSTACI LICZBOWEJ DO POSTACI STRINGOWEJ TYPU "G3" (LITERA-CYFRA)!!!
+
+            return (result, fullIndex_AR);
         }
     }
 }
