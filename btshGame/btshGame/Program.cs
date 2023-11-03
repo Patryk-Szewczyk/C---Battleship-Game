@@ -1,9 +1,13 @@
 /// Battleship Game
 
 using System;
-using OutputProgram;   /// Użycie przestrzeni wyjściowej
-using InputWorkProgram;   /// Użycie przestrzeni wykonawczej
+using OutputProgram;
+/// Użycie przestrzeni wyjściowej
+using InputWorkProgram;
+/// Użycie przestrzeni wykonawczej
 using System.Runtime.CompilerServices;
+using System.Runtime.InteropServices;
+using System.Collections.Generic;
 
 namespace OutputProgram   /// Przestrzeń wyjściowa - miejce deklaracji obiektów z klas przestrzeni wykonawczej i aktywowania ich metod
 {
@@ -97,7 +101,7 @@ namespace InputWorkProgram   /// Przestrzeń wykonawcza - miejsce deklaracji kla
             Console.WriteLine("15. The winner wins \"PAngular\". (traditional programmer's christmas meal)");
             Console.WriteLine("16. After game players can play game again or get in game credits.");
             Console.WriteLine("");
-            Console.WriteLine("- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -");
+            Console.WriteLine("- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -");
             Console.WriteLine("");
         }
     }
@@ -132,8 +136,6 @@ namespace InputWorkProgram   /// Przestrzeń wykonawcza - miejsce deklaracji kla
             while (shipPage < 7)
             {
                 Console.Clear();
-                Console.WriteLine("");
-                Console.WriteLine("- - - - - - - - - - - - - - - - -");
                 Console.WriteLine("");
                 Console.WriteLine("PLAYER 1");
                 Console.WriteLine("");
@@ -193,7 +195,7 @@ namespace InputWorkProgram   /// Przestrzeń wykonawcza - miejsce deklaracji kla
                 Console.WriteLine("");
                 if (isBegAgn_FromDir == true)
                 {
-                    Console.WriteLine("To set ship you must set him direction and coordinates depend to first coordinate area.");
+                    Console.WriteLine("You must set " + (shipPage + 1).ToString() + " ship now.");
                     Console.WriteLine("To continue you must click ENTER key.");
                     Console.WriteLine("");
                     string toShipSet = Console.ReadLine();
@@ -416,33 +418,88 @@ namespace InputWorkProgram   /// Przestrzeń wykonawcza - miejsce deklaracji kla
             int startToIncValue = 89;
             for (int i = 0; i < 4; i++)
             {
-                List<int> lengthType = new List<int>();   /// Miejsce na kolejne zagnieżdżone indeksy tworzymy w stylu documnet.createElement('div'), który później Appendujemy
-                /// do określonego kontenera, który tak samo jak w JavaScript ma być kontenerem na eleemnty zagnieżdżone.
+                List<int> lengthType = new List<int>();   /// Z miejscami na kolejne ineksy obchodzimy się tak samo jak w JavaScript z tworzeniem elementów-tagów
+                                                          /// i wrzucaniem ich do elementów-rodziców. W JavaScript deklarujemy zmienną o wartości documnet.createElement('div'), który później Appendujemy 
+                                                          /// do określonego kontenera-rodzica, który ma być kontenerem na ten właśnie element i możliwie inne potomne. Dokładnie tak samo postępujemy w C# 
+                                                          /// z tablicami zagnieżdżonymi zadeklarowanymi za pomocą generyka List<typ>. Najpierw deklarujemy tablicę, później dodajemy do niej wartość, 
+                                                          /// tak jak byśmy używali metody .createTextNode() obiektu document (i wkładali tam stringa), a następnie wkładamy ów tablicę do tablicy nadrzędnej  
+                                                          /// i w JS jest to .appendChild()
                 int shipValue = 0;
                 shipValue = startToIncValue;
                 for (int j = 0; j < 10; j++)
                 {
                     lengthType.Add(shipValue += 1);
-                    //length_B[i][j] = shipValue += 1;
                 }
                 length_B.Add(lengthType);
                 startToIncValue -= 10;
             }
-            Console.Clear();
-            Console.WriteLine("Checking - B");
-            Console.WriteLine("");
-            for (int i = 0; i < length_B.Count; i++)
+            /// Kierunek w prawo:
+            int decrement = -1;
+            for (int i = 0; i < 4; i++)
             {
-                for (int j = 0; j < length_B[i].Count; j++)
+                List<int> lengthType = new List<int>();
+                int shipValue = 0;
+                shipValue = decrement;
+                for (int j = 0; j < 10; j++)
                 {
-                    Console.WriteLine((length_B[i][j]).ToString());
+                    lengthType.Add(shipValue += 10);
                 }
-                Console.WriteLine();
+                length_R.Add(lengthType);
+                decrement -= 1;
             }
-            Console.ReadLine();
-            // Kierunek w prawo:
+            /// Tworzenie tablic tymczasowych na pola zakazane:
+            List<List<int>> new_B_FusionVal_AR = new List<List<int>>();
+            List<List<int>> new_R_FusionVal_AR = new List<List<int>>();
+            /// Łączenie poszczególnych tablic w celu uzyskania poprawnych zestawów dostępnych pól względem długości i statku:
+            /// WYJAŚNIENIE: 
+            /// Jeżeli mam statek o długości 3 i pionowej pozycji położenia, to kiedy kładę go na np. I7 i mam jako
+            /// ogranicznik TYLKO tablicę odpowiadającej początkowi współrzędnej początkowej tego statku (przy długości 3 - linia pól H), 
+            /// która leżąc od dolnej krawędzi planszy znajdowałaby się na pozycji H7, to ogranicznik dotyczyłby tylko wyspółrzędnych z 
+            /// cyframi należącymi do H, a nie wszystkich pól w dół poczynając od H (H0 -> J9). Użytkownik kładąc więc statek na pozycji
+            /// I7, gdzie jest ZAKAZ ustawiania statków tej długości położyłby statek, który teoretycznie wychodziłby z planszy, a w 
+            /// praktyce dawałby błąd w konsoli... W celu ominięca tego problemu trzeba połączyć poszczególne tablice w taki sposób aby
+            /// pasowały do danego typu statku - jego długości.
+            List<int> L3_DB = length_B[1].Concat(length_B[0]).ToList();   /// Ograniczenie dla statków o długości 3 i pozycji pionowej
+            List<int> L4_DB = length_B[2].Concat(length_B[1]).Concat(length_B[0]).ToList();   /// Ograniczenie dla statków o długości 4 i pozycji pionowej
+            List<int> L5_DB = length_B[3].Concat(length_B[2]).Concat(length_B[1]).Concat(length_B[0]).ToList();   /// Ograniczenie dla statków o długości 5 i pozycji pionowej
+            List<int> L3_DR = length_R[1].Concat(length_R[0]).ToList();   /// Ograniczenie dla statków o długości 3 i pozycji poziomej
+            List<int> L4_DR = length_R[2].Concat(length_R[1]).Concat(length_R[0]).ToList();   /// Ograniczenie dla statków o długości 4 i pozycji poziomej
+            List<int> L5_DR = length_R[3].Concat(length_R[2]).Concat(length_R[1]).Concat(length_R[0]).ToList();   /// Ograniczenie dla statków o długości 5 i pozycji poziomej
+            /// Sortowanie tablicy length_R, w celu zwiększenia estetyki:
+            L3_DR.Sort();
+            L4_DR.Sort();
+            L5_DR.Sort();
+            /// Wkładanie poszczególnych zestawów pól zakazanych kolejno do indeksów poszczególnych tablic tymczasowych:
+            new_B_FusionVal_AR.Add(L3_DB);
+            new_B_FusionVal_AR.Add(L4_DB);
+            new_B_FusionVal_AR.Add(L5_DB);
+            new_R_FusionVal_AR.Add(L3_DR);
+            new_R_FusionVal_AR.Add(L4_DR);
+            new_R_FusionVal_AR.Add(L5_DR);
+            /// Aktualizowanie tablic dwuwymiarowych, wkładają do nich poszczególne tablice tymczasowe, względem danego kierunku położenia statku:
+            /// Aktualizowanie nastepuje od 1 indeksu obu tabel "length", gdyż dane w ich pierwszym indeksie (tablicy zagnieżdżonej) są poprawne (względwm długości statku).
+            for (int i = 0; i < new_B_FusionVal_AR.Count; i++)
+            {
+                length_B[i + 1] = new_B_FusionVal_AR[i];
+                length_R[i + 1] = new_R_FusionVal_AR[i];
+            }
+            /// Wkładanie gotowych grup zestawów pól zakazanych do głównej tablicy
             mainArray.Add(length_B);
             mainArray.Add(length_R);
+            /// Test poprawności danych: OK
+            /**Console.Clear();
+            Console.WriteLine("Checking - R");
+            for (int i = 0; i < mainArray[1].Count; i++)   // 0 - B | 1 - R
+            {
+                Console.WriteLine("");
+                for (int j = 0; j < mainArray[1][i].Count; j++)
+                {
+                    Console.WriteLine((mainArray[1][i][j]).ToString());
+                }
+            }
+            Console.WriteLine("");
+            Console.ReadLine();**/
+
             return mainArray;
         }
     }
@@ -455,6 +512,23 @@ namespace InputWorkProgram   /// Przestrzeń wykonawcza - miejsce deklaracji kla
             // Konwersja stringowej formy współrzędnej początkowej na formę intową: (B2 -> A = 0, B = 10, C = 20, ... więc B2 = 10 + 2 = 12)
             string dir = direction;
             string lgt = length;
+            List<List<List<int>>> dangerFields_AR = availableFields;
+
+            /// Test poprawności danych pól zakazanych:
+            ///Console.Clear();
+            Console.WriteLine("Checking - R");
+            for (int i = 0; i < dangerFields_AR[1].Count; i++)   // 0 - B | 1 - R
+            {
+                Console.WriteLine("");
+                for (int j = 0; j < dangerFields_AR[1][i].Count; j++)
+                {
+                    Console.WriteLine((dangerFields_AR[1][i][j]).ToString());
+                }
+            }
+            Console.WriteLine("");
+            //Console.ReadLine();
+
+
             string[] val = { fstCor };
             // Sprawdzanie czy statek nie wyjdzie poza planszę na podstawie lokalizacji współrzędnej początkowej, względem jego długości i kierunku położenia
             // (jedyne co mi jest tu potrzebne, to "STAŁA" tablica dostępnych pól, którą zreturnowałem wcześniej, żeby nie robić tu bałaganu)
