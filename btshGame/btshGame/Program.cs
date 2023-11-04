@@ -363,7 +363,6 @@ namespace InputWorkProgram   /// Przestrzeń wykonawcza - miejsce deklaracji kla
                         isDirCoor = false;
                         firstCoor = "";
                         Array.Clear(shipFullCoor, 0, shipFullCoor.Length);
-                        shipFullCoor[0] = "";
                         wantSave = "none";
                     }
                     else if (wantSave == "no")
@@ -383,7 +382,6 @@ namespace InputWorkProgram   /// Przestrzeń wykonawcza - miejsce deklaracji kla
                         isDirCoor = false;
                         firstCoor = "";
                         Array.Clear(shipFullCoor, 0, shipFullCoor.Length);
-                        shipFullCoor[0] = "";
                         wantSave = "none";
                     }
                 }
@@ -549,15 +547,16 @@ namespace InputWorkProgram   /// Przestrzeń wykonawcza - miejsce deklaracji kla
                     else { }
                 }
                 result_string.Add(fullCoor_string_1_num[i] + fullCoor_string_2_num[i]);
-                //result_int.Add(int.Parse(result_string[i]));
-                Console.WriteLine(result_string[i]);
+                result_int = result_string.Select(x => int.Parse(x)).ToList();
+                //Add(int.Parse(result_string[i]));
+                Console.WriteLine(result_int[i]);
             }
             // Usuwanie indeksów statków:
             List<int> splicedBoard_AR = new List<int>();
             splicedBoard_AR = fullIndex_AR;
-            for (int i = 0; i < splicedBoard_AR.Count; i++)
+            for (int i = 0; i < result_int.Count; i++)
             {
-                int startIndex = splicedBoard_AR.IndexOf(splicedBoard_AR[i]);
+                int startIndex = splicedBoard_AR.IndexOf(result_int[i]);
                 splicedBoard_AR.RemoveRange(startIndex, 1);
             }
             Console.ReadLine();
@@ -803,41 +802,45 @@ namespace InputWorkProgram   /// Przestrzeń wykonawcza - miejsce deklaracji kla
 
 
             /// Konwersja intowej formy współrzędnej początkowej na formę stringową: (24 -> 20 = C, 4 = 4, ... więc 24 = C + "4" = C4)
-            string[] returnLetCor_AR = { "A", "B", "C", "D", "E", "F", "G", "H", "I", "J" };
-            string[] returnNumCor_AR = { "0", "1", "2", "3", "4", "5", "6", "7", "8", "9" };
-            List<int> fullCoor_int = new List<int>();
-            fullCoor_int = shipCoordinates;
-            List<string> fullCoor_string = new List<string>();
-            fullCoor_string = fullCoor_int.Select(x => x.ToString()).ToList();
-            List<string> fullCoor_string_1_num = new List<string>();
-            List<string> fullCoor_string_2_num = new List<string>();
-            List<string> fullCoor_string_1_let = new List<string>();
-            List<string> result_list = new List<string>();
-            //Console.WriteLine("");
-            for (int i = 0; i < fullCoor_string.Count; i++)
+            if (result[0] != "?")
             {
-                if (fullCoor_string[i].Length == 1)
+                string[] returnLetCor_AR = { "A", "B", "C", "D", "E", "F", "G", "H", "I", "J" };
+                string[] returnNumCor_AR = { "0", "1", "2", "3", "4", "5", "6", "7", "8", "9" };
+                List<int> fullCoor_int = new List<int>();
+                fullCoor_int = shipCoordinates;
+                List<string> fullCoor_string = new List<string>();
+                fullCoor_string = fullCoor_int.Select(x => x.ToString()).ToList();
+                List<string> fullCoor_string_1_num = new List<string>();
+                List<string> fullCoor_string_2_num = new List<string>();
+                List<string> fullCoor_string_1_let = new List<string>();
+                List<string> result_list = new List<string>();
+                //Console.WriteLine("");
+                for (int i = 0; i < fullCoor_string.Count; i++)
                 {
-                    fullCoor_string_1_num.Add("0");
-                    fullCoor_string_2_num.Add(fullCoor_string[i].Substring(0, 1));
-                }
-                else if (fullCoor_string[i].Length == 2)
-                {
-                    fullCoor_string_1_num.Add(fullCoor_string[i].Substring(0, 1));
-                    fullCoor_string_2_num.Add(fullCoor_string[i].Substring(1, 1));
-                }
-                for (int j = 0; j < returnLetCor_AR.Length; j++)
-                {
-                    if (fullCoor_string_1_num[i] == returnNumCor_AR[j])
+                    if (fullCoor_string[i].Length == 1)
                     {
-                        fullCoor_string_1_let.Add(returnLetCor_AR[j]);
+                        fullCoor_string_1_num.Add("0");
+                        fullCoor_string_2_num.Add(fullCoor_string[i].Substring(0, 1));
                     }
-                    else { }
+                    else if (fullCoor_string[i].Length == 2)
+                    {
+                        fullCoor_string_1_num.Add(fullCoor_string[i].Substring(0, 1));
+                        fullCoor_string_2_num.Add(fullCoor_string[i].Substring(1, 1));
+                    }
+                    for (int j = 0; j < returnLetCor_AR.Length; j++)
+                    {
+                        if (fullCoor_string_1_num[i] == returnNumCor_AR[j])
+                        {
+                            fullCoor_string_1_let.Add(returnLetCor_AR[j]);
+                        }
+                        else { }
+                    }
+                    result_list.Add(fullCoor_string_1_let[i] + fullCoor_string_2_num[i]);
                 }
-                result_list.Add(fullCoor_string_1_let[i] + fullCoor_string_2_num[i]);
+                result = result_list.Select(x => x.ToString()).ToArray();
+                //Console.ReadLine();
             }
-            result = result_list.Select(x => x.ToString()).ToArray();
-            //Console.ReadLine();
+            else { }
 
             return (result, fullIndex_AR);
         }
