@@ -116,7 +116,7 @@ namespace InputWorkProgram   /// Przestrzeń wykonawcza - miejsce deklaracji kla
             /// Tworzenie instancji klasy "BoardContentMaker" i wywołanie metoda odpowiadaojący za tablice związane z plansza:
             BoardContentMaker boardContentMaker_Obj = new BoardContentMaker();
             string[,] fieldAreaContent_AR = boardContentMaker_Obj.set_fieldAreaContent_AR();
-            int[] fullIndex_AR = boardContentMaker_Obj.set_fullIndex_AR();   /// Osobna metoda z return
+            List<int> fullIndex_AR = boardContentMaker_Obj.set_fullIndex_AR();   /// Osobna metoda z return
             List<List<List<int>>> availableFields_AR = boardContentMaker_Obj.set_availableFields_AR();   /// Osobna metoda z return
 
             int shipPage = 0;
@@ -129,7 +129,7 @@ namespace InputWorkProgram   /// Przestrzeń wykonawcza - miejsce deklaracji kla
             bool isBegAgn_FromDir = true;
             bool isCoor = true;  /// true - musi być niewidozne dopóki kierunke nie jest określony
             string firstCoor = "";
-            string[] shipFullCoor = { };
+            string[] shipFullCoor = {""};
             string wantSave = "none";
             string[] letCoorName_AR = { "A", "B", "C", "D", "E", "F", "G", "H", "I", "J" };
             while (shipPage < 7)
@@ -313,7 +313,7 @@ namespace InputWorkProgram   /// Przestrzeń wykonawcza - miejsce deklaracji kla
                                     ShipBuildChecker shipBuildChecker_Obj = new ShipBuildChecker();
                                     /// Za każdym ułożeniem statku, tabela pozycji pól planszy ma skracać się o współrzędne statku i z tego powodu potrzebne było aktualizowanie
                                     /// ów tabeli poza pętlą while, aby zachować jej zaktualizowany stan i ponownie ją przekazać do obróbki. W tym celu użyłem krotki ze standardu 7.0:
-                                    (string[], int[]) tuples_1 = shipBuildChecker_Obj.shipCoorBuildChecker(firstCoor, selectDirection, shipLengthName_AR[shipPage], availableFields_AR, fullIndex_AR, avalLet_AR, avalNum_AR);
+                                    (string[], List<int>) tuples_1 = shipBuildChecker_Obj.shipCoorBuildChecker(firstCoor, selectDirection, shipLengthName_AR[shipPage], availableFields_AR, fullIndex_AR, avalLet_AR, avalNum_AR);
                                     shipFullCoor = tuples_1.Item1;
                                     fullIndex_AR = tuples_1.Item2;
                                 }
@@ -339,6 +339,13 @@ namespace InputWorkProgram   /// Przestrzeń wykonawcza - miejsce deklaracji kla
                     wantSave = Console.ReadLine();
                     if (wantSave == "yes")
                     {
+                        // TWORZENIE OBIEKTU STATKU - INSTANCJI KLASY FABRYKI STATKÓW - PRZEKAZUJĄC WSZYSTKIE POTRZEBNE DO TEGO PARAMERY:
+                        // kod
+                        /// Aktualizacja planszy poprzez umieszczeni na niej nowego statku
+                        BoardContentMaker shipBuildChecker_Obj = new BoardContentMaker();
+                        (string[,], List<int>) updBrdData = shipBuildChecker_Obj.updateBoardContent(fullIndex_AR, shipFullCoor, fieldAreaContent_AR);
+                        fieldAreaContent_AR = updBrdData.Item1;
+                        fullIndex_AR = updBrdData.Item2;
                         // Reset wszytskich słiczów i przejście do kolejnego statku
                         Console.WriteLine("");
                         Console.WriteLine("- - - - - - - - - - - - - - - -");
@@ -356,13 +363,8 @@ namespace InputWorkProgram   /// Przestrzeń wykonawcza - miejsce deklaracji kla
                         isDirCoor = false;
                         firstCoor = "";
                         Array.Clear(shipFullCoor, 0, shipFullCoor.Length);
+                        shipFullCoor[0] = "";
                         wantSave = "none";
-                        // TWORZENIE OBIEKTU STATKU - INSTANCJI KLASY FABRYKI STATKÓW - PRZEKAZUJĄC WSZYSTKIE POTRZEBNE DO TEGO PARAMERY:
-                        // kod
-                        /// Aktualizacja planszy poprzez umieszczeni na niej nowego statku
-                        BoardContentMaker shipBuildChecker_Obj = new BoardContentMaker();
-                        string[,] updBrdData = shipBuildChecker_Obj.updateBoardContent(shipFullCoor, fieldAreaContent_AR);
-                        fieldAreaContent_AR = updBrdData;
                     }
                     else if (wantSave == "no")
                     {
@@ -381,6 +383,7 @@ namespace InputWorkProgram   /// Przestrzeń wykonawcza - miejsce deklaracji kla
                         isDirCoor = false;
                         firstCoor = "";
                         Array.Clear(shipFullCoor, 0, shipFullCoor.Length);
+                        shipFullCoor[0] = "";
                         wantSave = "none";
                     }
                 }
@@ -402,12 +405,12 @@ namespace InputWorkProgram   /// Przestrzeń wykonawcza - miejsce deklaracji kla
             }
             return array;
         }
-        public int[] set_fullIndex_AR()
+        public List<int> set_fullIndex_AR()
         {
-            int[] array = new int[100];
+            List<int> array = new List<int>();
             for (int i = 0; i < 100; i++)
             {
-                array[i] = i;
+                array.Add(i);
             }
             return array;
         }
@@ -439,6 +442,7 @@ namespace InputWorkProgram   /// Przestrzeń wykonawcza - miejsce deklaracji kla
                 length_B.Add(lengthType);
                 startToIncValue -= 10;
             }
+
             /// Kierunek w prawo:
             int decrement = -1;
             for (int i = 0; i < 4; i++)
@@ -453,6 +457,7 @@ namespace InputWorkProgram   /// Przestrzeń wykonawcza - miejsce deklaracji kla
                 length_R.Add(lengthType);
                 decrement -= 1;
             }
+
             /// Tworzenie tablic tymczasowych na pola zakazane:
             List<List<int>> new_B_FusionVal_AR = new List<List<int>>();
             List<List<int>> new_R_FusionVal_AR = new List<List<int>>();
@@ -470,11 +475,11 @@ namespace InputWorkProgram   /// Przestrzeń wykonawcza - miejsce deklaracji kla
             List<int> L5_DB = length_B[3].Concat(length_B[2]).Concat(length_B[1]).Concat(length_B[0]).ToList();   /// Ograniczenie dla statków o długości 5 i pozycji pionowej
             List<int> L3_DR = length_R[1].Concat(length_R[0]).ToList();   /// Ograniczenie dla statków o długości 3 i pozycji poziomej
             List<int> L4_DR = length_R[2].Concat(length_R[1]).Concat(length_R[0]).ToList();   /// Ograniczenie dla statków o długości 4 i pozycji poziomej
-            List<int> L5_DR = length_R[3].Concat(length_R[2]).Concat(length_R[1]).Concat(length_R[0]).ToList();   /// Ograniczenie dla statków o długości 5 i pozycji poziomej
-                                                                                                                  /// Sortowanie tablicy length_R, w celu zwiększenia estetyki:
+            List<int> L5_DR = length_R[3].Concat(length_R[2]).Concat(length_R[1]).Concat(length_R[0]).ToList();   /// Ograniczenie dla statków o długości 5 i pozycji poziomej                                                                                                     /// Sortowanie tablicy length_R, w celu zwiększenia estetyki:
             L3_DR.Sort();
             L4_DR.Sort();
             L5_DR.Sort();
+
             /// Wkładanie poszczególnych zestawów pól zakazanych kolejno do indeksów poszczególnych tablic tymczasowych:
             new_B_FusionVal_AR.Add(L3_DB);
             new_B_FusionVal_AR.Add(L4_DB);
@@ -482,6 +487,7 @@ namespace InputWorkProgram   /// Przestrzeń wykonawcza - miejsce deklaracji kla
             new_R_FusionVal_AR.Add(L3_DR);
             new_R_FusionVal_AR.Add(L4_DR);
             new_R_FusionVal_AR.Add(L5_DR);
+
             /// Aktualizowanie tablic dwuwymiarowych, wkładają do nich poszczególne tablice tymczasowe, względem danego kierunku położenia statku:
             /// Aktualizowanie nastepuje od 1 indeksu obu tabel "length", gdyż dane w ich pierwszym indeksie (tablicy zagnieżdżonej) są poprawne (względwm długości statku).
             for (int i = 0; i < new_B_FusionVal_AR.Count; i++)
@@ -489,9 +495,11 @@ namespace InputWorkProgram   /// Przestrzeń wykonawcza - miejsce deklaracji kla
                 length_B[i + 1] = new_B_FusionVal_AR[i];
                 length_R[i + 1] = new_R_FusionVal_AR[i];
             }
+
             /// Wkładanie gotowych grup zestawów pól zakazanych do głównej tablicy
             mainArray.Add(length_B);
             mainArray.Add(length_R);
+            
             /// Test poprawności danych: OK
             /**Console.Clear();
             Console.WriteLine("Checking - R");
@@ -508,10 +516,53 @@ namespace InputWorkProgram   /// Przestrzeń wykonawcza - miejsce deklaracji kla
 
             return mainArray;
         }
-        public string[,] updateBoardContent(string[] shipFullCoor, string[,] fieldAreaContent_AR)
+        public (string[,], List<int>) updateBoardContent(List<int> fullIndex_AR, string[] shipFullCoor, string[,] fieldAreaContent_AR)
         {
             string[,] outputBoardData = fieldAreaContent_AR;
-            /// Test poprawności danych:
+
+            // Konwersja stringowej formy współrzędnej początkowej na formę intową: (B2 -> A = 0, B = 10, C = 20, ... więc B2 = 10 + 2 = 12)
+
+
+            string[] brdLetCor_AR = { "A", "B", "C", "D", "E", "F", "G", "H", "I", "J" };
+            string[] brdNumCor_AR = { "0", "1", "2", "3", "4", "5", "6", "7", "8", "9" };
+            List<string> fullCoor_string = new List<string>();
+            fullCoor_string = shipFullCoor.Select(x => x.ToString()).ToList();
+            List<string> fullCoor_string_1_let = new List<string>();
+            List<string> fullCoor_string_2_num = new List<string>();
+            List<string> fullCoor_string_1_num = new List<string>();
+            List<string> result_string = new List<string>();
+            List<int> result_int = new List<int>();
+            //Console.WriteLine("");
+
+            for (int i = 0; i < fullCoor_string.Count; i++)
+            {
+                
+                fullCoor_string_1_let.Add(fullCoor_string[i].Substring(0, 1));
+                fullCoor_string_2_num.Add(fullCoor_string[i].Substring(1, 1));
+                
+                for (int j = 0; j < brdLetCor_AR.Length; j++)
+                {
+                    if (fullCoor_string_1_let[i] == brdLetCor_AR[j])
+                    {
+                        fullCoor_string_1_num.Add(brdNumCor_AR[j]);
+                    }
+                    else { }
+                }
+                result_string.Add(fullCoor_string_1_num[i] + fullCoor_string_2_num[i]);
+                //result_int.Add(int.Parse(result_string[i]));
+                Console.WriteLine(result_string[i]);
+            }
+            // Usuwanie indeksów statków:
+            List<int> splicedBoard_AR = new List<int>();
+            splicedBoard_AR = fullIndex_AR;
+            for (int i = 0; i < splicedBoard_AR.Count; i++)
+            {
+                int startIndex = splicedBoard_AR.IndexOf(splicedBoard_AR[i]);
+                splicedBoard_AR.RemoveRange(startIndex, 1);
+            }
+            Console.ReadLine();
+
+            /// Test poprawności danych: OK
             Console.Clear();
             for (int i = 0; i < 10; i++)
             {
@@ -528,12 +579,13 @@ namespace InputWorkProgram   /// Przestrzeń wykonawcza - miejsce deklaracji kla
                 else if (i >= 9) { }
             }
             Console.ReadLine();
-            return outputBoardData;
+
+            return (outputBoardData, splicedBoard_AR);
         }
     }
     public class ShipBuildChecker
     {
-        public (string[], int[]) shipCoorBuildChecker(string firstCor, string direction, string length, List<List<List<int>>> availableFields, int[] fullIndexArray, string[] avalLet_AR, string[] avalNum_AR)
+        public (string[], List<int>) shipCoorBuildChecker(string firstCor, string direction, string length, List<List<List<int>>> availableFields, List<int> fullIndexArray, string[] avalLet_AR, string[] avalNum_AR)
         {
             // Konwersja stringowej formy współrzędnej początkowej na formę intową: (B2 -> A = 0, B = 10, C = 20, ... więc B2 = 10 + 2 = 12)
             string[] brdLetCor_AR = avalLet_AR;
@@ -561,7 +613,7 @@ namespace InputWorkProgram   /// Przestrzeń wykonawcza - miejsce deklaracji kla
             /// Deklarowanie zmiennych na podstawie otrzymanych parametrów:
             string dir = direction;
             string lgt = length;
-            int[] fullIndex_AR = fullIndexArray;
+            List<int> fullIndex_AR = fullIndexArray;
             string[] result = { firstCor };   /// Inicjowanie wyniku z tymczasową wartością, byle tylko spełaniała wymóg returnowania przed ogarnięciem wartości wynikowej
             List<List<List<int>>> dangerFieldsGroup_ARS = availableFields;
             /// Wyznaczanie odpowiedniej tabeli zakazanych pól w zależności od długości i kierunku położenia statku:
@@ -605,7 +657,7 @@ namespace InputWorkProgram   /// Przestrzeń wykonawcza - miejsce deklaracji kla
             {
                 // Sprawdzenie czy punkt początkowy statku jest dostępny w "fullIndex_AR": (tablica dostępnych pól, tablica ruchoma)
                 int notIsIn_fullAreasBoardAR = 0;
-                for (int j = 0; j < fullIndex_AR.Length; j++)
+                for (int j = 0; j < fullIndex_AR.Count; j++)
                 {
                     if (fstCoor == fullIndex_AR[j])
                     {
@@ -617,7 +669,7 @@ namespace InputWorkProgram   /// Przestrzeń wykonawcza - miejsce deklaracji kla
                         notIsIn_fullAreasBoardAR += 1;
                     }
                 }
-                if (notIsIn_fullAreasBoardAR < fullIndex_AR.Length)   /// Dostępne pole do rozpoczęcie tworzenia statku
+                if (notIsIn_fullAreasBoardAR < fullIndex_AR.Count)   /// Dostępne pole do rozpoczęcie tworzenia statku
                 {
                     // Włożenie pierwszej współrzędnej
                     shipCoordinates.Add(fstCoor);
@@ -641,14 +693,68 @@ namespace InputWorkProgram   /// Przestrzeń wykonawcza - miejsce deklaracji kla
                         shipCoordinates.Add(nextCoor);
                     }
                     /// Sprawdzenie czy aktualnie utworzone współrzędne istnieją już w RUCHOMEJ tablicy dostęppnych pół "fullIndex_AR"
-
+                    /// Jeżei istnieją, nie twórz statku i poinformuj gracza o nakładaniu się statków.
+                    /// Jeżeli nie istnieją, twórz statki i poinformuj gracza o udanej operacji.
+                    int IS_In_fullIndex_AR_nextCoor = 0;
+                    int NOTIS_fullIndex_AR_nextCoor = 0;
+                    for (int i = 0; i < shipCoordinates.Count; i++)
+                    {
+                        for (int j = 0; j < fullIndex_AR.Count; j++)
+                        {
+                            if (shipCoordinates[i] == fullIndex_AR[j])
+                            {
+                                IS_In_fullIndex_AR_nextCoor += 1;
+                                if (IS_In_fullIndex_AR_nextCoor == shipCoordinates.Count)
+                                {
+                                    for (int k = 0; k < shipCoordinates.Count; k++)
+                                    {
+                                        /// Usuwanie indeksów z RUCHOMEJ tablicy dostępnych pól, aby dzięki temu móc określić czy statki nie nakładają się na siebie, robiąc odpowiedniego IFa z FORem.
+                                        /// Zrobiłem to w metodzie update, GDYŻ kiedy zrobiłbym to tutaj, to tablica została by zmodyfikowana przed decyzją gracza, czy chce ustawić
+                                        /// statek z jego współrzędnymi na planszy. Jeżeli napisałby, że nie, to dane zresetowałyby się, ALE tablica pozostałaby zmodyfikowana.
+                                        /// Wowczas kiedy gracz chciałby ustawić statek o jedną współrzędną początkową przed usuniętymi indeksami, to kiedy współrzędne dalsze 
+                                        /// statku wskazywałyby indeksy usunięte przez położenie pprzedniego statku - mięlibyćmy komunikat o nakładaniu się statkuw, co byłoby 
+                                        /// oczywiści błędem.
+                                        /// Jako że w instrukcji warunkwej poprzedzającej zapyatnie czy gracz chce zapisać dane mamy specjalną zmienną {?}, którą opisałem wcześniej,
+                                        /// nie musimy się martwić o to, że tablica zostanie zmodyfikowana przed sprawdzeniem bezkolizyjności, wychodzenia statku z planszy oraz
+                                        /// przedewszsytkim przed naszą niekontrolowaną decyzją w sprawie ustawienia statku, czyli inaczej zmodyfokowania tabeli.
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    for (int i = 0; i < fullIndex_AR.Count; i++)
+                    {
+                        NOTIS_fullIndex_AR_nextCoor += 1;
+                        int target = fullIndex_AR.Count;
+                        for (int j = 0; j < shipCoordinates.Count; j++)
+                        {
+                            if (NOTIS_fullIndex_AR_nextCoor == target)
+                            {
+                                if (IS_In_fullIndex_AR_nextCoor < int.Parse(lgt))
+                                {
+                                    Console.WriteLine("");
+                                    Console.WriteLine("- - - - - - - - - - - - - - - - - - - -");
+                                    Console.WriteLine("");
+                                    Console.WriteLine("Ship canNOT overlap other ship or ships!");
+                                    Console.WriteLine("You must give new coordinates.");
+                                    Console.WriteLine("Click ENTER key to continue:");
+                                    Console.WriteLine("");
+                                    Console.ReadLine();
+                                    string[] result_STOP = {"?"};   /// {"?"} Specjalna wartość informująca o wykryciu umieszczenia statku w niedozowlonym miejscu. Jest to wartość RESETOWA ponownego wyznaczenia współrzędnej początkowej
+                                    result = result_STOP;
+                                }
+                                else {}
+                            }
+                            else {}
+                        }
+                    }
 
                     /// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
                     /// DO TESTÓW:
                     /// Konwertowanie cyfrowego int[] na string[], aby można było włożyć do go string[] resutl:
-                    int[] result_int = shipCoordinates.ToArray();
-                    string[] result_string = result_int.Select(x => x.ToString()).ToArray();
-                    result = result_string;
+                    //int[] result_int = shipCoordinates.ToArray();
+                    //string[] result_string = result_int.Select(x => x.ToString()).ToArray();
+                    //result = result_string;
                     /// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
                     Console.WriteLine("");
                     Console.WriteLine("- - - - - - - - - - - - - - -");
@@ -664,7 +770,7 @@ namespace InputWorkProgram   /// Przestrzeń wykonawcza - miejsce deklaracji kla
                     Console.WriteLine("");
                     Console.ReadLine();
                 }
-                else if (notIsIn_fullAreasBoardAR == fullIndex_AR.Length)
+                else if (notIsIn_fullAreasBoardAR == fullIndex_AR.Count)
                 {
                     Console.WriteLine("");
                     Console.WriteLine("- - - - - - - - - - - - - - - - - - - -");
@@ -695,7 +801,43 @@ namespace InputWorkProgram   /// Przestrzeń wykonawcza - miejsce deklaracji kla
             /// Sprawdzenie czy współrzędna początkowa istnieje w "RUCHOMEJ" tablicy współrzędnych
 
 
-            // WEŻ PRZED "WŁAŚCIWYM" ZRETURNOWANIEM "result" SKONWERTUJ WPÓŁRZĘDNE W POSTACI LICZBOWEJ DO POSTACI STRINGOWEJ TYPU "G3" (LITERA-CYFRA)!!!
+
+            /// Konwersja intowej formy współrzędnej początkowej na formę stringową: (24 -> 20 = C, 4 = 4, ... więc 24 = C + "4" = C4)
+            string[] returnLetCor_AR = { "A", "B", "C", "D", "E", "F", "G", "H", "I", "J" };
+            string[] returnNumCor_AR = { "0", "1", "2", "3", "4", "5", "6", "7", "8", "9" };
+            List<int> fullCoor_int = new List<int>();
+            fullCoor_int = shipCoordinates;
+            List<string> fullCoor_string = new List<string>();
+            fullCoor_string = fullCoor_int.Select(x => x.ToString()).ToList();
+            List<string> fullCoor_string_1_num = new List<string>();
+            List<string> fullCoor_string_2_num = new List<string>();
+            List<string> fullCoor_string_1_let = new List<string>();
+            List<string> result_list = new List<string>();
+            //Console.WriteLine("");
+            for (int i = 0; i < fullCoor_string.Count; i++)
+            {
+                if (fullCoor_string[i].Length == 1)
+                {
+                    fullCoor_string_1_num.Add("0");
+                    fullCoor_string_2_num.Add(fullCoor_string[i].Substring(0, 1));
+                }
+                else if (fullCoor_string[i].Length == 2)
+                {
+                    fullCoor_string_1_num.Add(fullCoor_string[i].Substring(0, 1));
+                    fullCoor_string_2_num.Add(fullCoor_string[i].Substring(1, 1));
+                }
+                for (int j = 0; j < returnLetCor_AR.Length; j++)
+                {
+                    if (fullCoor_string_1_num[i] == returnNumCor_AR[j])
+                    {
+                        fullCoor_string_1_let.Add(returnLetCor_AR[j]);
+                    }
+                    else { }
+                }
+                result_list.Add(fullCoor_string_1_let[i] + fullCoor_string_2_num[i]);
+            }
+            result = result_list.Select(x => x.ToString()).ToArray();
+            //Console.ReadLine();
 
             return (result, fullIndex_AR);
         }
