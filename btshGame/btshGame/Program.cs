@@ -425,12 +425,12 @@ namespace InputWorkProgram   /// Przestrzeń wykonawcza - miejsce deklaracji kla
             int startToIncValue = 89;
             for (int i = 0; i < 4; i++)
             {
-                List<int> lengthType = new List<int>();   /// Z miejscami na kolejne ineksy obchodzimy się tak samo jak w JavaScript z tworzeniem elementów-tagów
-                                                          /// i wrzucaniem ich do elementów-rodziców. W JavaScript deklarujemy zmienną o wartości documnet.createElement('div'), który później Appendujemy 
-                                                          /// do określonego kontenera-rodzica, który ma być kontenerem na ten właśnie element i możliwie inne potomne. Dokładnie tak samo postępujemy w C# 
-                                                          /// z tablicami zagnieżdżonymi zadeklarowanymi za pomocą generyka List<typ>. Najpierw deklarujemy tablicę, później dodajemy do niej wartość, 
-                                                          /// tak jak byśmy używali metody .createTextNode() obiektu document (i wkładali tam stringa), a następnie wkładamy ów tablicę do tablicy nadrzędnej  
-                                                          /// i w JS jest to .appendChild()
+                List<int> lengthType = new List<int>();   
+                /// Z miejscami na kolejne ineksy obchodzimy się tak samo jak w JavaScript z tworzeniem elementów-tagów i wrzucaniem ich do elementów-rodziców. 
+                /// W JavaScript deklarujemy zmienną o wartości documnet.createElement('div'), który później Appendujemy do określonego kontenera-rodzica, 
+                /// który ma być kontenerem na ten właśnie element i możliwie inne potomne. Dokładnie tak samo postępujemy w C# z tablicami zagnieżdżonymi 
+                /// zadeklarowanymi za pomocą generyka List<typ>. Najpierw deklarujemy tablicę, później dodajemy do niej wartość, tak jak byśmy używali metody 
+                /// .createTextNode() obiektu document (i wkładali tam stringa), a następnie wkładamy ów tablicę do tablicy nadrzędnej i w JS jest to .appendChild()
                 int shipValue = 0;
                 shipValue = startToIncValue;
                 for (int j = 0; j < 10; j++)
@@ -516,11 +516,12 @@ namespace InputWorkProgram   /// Przestrzeń wykonawcza - miejsce deklaracji kla
         }
         public (string[,], List<int>) updateBoardContent(List<int> fullIndex_AR, string[] shipFullCoor, string[,] fieldAreaContent_AR)
         {
-            string[,] outputBoardData = fieldAreaContent_AR;
+            // Deklaracja gółwnych zmiennych:
+            List<int> splicedBoard_AR = new List<int>();   /// RUCHOMA fizyczna tablica dostępnych pól na statki
+            splicedBoard_AR = fullIndex_AR;
+            string[,] outputBoardData = fieldAreaContent_AR;   /// STAŁA graficzna tablica na statki (zmiany w wartościach STAŁEJ tablicy)
 
             // Konwersja stringowej formy współrzędnej początkowej na formę intową: (B2 -> A = 0, B = 10, C = 20, ... więc B2 = 10 + 2 = 12)
-
-
             string[] brdLetCor_AR = { "A", "B", "C", "D", "E", "F", "G", "H", "I", "J" };
             string[] brdNumCor_AR = { "0", "1", "2", "3", "4", "5", "6", "7", "8", "9" };
             List<string> fullCoor_string = new List<string>();
@@ -531,10 +532,8 @@ namespace InputWorkProgram   /// Przestrzeń wykonawcza - miejsce deklaracji kla
             List<string> result_string = new List<string>();
             List<int> result_int = new List<int>();
             //Console.WriteLine("");
-
             for (int i = 0; i < fullCoor_string.Count; i++)
-            {
-                
+            { 
                 fullCoor_string_1_let.Add(fullCoor_string[i].Substring(0, 1));
                 fullCoor_string_2_num.Add(fullCoor_string[i].Substring(1, 1));
                 
@@ -548,12 +547,15 @@ namespace InputWorkProgram   /// Przestrzeń wykonawcza - miejsce deklaracji kla
                 }
                 result_string.Add(fullCoor_string_1_num[i] + fullCoor_string_2_num[i]);
                 result_int = result_string.Select(x => int.Parse(x)).ToList();
-                //Add(int.Parse(result_string[i]));
                 Console.WriteLine(result_int[i]);
+                /// Aktualizowanie tablicy   /// UWAGA: "outputBoardData" to tablica dwuwymiarowa 10x10
+                outputBoardData[int.Parse(fullCoor_string_1_num[i]), int.Parse(fullCoor_string_2_num[i])] = "S ";
             }
-            // Usuwanie indeksów statków:
-            List<int> splicedBoard_AR = new List<int>();
-            splicedBoard_AR = fullIndex_AR;
+
+            // WEŹ PRZEKAŻ PARAMETR NUMERU STATKU I PRZEKAŻ JEGO WARTOŚĆ DO STRINGA WARTOŚCI POJAWIENIA SIĘ STATKU, ABY BYŁO WIADOMO GDZIE KTÓRY JEST!
+            // DODATKOWO ZMODYFIKUJ WYGLĄD PLANSZY TAK, ABY * OTACZAŁA OBWÓDKA
+
+            /// Usuwanie indeksów statków:
             for (int i = 0; i < result_int.Count; i++)
             {
                 int startIndex = splicedBoard_AR.IndexOf(result_int[i]);
