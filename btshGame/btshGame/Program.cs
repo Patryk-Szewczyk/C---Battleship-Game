@@ -8,6 +8,9 @@ using System.Runtime.InteropServices;
 using System.Collections.Generic;
 using System.Runtime.Versioning;
 
+/// Zrobiłem dwie przesrzenie nazw. Pierwsza jest na klasę główną z główną metodę Main(), która z klasą pełni funkcję tworzenia poszczególnych instancji następujących po sobie
+/// klas wykonawczyh, które pełnią rolę osobnych komponentów. Druga przestrzeń nazw zawiera ów klasy wynonawcze i inne klasy zwracające wartości do klas wykonawczych.
+/// Dodatkowa klasy wykonawcze zwracają argumenty do metody Main() klasy Program w pierwszej przestrzeni nazw, aby je użyć jako argumenty w kolejnej metodzie.
 namespace OutputProgram   /// Przestrzeń wyjściowa - miejce deklaracji obiektów z klas przestrzeni wykonawczej i aktywowania ich metod
 {
     public class Program   /// Główna i jedyna klasa przestrzeni wyjściowej
@@ -21,33 +24,29 @@ namespace OutputProgram   /// Przestrzeń wyjściowa - miejce deklaracji obiekt�
             /// Instrukcja gry
             Console.WriteLine("To continue with the instructions, click ENTER key");
             Console.WriteLine("");
-            string someVal_1 = Console.ReadLine();   /// Aby przejść dalej do kolejnej pseudo-strony konsoli (metoda "Console.Clear()") trzeba kliknąć ENTER
+            Console.ReadLine();   /// Aby przejść dalej do kolejnej pseudo-strony konsoli (metoda "Console.Clear()") trzeba kliknąć ENTER
             gameMenu_Obj.instruction();   /// Byle tylko był kliknięty ENTER
             //
             // WEŹ PÓŹNIEJ POZYCJONOWANIE STATKÓW GRACZA 1 I 2 ORAZ ICH GRĘ W PĘTLĘ WHILE I ODTWARZAJ PONOWNIE JAKO PONOWNĄ GRĘ!
             // Na końcu tej instrukcji warunkowej będzie zapytanie co robimy po grze.
             // Jeżeli gracz wybierze opcję ponowna gra, pętla wykona się ponownie, a z nią od nowa wszystkie punkty.
             // Jeżeli gracz wybierze napisy końcowe, zostaną puszczone napisy końcowe tak jak to sobie zaplanowałeś w głowie...
-            // while (isCredits == false)
-            //{
             //
-            //}
-            //
-            // Pozycjonowanie statków - gracz 1
+            // Gra "właściwa"
             Console.WriteLine("To continue with the ship positing, click ENTER key");
             Console.WriteLine("");
-            string someVal_2 = Console.ReadLine();
+            Console.ReadLine();
             // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
             // Gra zapętlona
             GameLoop gameLoop = new GameLoop();   /// Tworzenie zmiennej z instancją klasy GameMenu
-            (List<List<string>>, string[,,]) playersData_AR = gameLoop.setPlayersShips();
-            List<List<string>> playersShipCoor_AR = new List<List<string>>();
+            (string[,], string[,,]) playersData_AR = gameLoop.setPlayersShips();
+            string[,] playersShipCoor_AR = new string[2, 7];
             /// Użyłem tego typu tablicy ([,,]), gdyż wyświetlanie danych z tablic i wkładanie do nich zmodyfikowanych wartości jest 
             /// łatwiejsze, niż w przypadku innych (do już określonych indeksowo na każdą zagnieżdżoną tablicę, nie tak jak w 
             /// generyku List<typ>, gdzie swobodnie można dodawać wartości do indeksów tak jak w JS z .appendChild())
             string[,,] playersBoardContent_AR = new string[2, 10, 10];
-            playersShipCoor_AR = playersData_AR.Item1;
-            playersBoardContent_AR  = playersData_AR.Item2;   /// DO SPRAWDZENIA!
+            playersShipCoor_AR = playersData_AR.Item1;   /// DO SPRAWDZENIA!
+            playersBoardContent_AR = playersData_AR.Item2;   /// DO SPRAWDZENIA!
             // metoda: fight()   // argument: playersShipCoor_AR & playersBoardContent_AR
             // metoda: prize()   // argument: winner
             // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -118,14 +117,21 @@ namespace InputWorkProgram   /// Przestrzeń wykonawcza - miejsce deklaracji kla
     }
     public class GameLoop
     {
-        public (List<List<string>>, string[,,]) setPlayersShips()
+        public (string[,], string[,,]) setPlayersShips()
         {
             /// Tworzenie instancji klasy "BoardContentMaker" i wywołanie metoda odpowiadaojący za tablice związane z plansza:
             BoardContentMaker boardContentMaker_Obj = new BoardContentMaker();
             //string[,] fieldAreaContent_AR = boardContentMaker_Obj.set_fieldAreaContent_AR();
-            List<List<string>> playersShipCoor_AR = new List<List<string>>();   /// {player_1_AR, player_2_AR}
+            string[,] playersShipCoor_AR = new string[2, 7];   /// {player_1_AR, player_2_AR}
+            //playersShipCoor_AR = boardContentMaker_Obj.setPlayersShipCoor(playersShipCoor_AR);
+
+
+            //List<List<string>>  player_1_ShipCoor_AR = new List<List<string>>();
+            //List<List<string>> player_2_ShipCoor_AR = new List<List<string>>();
+            //playersShipCoor_AR.Add(player_1_ShipCoor_AR);
+            //playersShipCoor_AR.Add(player_2_ShipCoor_AR);
             string[,,] playersBoardContent_AR = boardContentMaker_Obj.set_fieldAreaContent_AR();   // [2, 10, 10]
-            List<int> fullIndex_AR = boardContentMaker_Obj.set_fullIndex_AR();   /// Osobna metoda z return
+            List<List<int>> fullIndex_AR = boardContentMaker_Obj.set_fullIndex_AR();   /// Osobna metoda z return
             List<List<List<int>>> availableFields_AR = boardContentMaker_Obj.set_availableFields_AR();   /// Osobna metoda z return
             int players = 0;
             int shipPage = 0;
@@ -142,7 +148,7 @@ namespace InputWorkProgram   /// Przestrzeń wykonawcza - miejsce deklaracji kla
             string[] shipFullCoor = { "" };
             string wantSave = "none";
             string[] letCoorName_AR = { "A", "B", "C", "D", "E", "F", "G", "H", "I", "J" };
-            while (players < 2) 
+            while (players < 2)
             {
                 players += 1;
                 shipPage = 0;
@@ -165,7 +171,7 @@ namespace InputWorkProgram   /// Przestrzeń wykonawcza - miejsce deklaracji kla
                     Console.WriteLine(" |                             | ");
                     Console.WriteLine(" |      0 1 2 3 4 5 6 7 8 9    | ");
                     Console.Write(" |    ");   /// lewa strona planszy
-                    /// Wyświetlanie  planszy tablicy za pomocą pętli zagnieżdżonej iterującej tablicę dwuwymiarową:
+                                               /// Wyświetlanie  planszy tablicy za pomocą pętli zagnieżdżonej iterującej tablicę dwuwymiarową:
                     for (int i = 0; i < 10; i++)
                     {
                         Console.Write(letCoorName_AR[i] + " ");
@@ -217,8 +223,9 @@ namespace InputWorkProgram   /// Przestrzeń wykonawcza - miejsce deklaracji kla
                         Console.Write("Coordination:");
                         for (int i = 0; i < shipFullCoor.Length; i++)
                         {
-                            Console.Write(" | " + shipFullCoor[i] + " |");
+                            Console.Write(" | " + shipFullCoor[i]);
                         }
+                        Console.Write(" |");
                         Console.WriteLine("");
                     }
                     Console.WriteLine("");
@@ -229,7 +236,7 @@ namespace InputWorkProgram   /// Przestrzeń wykonawcza - miejsce deklaracji kla
                         Console.WriteLine("You must set " + (shipPage + 1).ToString() + " ship now.");
                         Console.WriteLine("To continue you must click ENTER key.");
                         Console.WriteLine("");
-                        string toShipSet = Console.ReadLine();
+                        Console.ReadLine();
                     }
                     else { }
                     if (isDirCoor == false || shipFullCoor[0] == "?")   /// {"?"} Specjalna wartość informująca o wykryciu umieszczenia statku w niedozowlonym miejscu. Jest to wartość RESETOWA ponownego wyznaczenia współrzędnej początkowej
@@ -257,7 +264,7 @@ namespace InputWorkProgram   /// Przestrzeń wykonawcza - miejsce deklaracji kla
                                 Console.WriteLine("Direction is set!");
                                 Console.WriteLine("To continue click ENTER key");
                                 Console.WriteLine("");
-                                string any = Console.ReadLine();
+                                Console.ReadLine();
                             }
                             else if (selectDirection != "B" || selectDirection != "R")
                             {
@@ -269,7 +276,7 @@ namespace InputWorkProgram   /// Przestrzeń wykonawcza - miejsce deklaracji kla
                                 Console.WriteLine("You write uncorrect value. Direction value must be \"B\" or \"R\" !");
                                 Console.WriteLine("To continue click ENTER key");
                                 Console.WriteLine("");
-                                string any = Console.ReadLine();
+                                Console.ReadLine();
                             }
                         }
                         else { }
@@ -291,7 +298,7 @@ namespace InputWorkProgram   /// Przestrzeń wykonawcza - miejsce deklaracji kla
                                 Console.WriteLine("You don\'t left empty value. You can write correct value.");
                                 Console.WriteLine("Click ENTER key to continue:");
                                 Console.WriteLine("");
-                                string any = Console.ReadLine();
+                                Console.ReadLine();
 
                             }
                             else if (firstCoor != null)
@@ -304,7 +311,7 @@ namespace InputWorkProgram   /// Przestrzeń wykonawcza - miejsce deklaracji kla
                                     Console.WriteLine("Your value\'s length is uncorrect. You must change it.");
                                     Console.WriteLine("Click ENTER key to continue:");
                                     Console.WriteLine("");
-                                    string any = Console.ReadLine();
+                                    Console.ReadLine();
                                 }
                                 else if (firstCoor.Length == 2)   /// Jeżeli wartość i odpowiednia długość jest, wprawdź poprawność wartości.
                                 {
@@ -345,9 +352,18 @@ namespace InputWorkProgram   /// Przestrzeń wykonawcza - miejsce deklaracji kla
                                         ShipBuildChecker shipBuildChecker_Obj = new ShipBuildChecker();
                                         /// Za każdym ułożeniem statku, tabela pozycji pól planszy ma skracać się o współrzędne statku i z tego powodu potrzebne było aktualizowanie
                                         /// ów tabeli poza pętlą while, aby zachować jej zaktualizowany stan i ponownie ją przekazać do obróbki. W tym celu użyłem krotki ze standardu 7.0:
-                                        (string[], List<int>) tuples_1 = shipBuildChecker_Obj.shipCoorBuildChecker(firstCoor, selectDirection, shipLengthName_AR[shipPage], availableFields_AR, fullIndex_AR, avalLet_AR, avalNum_AR);
+                                        (string[], List<List<int>>) tuples_1 = shipBuildChecker_Obj.shipCoorBuildChecker(firstCoor, selectDirection, shipLengthName_AR[shipPage], availableFields_AR, fullIndex_AR, avalLet_AR, avalNum_AR, players);
                                         shipFullCoor = tuples_1.Item1;
                                         fullIndex_AR = tuples_1.Item2;
+                                        string playerShipCoor = "";
+                                        for (int i = 0; i < shipFullCoor.Length; i++)
+                                        {
+                                            playerShipCoor += " | " + shipFullCoor[i];
+                                        }
+                                        playersShipCoor_AR[players - 1, shipPage] = playerShipCoor;
+                                        //List<string> playerOnceShipCoor = new List<string>();
+                                        //playerOnceShipCoor = shipFullCoor.Select(x => x.ToString()).ToList();
+                                        //playersShipCoor_AR;
                                     }
                                     else if (isIn_avalLet_AR == false || isIn_avalNum_AR == false)
                                     {
@@ -357,7 +373,7 @@ namespace InputWorkProgram   /// Przestrzeń wykonawcza - miejsce deklaracji kla
                                         Console.WriteLine("This area NOT exists in our board!");
                                         Console.WriteLine("Click ENTER key to continue:");
                                         Console.WriteLine("");
-                                        string any = Console.ReadLine();
+                                        Console.ReadLine();
                                     }
                                     else { }
                                 }
@@ -375,7 +391,7 @@ namespace InputWorkProgram   /// Przestrzeń wykonawcza - miejsce deklaracji kla
                             // kod
                             /// Aktualizacja planszy poprzez umieszczeni na niej nowego statku
                             BoardContentMaker shipBuildChecker_Obj = new BoardContentMaker();
-                            (string[,,], List<int>) updBrdData = shipBuildChecker_Obj.updateBoardContent(fullIndex_AR, shipFullCoor, playersBoardContent_AR, players);
+                            (string[,,], List<List<int>>) updBrdData = shipBuildChecker_Obj.updateBoardContent(fullIndex_AR, shipFullCoor, playersBoardContent_AR, players);
                             playersBoardContent_AR = updBrdData.Item1;
                             fullIndex_AR = updBrdData.Item2;
                             // Koniec ustawiania statków dla danego gracza: (switch)
@@ -383,7 +399,7 @@ namespace InputWorkProgram   /// Przestrzeń wykonawcza - miejsce deklaracji kla
                             {
                                 isSetPlayerShipCoor = true;
                             }
-                            else {}
+                            else { }
                             // Reset wszytskich słiczów i przejście do kolejnego statku
                             Console.WriteLine("");
                             Console.WriteLine("- - - - - - - - - - - - - - - -");
@@ -391,7 +407,7 @@ namespace InputWorkProgram   /// Przestrzeń wykonawcza - miejsce deklaracji kla
                             Console.WriteLine("Your ship data is saved!");
                             Console.WriteLine("Click ENTER key to continue:");
                             Console.WriteLine("");
-                            string any = Console.ReadLine();
+                            Console.ReadLine();
                             // Przejście do kolejnego statku:
                             shipPageIncrement = 1;
                             /// Reset zmiennych potrzebnych do wypełniania informacji o kolejnym statku i związanych z nimi przełączników:
@@ -412,7 +428,7 @@ namespace InputWorkProgram   /// Przestrzeń wykonawcza - miejsce deklaracji kla
                             Console.WriteLine("Your ship data is deleted. You must posite ship again.");
                             Console.WriteLine("Click ENTER key to continue:");
                             Console.WriteLine("");
-                            string any = Console.ReadLine();
+                            Console.ReadLine();
                             /// Reset zmiennych potrzebnych do wypełniania informacji o bieżącym statu i związanych z nimi przełączników:
                             isDir = false;
                             isBegAgn_FromDir = true;
@@ -423,7 +439,7 @@ namespace InputWorkProgram   /// Przestrzeń wykonawcza - miejsce deklaracji kla
                             wantSave = "none";
                         }
                     }
-                    if (shipPage == 7  && isSetPlayerShipCoor == true)
+                    if (shipPage == 7 && isSetPlayerShipCoor == true)
                     {
                         /// Informacja o ustawieniu wszystkich statków:
                         Console.WriteLine("");
@@ -433,7 +449,7 @@ namespace InputWorkProgram   /// Przestrzeń wykonawcza - miejsce deklaracji kla
                         Console.WriteLine("and next to second player and next to second player ship setting.");
                         Console.WriteLine("Click ENTER key to continue:");
                         Console.WriteLine("");
-                        string any = Console.ReadLine();
+                        Console.ReadLine();
                         /// Aktualizowanie tablic graczy:
                         //playersShipCoor_AR.Add();
                         //playersBoardContent_AR.Add();
@@ -456,8 +472,17 @@ namespace InputWorkProgram   /// Przestrzeń wykonawcza - miejsce deklaracji kla
     }
     public class BoardContentMaker
     {
+        //public List<List<List<List<string>>>> setPlayersShipCoor(List<List<List<List<string>>>> playersShipCoor_AR)
+        //{
+        /// Tworzenie indeksów (do czterowymiarowego List) na współrzędne statków dla obu graczy:
+        //List<List<List<List<string>>>> result = playersShipCoor_AR;
+        //return result;
+        //}
         public string[,,] set_fieldAreaContent_AR()
         {
+            /// Tworzenie tablic z graficzną zawartością stanu gry dla wszystkich graczy:
+            /// Użyłem tu typu zagnieżdżonej tablicy array[,,], a nie List<List<List<string>>>
+            /// z tego powodu, iż łatwiej jest mi modyfikować tablicę i wyświetlać ją w konsoli
             string[,,] array = new string[2, 10, 10];
             for (int i = 0; i < 2; i++)
             {
@@ -465,19 +490,24 @@ namespace InputWorkProgram   /// Przestrzeń wykonawcza - miejsce deklaracji kla
                 {
                     for (int k = 0; k < 10; k++)
                     {
-                        array[i, j, k] = "* ";
+                        array[i, j, k] = "~ ";
                     }
                 }
             }
             return array;
         }
-        public List<int> set_fullIndex_AR()
+        public List<List<int>> set_fullIndex_AR()
         {
-            List<int> array = new List<int>();
+            List<List<int>> array = new List<List<int>>();
+            List<int> player_1 = new List<int>();
+            List<int> player_2 = new List<int>();
             for (int i = 0; i < 100; i++)
             {
-                array.Add(i);
+                player_1.Add(i);
+                player_2.Add(i);
             }
+            array.Add(player_1);
+            array.Add(player_2);
             return array;
         }
         public List<List<List<int>>> set_availableFields_AR()
@@ -582,14 +612,13 @@ namespace InputWorkProgram   /// Przestrzeń wykonawcza - miejsce deklaracji kla
 
             return mainArray;
         }
-        public (string[,,], List<int>) updateBoardContent(List<int> fullIndex_AR, string[] shipFullCoor, string[,,] playersBoardContent_AR, int players)
+        public (string[,,], List<List<int>>) updateBoardContent(List<List<int>> fullIndex_AR, string[] shipFullCoor, string[,,] playersBoardContent_AR, int players)
         {
             // Deklaracja gółwnych zmiennych:
-            List<int> splicedBoard_AR = new List<int>();   /// RUCHOMA fizyczna tablica dostępnych pól na statki
+            List<List<int>> splicedBoard_AR = new List<List<int>>();   /// RUCHOMA fizyczna tablica dostępnych pól na statki
             splicedBoard_AR = fullIndex_AR;
             string[,,] outputBoardData = playersBoardContent_AR;   /// STAŁA graficzna tablica na statki (zmiany w wartościach STAŁEJ tablicy)
-            int player = players;
-            player -= 1;   // players będzie zawyżone o 1, bo od razu w pętli nastepuje inkrementacja
+            int player = players - 1;   // players będzie zawyżone o 1, bo od razu w pętli nastepuje inkrementacja, a indeksy zaczynają się od 0
 
             // Konwersja stringowej formy współrzędnej początkowej na formę intową: (B2 -> A = 0, B = 10, C = 20, ... więc B2 = 10 + 2 = 12)
             string[] brdLetCor_AR = { "A", "B", "C", "D", "E", "F", "G", "H", "I", "J" };
@@ -629,8 +658,8 @@ namespace InputWorkProgram   /// Przestrzeń wykonawcza - miejsce deklaracji kla
             /// Usuwanie indeksów statków:
             for (int i = 0; i < result_int.Count; i++)
             {
-                int startIndex = splicedBoard_AR.IndexOf(result_int[i]);
-                splicedBoard_AR.RemoveRange(startIndex, 1);
+                int startIndex = splicedBoard_AR[player].IndexOf(result_int[i]);
+                splicedBoard_AR[player].RemoveRange(startIndex, 1);
             }
             //Console.ReadLine();
 
@@ -657,7 +686,7 @@ namespace InputWorkProgram   /// Przestrzeń wykonawcza - miejsce deklaracji kla
     }
     public class ShipBuildChecker
     {
-        public (string[], List<int>) shipCoorBuildChecker(string firstCor, string direction, string length, List<List<List<int>>> availableFields, List<int> fullIndexArray, string[] avalLet_AR, string[] avalNum_AR)
+        public (string[], List<List<int>>) shipCoorBuildChecker(string firstCor, string direction, string length, List<List<List<int>>> availableFields, List<List<int>> fullIndexArray, string[] avalLet_AR, string[] avalNum_AR, int players)
         {
             // Konwersja stringowej formy współrzędnej początkowej na formę intową: (B2 -> A = 0, B = 10, C = 20, ... więc B2 = 10 + 2 = 12)
             string[] brdLetCor_AR = avalLet_AR;
@@ -666,9 +695,10 @@ namespace InputWorkProgram   /// Przestrzeń wykonawcza - miejsce deklaracji kla
             string fstCoor_1_let = fstCoor_string.Substring(0, 1);
             string fstCoor_2_num = fstCoor_string.Substring(1, 1);
             string fstCoor_1_num = "";
+            int player = players - 1;
             for (int i = 0; i < avalLet_AR.Length; i++)
             {
-                if (fstCoor_1_let == brdLetCor_AR[i])   
+                if (fstCoor_1_let == brdLetCor_AR[i])
                 /// Jeżeli np.: B == arr[i], to "wynik" = [i] | B jest wartością drugiego indeksu tablicy arr, więc instrukcja spełnia się
                 ///na indeksie 2, tej tabeli, a więc [i] wynosi 1 (bo [i] inkrementuje się o jeden po zakończeniu wykonywania jedenj iteracji tej pętli) - wartość B to 1.
                 {
@@ -686,7 +716,7 @@ namespace InputWorkProgram   /// Przestrzeń wykonawcza - miejsce deklaracji kla
             /// Deklarowanie zmiennych na podstawie otrzymanych parametrów:
             string dir = direction;
             string lgt = length;
-            List<int> fullIndex_AR = fullIndexArray;
+            List<List<int>> fullIndex_AR = fullIndexArray;
             string[] result = { firstCor };   /// Inicjowanie wyniku z tymczasową wartością, byle tylko spełaniała wymóg returnowania przed ogarnięciem wartości wynikowej
             List<List<List<int>>> dangerFieldsGroup_ARS = availableFields;
             /// Wyznaczanie odpowiedniej tabeli zakazanych pól w zależności od długości i kierunku położenia statku:
@@ -730,19 +760,19 @@ namespace InputWorkProgram   /// Przestrzeń wykonawcza - miejsce deklaracji kla
             {
                 // Sprawdzenie czy punkt początkowy statku jest dostępny w "fullIndex_AR": (tablica dostępnych pól, tablica ruchoma)
                 int notIsIn_fullAreasBoardAR = 0;
-                for (int j = 0; j < fullIndex_AR.Count; j++)
+                for (int j = 0; j < fullIndex_AR[player].Count; j++)
                 {
-                    if (fstCoor == fullIndex_AR[j])
+                    if (fstCoor == fullIndex_AR[player][j])
                     {
                         // Dostępne pole do rozpoczęcie tworzenia statku
                     }
-                    else if (fstCoor != fullIndex_AR[j])
+                    else if (fstCoor != fullIndex_AR[player][j])
                     {
                         /// Sytuacja: Statek nakłada się na inny statek lub statki
                         notIsIn_fullAreasBoardAR += 1;
                     }
                 }
-                if (notIsIn_fullAreasBoardAR < fullIndex_AR.Count)   /// Dostępne pole do rozpoczęcie tworzenia statku
+                if (notIsIn_fullAreasBoardAR < fullIndex_AR[player].Count)   /// Dostępne pole do rozpoczęcie tworzenia statku
                 {
                     // Włożenie pierwszej współrzędnej
                     shipCoordinates.Add(fstCoor);
@@ -771,9 +801,9 @@ namespace InputWorkProgram   /// Przestrzeń wykonawcza - miejsce deklaracji kla
                     int IS_In_fullIndex_AR_nextCoor = 0;
                     for (int i = 0; i < shipCoordinates.Count; i++)
                     {
-                        for (int j = 0; j < fullIndex_AR.Count; j++)
+                        for (int j = 0; j < fullIndex_AR[player].Count; j++)
                         {
-                            if (shipCoordinates[i] == fullIndex_AR[j])
+                            if (shipCoordinates[i] == fullIndex_AR[player][j])
                             {
                                 IS_In_fullIndex_AR_nextCoor += 1;
                                 if (IS_In_fullIndex_AR_nextCoor == shipCoordinates.Count)
@@ -841,7 +871,7 @@ namespace InputWorkProgram   /// Przestrzeń wykonawcza - miejsce deklaracji kla
                     //Console.WriteLine("");
                     //Console.ReadLine();
                 }
-                else if (notIsIn_fullAreasBoardAR == fullIndex_AR.Count)
+                else if (notIsIn_fullAreasBoardAR == fullIndex_AR[player].Count)
                 {
                     Console.WriteLine("");
                     Console.WriteLine("- - - - - - - - - - - - - - - - - - - -");
@@ -913,7 +943,6 @@ namespace InputWorkProgram   /// Przestrzeń wykonawcza - miejsce deklaracji kla
                 //Console.ReadLine();
             }
             else { }
-
             return (result, fullIndex_AR);
         }
     }
