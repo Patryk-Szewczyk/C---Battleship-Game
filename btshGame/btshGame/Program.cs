@@ -94,6 +94,7 @@ namespace InputWorkProgram   /// Przestrzeń wykonawcza - miejsce deklaracji kla
             Console.WriteLine("");
             Console.WriteLine("- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -");
             Console.WriteLine("");
+            // POPRAW INSTRUKCJĘ OBSŁUGI GRY!!!
             Console.WriteLine("1. Every player must set our every ship on our board.");
             Console.WriteLine("2. Every player have a 7 ships.");
             Console.WriteLine("3. Each ship has a certain length and direction.");
@@ -123,8 +124,7 @@ namespace InputWorkProgram   /// Przestrzeń wykonawcza - miejsce deklaracji kla
             BoardContentMaker boardContentMaker_Obj = new BoardContentMaker();
             //string[,] fieldAreaContent_AR = boardContentMaker_Obj.set_fieldAreaContent_AR();
             List<List<string>> playersShipCoor_AR = new List<List<string>>();   /// {player_1_AR, player_2_AR}
-            string[,,] playersBoardContent_AR = new string [2, 10, 10];
-            playersBoardContent_AR = boardContentMaker_Obj.set_fieldAreaContent_AR();
+            string[,,] playersBoardContent_AR = boardContentMaker_Obj.set_fieldAreaContent_AR();   // [2, 10, 10]
             List<int> fullIndex_AR = boardContentMaker_Obj.set_fullIndex_AR();   /// Osobna metoda z return
             List<List<List<int>>> availableFields_AR = boardContentMaker_Obj.set_availableFields_AR();   /// Osobna metoda z return
             int players = 0;
@@ -143,8 +143,9 @@ namespace InputWorkProgram   /// Przestrzeń wykonawcza - miejsce deklaracji kla
             string wantSave = "none";
             string[] letCoorName_AR = { "A", "B", "C", "D", "E", "F", "G", "H", "I", "J" };
             while (players < 2) 
-            { 
+            {
                 players += 1;
+                shipPage = 0;
                 Console.Clear();
                 Console.WriteLine("");
                 Console.WriteLine("Set ships on board for player " + players.ToString());
@@ -223,16 +224,9 @@ namespace InputWorkProgram   /// Przestrzeń wykonawcza - miejsce deklaracji kla
                     Console.WriteLine("");
                     Console.WriteLine("- - - - - - - - - - - - - - - - - - -");
                     Console.WriteLine("");
-                    if (isBegAgn_FromDir == true)
+                    if (isBegAgn_FromDir == true && shipPage < 7)
                     {
-                        if (shipPage < 7)
-                        {
-                            Console.WriteLine("You must set " + (shipPage + 1).ToString() + " ship now.");
-                        }
-                        else if (shipPage == 7)
-                        {
-                            Console.WriteLine("You must set " + shipPage.ToString() + " ship now.");
-                        }
+                        Console.WriteLine("You must set " + (shipPage + 1).ToString() + " ship now.");
                         Console.WriteLine("To continue you must click ENTER key.");
                         Console.WriteLine("");
                         string toShipSet = Console.ReadLine();
@@ -240,21 +234,12 @@ namespace InputWorkProgram   /// Przestrzeń wykonawcza - miejsce deklaracji kla
                     else { }
                     if (isDirCoor == false || shipFullCoor[0] == "?")   /// {"?"} Specjalna wartość informująca o wykryciu umieszczenia statku w niedozowlonym miejscu. Jest to wartość RESETOWA ponownego wyznaczenia współrzędnej początkowej
                     {
-                        if (isDir == false)
+                        if (isDir == false && shipPage < 7)
                         {
                             Console.Clear();
-                            if (shipPage < 7)
-                            {
-                                Console.WriteLine("Set " + (shipPage + 1).ToString() + "/7 ship direction: ");
-                                Console.WriteLine("Type: " + shipTypeName_AR[shipPage]);
-                                Console.WriteLine("Length: " + shipLengthName_AR[shipPage]);
-                            }
-                            else if (shipPage == 7)
-                            {
-                                Console.WriteLine("Set " + shipPage.ToString() + "/7 ship direction: ");
-                                Console.WriteLine("Type: " + shipTypeName_AR[shipPage - 1]);
-                                Console.WriteLine("Length: " + shipLengthName_AR[shipPage - 1]);
-                            }
+                            Console.WriteLine("Set " + (shipPage + 1).ToString() + "/7 ship direction: ");
+                            Console.WriteLine("Type: " + shipTypeName_AR[shipPage]);
+                            Console.WriteLine("Length: " + shipLengthName_AR[shipPage]);
                             Console.WriteLine("");
                             Console.WriteLine("\"B\" - vertical position (from top to bottom: A2 -> A2, B2 , ...)");
                             Console.WriteLine("\"R\" - horizontal position (from left to right: A2 -> A2, A3, ...)");
@@ -288,21 +273,12 @@ namespace InputWorkProgram   /// Przestrzeń wykonawcza - miejsce deklaracji kla
                             }
                         }
                         else { }
-                        if (isCoor == false || shipFullCoor[0] == "?")   /// {"?"} Specjalna wartość informująca o wykryciu umieszczenia statku w niedozowlonym miejscu. Jest to wartość RESETOWA ponownego wyznaczenia współrzędnej początkowej
+                        if ((isCoor == false && shipPage < 7) || (shipFullCoor[0] == "?" && shipPage < 7))   /// {"?"} Specjalna wartość informująca o wykryciu umieszczenia statku w niedozowlonym miejscu. Jest to wartość RESETOWA ponownego wyznaczenia współrzędnej początkowej
                         {
                             Console.Clear();
-                            if (shipPage < 7)
-                            {
-                                Console.WriteLine("Set " + (shipPage + 1).ToString() + "/7 ship coordinates: ");
-                                Console.WriteLine("Type: " + shipTypeName_AR[shipPage]);
-                                Console.WriteLine("Length: " + shipLengthName_AR[shipPage]);
-                            }
-                            else if (shipPage == 7)
-                            {
-                                Console.WriteLine("Set " + shipPage.ToString() + "/7 ship coordinates: ");
-                                Console.WriteLine("Type: " + shipTypeName_AR[shipPage - 1]);
-                                Console.WriteLine("Length: " + shipLengthName_AR[shipPage - 1]);
-                            }
+                            Console.WriteLine("Set " + (shipPage + 1).ToString() + "/7 ship coordinates: ");
+                            Console.WriteLine("Type: " + shipTypeName_AR[shipPage]);
+                            Console.WriteLine("Length: " + shipLengthName_AR[shipPage]);
                             Console.WriteLine("");
                             Console.WriteLine("Value from A0 to J9:");
                             Console.WriteLine("");
@@ -393,7 +369,7 @@ namespace InputWorkProgram   /// Przestrzeń wykonawcza - miejsce deklaracji kla
                     {
                         Console.WriteLine("Do you want save this ship data? Write \"yes\" or \"no\".");
                         wantSave = Console.ReadLine();
-                        if (wantSave == "yes")
+                        if (wantSave == "yes" && shipPage < 7)
                         {
                             // TWORZENIE OBIEKTU STATKU - INSTANCJI KLASY FABRYKI STATKÓW - PRZEKAZUJĄC WSZYSTKIE POTRZEBNE DO TEGO PARAMERY:
                             // kod
@@ -427,7 +403,7 @@ namespace InputWorkProgram   /// Przestrzeń wykonawcza - miejsce deklaracji kla
                             Array.Clear(shipFullCoor, 0, shipFullCoor.Length);
                             wantSave = "none";
                         }
-                        else if (wantSave == "no")
+                        else if (wantSave == "no" && shipPage < 7)
                         {
                             /// Reset wszystkich słiczów i ponowne pozycjonowanie statku
                             Console.WriteLine("");
@@ -438,16 +414,13 @@ namespace InputWorkProgram   /// Przestrzeń wykonawcza - miejsce deklaracji kla
                             Console.WriteLine("");
                             string any = Console.ReadLine();
                             /// Reset zmiennych potrzebnych do wypełniania informacji o bieżącym statu i związanych z nimi przełączników:
-                            if (shipPage < 7)
-                            {
-                                isDir = false;
-                                isBegAgn_FromDir = true;
-                                isCoor = true;   /// Niewidoczne, bo najpierw trzeba ogarnąć kierunek, a potem wyświetlić zapytanie o współrzędną początkową
-                                isDirCoor = false;
-                                firstCoor = "";
-                                Array.Clear(shipFullCoor, 0, shipFullCoor.Length);
-                                wantSave = "none";
-                            }
+                            isDir = false;
+                            isBegAgn_FromDir = true;
+                            isCoor = true;   /// Niewidoczne, bo najpierw trzeba ogarnąć kierunek, a potem wyświetlić zapytanie o współrzędną początkową
+                            isDirCoor = false;
+                            firstCoor = "";
+                            Array.Clear(shipFullCoor, 0, shipFullCoor.Length);
+                            wantSave = "none";
                         }
                     }
                     if (shipPage == 7  && isSetPlayerShipCoor == true)
@@ -466,7 +439,6 @@ namespace InputWorkProgram   /// Przestrzeń wykonawcza - miejsce deklaracji kla
                         //playersBoardContent_AR.Add();
                         /// Reset wszystkigo co potrzebne do ponownego ustawienia statków dla kolejnego gracza:
                         isSetPlayerShipCoor = false;
-                        shipPage = -1;
                         // - - - - - - - - - - - - -
                         isDir = false;
                         isBegAgn_FromDir = true;
