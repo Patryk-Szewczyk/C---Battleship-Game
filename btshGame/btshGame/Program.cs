@@ -48,6 +48,7 @@ namespace OutputProgram   /// Przestrzeń wyjściowa - miejce deklaracji obiekt�
             playersShipCoor_AR = playersData_AR.Item1;   /// DO SPRAWDZENIA!
             playersBoardContent_AR = playersData_AR.Item2;   /// DO SPRAWDZENIA!
             // metoda: fight()   // argument: playersShipCoor_AR & playersBoardContent_AR
+            string winner = gameLoop.fight(playersShipCoor_AR, playersBoardContent_AR);
             // metoda: prize()   // argument: winner
             // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
             // Ekran końcowy i napisy końcowe
@@ -146,6 +147,7 @@ namespace InputWorkProgram   /// Przestrzeń wykonawcza - miejsce deklaracji kla
             bool isCoor = true;  /// true - musi być niewidozne dopóki kierunke nie jest określony
             string firstCoor = "";
             string[] shipFullCoor = { "" };
+            bool isDone = false;
             string wantSave = "none";
             string[] letCoorName_AR = { "A", "B", "C", "D", "E", "F", "G", "H", "I", "J" };
             while (players < 2)
@@ -163,36 +165,32 @@ namespace InputWorkProgram   /// Przestrzeń wykonawcza - miejsce deklaracji kla
                 {
                     Console.Clear();
                     Console.WriteLine("");
-                    Console.WriteLine("            PLAYER " + players);
-                    Console.WriteLine("");
-                    Console.WriteLine("- - - - - - - - - - - - - - - - -");
-                    Console.WriteLine("  _____________________________  ");
-                    Console.WriteLine(" |                             | ");
-                    Console.WriteLine(" |                             | ");
-                    Console.WriteLine(" |      0 1 2 3 4 5 6 7 8 9    | ");
-                    Console.Write(" |    ");   /// lewa strona planszy
-                                               /// Wyświetlanie  planszy tablicy za pomocą pętli zagnieżdżonej iterującej tablicę dwuwymiarową:
+                    Console.WriteLine("               PLAYER " + players);
+                    Console.WriteLine("                                     ");
+                    Console.WriteLine("         0 1 2 3 4 5 6 7 8 9         ");
+                    Console.WriteLine("         -------------------         ");
+                    Console.Write("     ");   /// lewa strona planszy
+                                              /// Wyświetlanie  planszy tablicy za pomocą pętli zagnieżdżonej iterującej tablicę dwuwymiarową:
                     for (int i = 0; i < 10; i++)
                     {
-                        Console.Write(letCoorName_AR[i] + " ");
+                        Console.Write(letCoorName_AR[i] + " | ");
                         for (int j = 0; j < 10; j++)
                         {
                             /// tablica trzywymiarowa, (players - 1) - players jest inkrementowane na początku pętli,
                             /// a indeksy rozpoczynają się od zera, więc daltego mamy (players - 1)
                             Console.Write(playersBoardContent_AR[(players - 1), i, j]);
                         }
-                        Console.Write("");
-                        Console.WriteLine("   | ");   /// prawa strona planszy
+                        Console.Write("|");
+                        Console.WriteLine("    ");   /// prawa strona planszy
                         if (i < 9)   /// w iteracji dobijamy maksymalnie do 9, bo [i] ma być < 10
                         {
-                            Console.Write(" |    ");   /// lewa strona planszy
+                            Console.Write("     ");   /// lewa strona planszy
                         }
                         else if (i >= 9) { }
                     }
-                    Console.WriteLine(" |                             | ");
-                    Console.WriteLine(" |_____________________________| ");
-                    Console.WriteLine("");
-                    Console.WriteLine("- - - - - - - - - - - - - - - - -");
+                    Console.WriteLine("         -------------------         ");
+                    Console.WriteLine("                                     ");
+                    Console.WriteLine("- - - - - - - - - - - - - - - - - - -");
                     Console.WriteLine("");
                     if (shipPage < 7)   /// 7 jest przeznaczone tylko dla komunikato o zakończeniu ustawianai statków dla gracza. W poniższych sytuacjach trzeba zmniejszyć o 1, gdyż w przeciwnym razie lecimy o 1 statek do góry, przez co mam złe wartości liczbowe i błąd w Array (RangeOf)
                     {
@@ -231,9 +229,9 @@ namespace InputWorkProgram   /// Przestrzeń wykonawcza - miejsce deklaracji kla
                     Console.WriteLine("");
                     Console.WriteLine("- - - - - - - - - - - - - - - - - - -");
                     Console.WriteLine("");
-                    if (isBegAgn_FromDir == true && shipPage < 7)
+                    if (isBegAgn_FromDir == true && shipPage == 0)
                     {
-                        Console.WriteLine("You must set " + (shipPage + 1).ToString() + " ship now.");
+                        Console.WriteLine("You must set all 7 ships to continue.");
                         Console.WriteLine("To continue you must click ENTER key.");
                         Console.WriteLine("");
                         Console.ReadLine();
@@ -244,11 +242,70 @@ namespace InputWorkProgram   /// Przestrzeń wykonawcza - miejsce deklaracji kla
                         if (isDir == false && shipPage < 7)
                         {
                             Console.Clear();
-                            Console.WriteLine("Set " + (shipPage + 1).ToString() + "/7 ship direction: ");
-                            Console.WriteLine("Type: " + shipTypeName_AR[shipPage]);
-                            Console.WriteLine("Length: " + shipLengthName_AR[shipPage]);
                             Console.WriteLine("");
-                            Console.WriteLine("\"B\" - vertical position (from top to bottom: A2 -> A2, B2 , ...)");
+                            Console.WriteLine("               PLAYER " + players);
+                            Console.WriteLine("                                     ");
+                            Console.WriteLine("         0 1 2 3 4 5 6 7 8 9         ");
+                            Console.WriteLine("         -------------------         ");
+                            Console.Write("     ");   /// lewa strona planszy
+                                                      /// Wyświetlanie  planszy tablicy za pomocą pętli zagnieżdżonej iterującej tablicę dwuwymiarową:
+                            for (int i = 0; i < 10; i++)
+                            {
+                                Console.Write(letCoorName_AR[i] + " | ");
+                                for (int j = 0; j < 10; j++)
+                                {
+                                    /// tablica trzywymiarowa, (players - 1) - players jest inkrementowane na początku pętli,
+                                    /// a indeksy rozpoczynają się od zera, więc daltego mamy (players - 1)
+                                    Console.Write(playersBoardContent_AR[(players - 1), i, j]);
+                                }
+                                Console.Write("|");
+                                Console.WriteLine("    ");   /// prawa strona planszy
+                                if (i < 9)   /// w iteracji dobijamy maksymalnie do 9, bo [i] ma być < 10
+                                {
+                                    Console.Write("     ");   /// lewa strona planszy
+                                }
+                                else if (i >= 9) { }
+                            }
+                            Console.WriteLine("         -------------------         ");
+                            Console.WriteLine("                                     ");
+                            Console.WriteLine("- - - - - - - - - - - - - - - - - - -");
+                            Console.WriteLine("");
+                            if (shipPage < 7)   /// 7 jest przeznaczone tylko dla komunikato o zakończeniu ustawianai statków dla gracza. W poniższych sytuacjach trzeba zmniejszyć o 1, gdyż w przeciwnym razie lecimy o 1 statek do góry, przez co mam złe wartości liczbowe i błąd w Array (RangeOf)
+                            {
+                                Console.WriteLine("Set " + (shipPage + 1).ToString() + "/7 ship:");
+                                Console.WriteLine("Type: " + shipTypeName_AR[shipPage]);
+                                Console.WriteLine("Length: " + shipLengthName_AR[shipPage]);
+                            }
+                            else if (shipPage == 7)
+                            {
+                                Console.WriteLine("Set " + shipPage.ToString() + "/7 ship:");
+                                Console.WriteLine("Type: " + shipTypeName_AR[shipPage - 1]);
+                                Console.WriteLine("Length: " + shipLengthName_AR[shipPage - 1]);
+                            }
+                            if (isDir == false)
+                            {
+                                Console.WriteLine("Direction: ?");
+                            }
+                            else if (isDir == true)
+                            {
+                                Console.WriteLine("Direction: " + selectDirection);
+                            }
+                            if (isCoor == true)
+                            {
+                                Console.WriteLine("Coordination: ?");
+                            }
+                            else if (isCoor == false)
+                            {
+                                Console.Write("Coordination:");
+                                for (int i = 0; i < shipFullCoor.Length; i++)
+                                {
+                                    Console.Write(" | " + shipFullCoor[i]);
+                                }
+                                Console.Write(" |");
+                                Console.WriteLine("");
+                            }
+                            Console.WriteLine("");
+                            Console.WriteLine("\"B\" - vertical position (from top to bottom: A2 -> A2, B2, ...)");
                             Console.WriteLine("\"R\" - horizontal position (from left to right: A2 -> A2, A3, ...)");
                             Console.WriteLine("");
                             selectDirection = Console.ReadLine();
@@ -259,9 +316,9 @@ namespace InputWorkProgram   /// Przestrzeń wykonawcza - miejsce deklaracji kla
                                 isDir = true;
                                 isCoor = false;
                                 Console.WriteLine("");
-                                Console.WriteLine("- - - - - - - - - - - - - - - - -");
+                                Console.WriteLine("- - - - - - - - - - - - - - - - - - -");
                                 Console.WriteLine("");
-                                Console.WriteLine("Direction is set!");
+                                Console.WriteLine("Direction is saved!");
                                 Console.WriteLine("To continue click ENTER key");
                                 Console.WriteLine("");
                                 Console.ReadLine();
@@ -271,9 +328,10 @@ namespace InputWorkProgram   /// Przestrzeń wykonawcza - miejsce deklaracji kla
                                 shipPageIncrement = 0;
                                 isBegAgn_FromDir = false;
                                 Console.WriteLine("");
-                                Console.WriteLine("- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -");
+                                Console.WriteLine("- - - - - - - - - - - - - - - - - - -");
                                 Console.WriteLine("");
-                                Console.WriteLine("You write uncorrect value. Direction value must be \"B\" or \"R\" !");
+                                Console.WriteLine("You write uncorrect value.");
+                                Console.WriteLine("Direction value must be \"B\" or \"R\" !");
                                 Console.WriteLine("To continue click ENTER key");
                                 Console.WriteLine("");
                                 Console.ReadLine();
@@ -283,9 +341,68 @@ namespace InputWorkProgram   /// Przestrzeń wykonawcza - miejsce deklaracji kla
                         if ((isCoor == false && shipPage < 7) || (shipFullCoor[0] == "?" && shipPage < 7))   /// {"?"} Specjalna wartość informująca o wykryciu umieszczenia statku w niedozowlonym miejscu. Jest to wartość RESETOWA ponownego wyznaczenia współrzędnej początkowej
                         {
                             Console.Clear();
-                            Console.WriteLine("Set " + (shipPage + 1).ToString() + "/7 ship coordinates: ");
-                            Console.WriteLine("Type: " + shipTypeName_AR[shipPage]);
-                            Console.WriteLine("Length: " + shipLengthName_AR[shipPage]);
+                            Console.WriteLine("");
+                            Console.WriteLine("               PLAYER " + players);
+                            Console.WriteLine("                                     ");
+                            Console.WriteLine("         0 1 2 3 4 5 6 7 8 9         ");
+                            Console.WriteLine("         -------------------         ");
+                            Console.Write("     ");   /// lewa strona planszy
+                                                      /// Wyświetlanie  planszy tablicy za pomocą pętli zagnieżdżonej iterującej tablicę dwuwymiarową:
+                            for (int i = 0; i < 10; i++)
+                            {
+                                Console.Write(letCoorName_AR[i] + " | ");
+                                for (int j = 0; j < 10; j++)
+                                {
+                                    /// tablica trzywymiarowa, (players - 1) - players jest inkrementowane na początku pętli,
+                                    /// a indeksy rozpoczynają się od zera, więc daltego mamy (players - 1)
+                                    Console.Write(playersBoardContent_AR[(players - 1), i, j]);
+                                }
+                                Console.Write("|");
+                                Console.WriteLine("    ");   /// prawa strona planszy
+                                if (i < 9)   /// w iteracji dobijamy maksymalnie do 9, bo [i] ma być < 10
+                                {
+                                    Console.Write("     ");   /// lewa strona planszy
+                                }
+                                else if (i >= 9) { }
+                            }
+                            Console.WriteLine("         -------------------         ");
+                            Console.WriteLine("                                     ");
+                            Console.WriteLine("- - - - - - - - - - - - - - - - - - -");
+                            Console.WriteLine("");
+                            if (shipPage < 7)   /// 7 jest przeznaczone tylko dla komunikato o zakończeniu ustawianai statków dla gracza. W poniższych sytuacjach trzeba zmniejszyć o 1, gdyż w przeciwnym razie lecimy o 1 statek do góry, przez co mam złe wartości liczbowe i błąd w Array (RangeOf)
+                            {
+                                Console.WriteLine("Set " + (shipPage + 1).ToString() + "/7 ship:");
+                                Console.WriteLine("Type: " + shipTypeName_AR[shipPage]);
+                                Console.WriteLine("Length: " + shipLengthName_AR[shipPage]);
+                            }
+                            else if (shipPage == 7)
+                            {
+                                Console.WriteLine("Set " + shipPage.ToString() + "/7 ship:");
+                                Console.WriteLine("Type: " + shipTypeName_AR[shipPage - 1]);
+                                Console.WriteLine("Length: " + shipLengthName_AR[shipPage - 1]);
+                            }
+                            if (isDir == false)
+                            {
+                                Console.WriteLine("Direction: ?");
+                            }
+                            else if (isDir == true)
+                            {
+                                Console.WriteLine("Direction: " + selectDirection);
+                            }
+                            if (isCoor == true || isDone == false)   /// isDone - kiedy nie ma określonych współrzędnych, lub nie przeszły testu poprawności
+                            {
+                                Console.WriteLine("Coordination: ?");
+                            }
+                            else if (isCoor == false && isDone == true)   /// isDone - współrzędne przeszły testy poprawności i są ustalone. Musiałem to zrobić, gdyż w pewnym momencie pojawiało się niechciane puste pole bez "?".
+                            {
+                                Console.Write("Coordination:");
+                                for (int i = 0; i < shipFullCoor.Length; i++)
+                                {
+                                    Console.Write(" | " + shipFullCoor[i]);
+                                }
+                                Console.Write(" |");
+                                Console.WriteLine("");
+                            }
                             Console.WriteLine("");
                             Console.WriteLine("Value from A0 to J9:");
                             Console.WriteLine("");
@@ -293,9 +410,10 @@ namespace InputWorkProgram   /// Przestrzeń wykonawcza - miejsce deklaracji kla
                             if (firstCoor == null)   /// Sprawdzenie czy współrzędna początkowa nie jest pusta.
                             {
                                 Console.WriteLine("");
-                                Console.WriteLine("- - - - - - - - - - - - - - - - - - - - - - - - - - - - -");
+                                Console.WriteLine("- - - - - - - - - - - - - - - - - - -");
                                 Console.WriteLine("");
-                                Console.WriteLine("You don\'t left empty value. You can write correct value.");
+                                Console.WriteLine("You don\'t left empty value.");
+                                Console.WriteLine("You can write correct value.");
                                 Console.WriteLine("Click ENTER key to continue:");
                                 Console.WriteLine("");
                                 Console.ReadLine();
@@ -306,9 +424,10 @@ namespace InputWorkProgram   /// Przestrzeń wykonawcza - miejsce deklaracji kla
                                 if (firstCoor.Length != 2)   /// Sprawdzenie czy współrzędna początkowa ma odpowiednią długość.
                                 {
                                     Console.WriteLine("");
-                                    Console.WriteLine("- - - - - - - - - - - - - - - - - - - - - - - - - - - - -");
+                                    Console.WriteLine("- - - - - - - - - - - - - - - - - - -");
                                     Console.WriteLine("");
-                                    Console.WriteLine("Your value\'s length is uncorrect. You must change it.");
+                                    Console.WriteLine("Your value\'s length is uncorrect. ");
+                                    Console.WriteLine("You must change it.");
                                     Console.WriteLine("Click ENTER key to continue:");
                                     Console.WriteLine("");
                                     Console.ReadLine();
@@ -352,13 +471,21 @@ namespace InputWorkProgram   /// Przestrzeń wykonawcza - miejsce deklaracji kla
                                         ShipBuildChecker shipBuildChecker_Obj = new ShipBuildChecker();
                                         /// Za każdym ułożeniem statku, tabela pozycji pól planszy ma skracać się o współrzędne statku i z tego powodu potrzebne było aktualizowanie
                                         /// ów tabeli poza pętlą while, aby zachować jej zaktualizowany stan i ponownie ją przekazać do obróbki. W tym celu użyłem krotki ze standardu 7.0:
-                                        (string[], List<List<int>>) tuples_1 = shipBuildChecker_Obj.shipCoorBuildChecker(firstCoor, selectDirection, shipLengthName_AR[shipPage], availableFields_AR, fullIndex_AR, avalLet_AR, avalNum_AR, players);
+                                        (string[], List<List<int>>, bool) tuples_1 = shipBuildChecker_Obj.shipCoorBuildChecker(firstCoor, selectDirection, shipLengthName_AR[shipPage], availableFields_AR, fullIndex_AR, avalLet_AR, avalNum_AR, players, isDone);
                                         shipFullCoor = tuples_1.Item1;
                                         fullIndex_AR = tuples_1.Item2;
+                                        isDone = tuples_1.Item3;
                                         string playerShipCoor = "";
                                         for (int i = 0; i < shipFullCoor.Length; i++)
                                         {
-                                            playerShipCoor += " | " + shipFullCoor[i];
+                                            if (i == 0)
+                                            {
+                                                playerShipCoor += shipFullCoor[i];
+                                            }
+                                            else if (i > 0)
+                                            {
+                                                playerShipCoor += " | " + shipFullCoor[i];
+                                            }
                                         }
                                         playersShipCoor_AR[players - 1, shipPage] = playerShipCoor;
                                         //List<string> playerOnceShipCoor = new List<string>();
@@ -368,7 +495,7 @@ namespace InputWorkProgram   /// Przestrzeń wykonawcza - miejsce deklaracji kla
                                     else if (isIn_avalLet_AR == false || isIn_avalNum_AR == false)
                                     {
                                         Console.WriteLine("");
-                                        Console.WriteLine("- - - - - - - - - - - - - - - - - -");
+                                        Console.WriteLine("- - - - - - - - - - - - - - - - - - -");
                                         Console.WriteLine("");
                                         Console.WriteLine("This area NOT exists in our board!");
                                         Console.WriteLine("Click ENTER key to continue:");
@@ -402,7 +529,7 @@ namespace InputWorkProgram   /// Przestrzeń wykonawcza - miejsce deklaracji kla
                             else { }
                             // Reset wszytskich słiczów i przejście do kolejnego statku
                             Console.WriteLine("");
-                            Console.WriteLine("- - - - - - - - - - - - - - - -");
+                            Console.WriteLine("- - - - - - - - - - - - - - - - - - -");
                             Console.WriteLine("");
                             Console.WriteLine("Your ship data is saved!");
                             Console.WriteLine("Click ENTER key to continue:");
@@ -423,9 +550,10 @@ namespace InputWorkProgram   /// Przestrzeń wykonawcza - miejsce deklaracji kla
                         {
                             /// Reset wszystkich słiczów i ponowne pozycjonowanie statku
                             Console.WriteLine("");
-                            Console.WriteLine("- - - - - - - - - - - - - - - - -");
+                            Console.WriteLine("- - - - - - - - - - - - - - - - - - -");
                             Console.WriteLine("");
-                            Console.WriteLine("Your ship data is deleted. You must posite ship again.");
+                            Console.WriteLine("Your ship data is deleted.");
+                            Console.WriteLine("You must posite ship again.");
                             Console.WriteLine("Click ENTER key to continue:");
                             Console.WriteLine("");
                             Console.ReadLine();
@@ -433,6 +561,7 @@ namespace InputWorkProgram   /// Przestrzeń wykonawcza - miejsce deklaracji kla
                             isDir = false;
                             isBegAgn_FromDir = true;
                             isCoor = true;   /// Niewidoczne, bo najpierw trzeba ogarnąć kierunek, a potem wyświetlić zapytanie o współrzędną początkową
+                            isDone = false;
                             isDirCoor = false;
                             firstCoor = "";
                             Array.Clear(shipFullCoor, 0, shipFullCoor.Length);
@@ -443,10 +572,10 @@ namespace InputWorkProgram   /// Przestrzeń wykonawcza - miejsce deklaracji kla
                     {
                         /// Informacja o ustawieniu wszystkich statków:
                         Console.WriteLine("");
-                        Console.WriteLine("- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -");
-                        Console.WriteLine("");
-                        Console.WriteLine("You set all ships. Now you make a mental note yours ship with them coordinates");
-                        Console.WriteLine("and next to second player and next to second player ship setting.");
+                        Console.WriteLine("You set all ships. Now you make a mental");
+                        Console.WriteLine("note yours ship with them coordinates");
+                        Console.WriteLine("and next to second player and next to");
+                        Console.WriteLine("second player ship setting.");
                         Console.WriteLine("Click ENTER key to continue:");
                         Console.WriteLine("");
                         Console.ReadLine();
@@ -459,6 +588,7 @@ namespace InputWorkProgram   /// Przestrzeń wykonawcza - miejsce deklaracji kla
                         isDir = false;
                         isBegAgn_FromDir = true;
                         isCoor = true;   /// Niewidoczne, bo najpierw trzeba ogarnąć kierunek, a potem wyświetlić zapytanie o współrzędną początkową
+                        isDone = false;
                         isDirCoor = false;
                         firstCoor = "";
                         Array.Clear(shipFullCoor, 0, shipFullCoor.Length);
@@ -469,15 +599,76 @@ namespace InputWorkProgram   /// Przestrzeń wykonawcza - miejsce deklaracji kla
             }
             return (playersShipCoor_AR, playersBoardContent_AR);
         }
+        public string fight(string[,] playersShipCoor_AR, string[,,] playersBoardContent_AR)
+        {
+            /// Deklaracja głównych zmiennych:
+            string[,] playersShips_AR_toConvert = new string[2, 7];
+            string[,,] playersBoards_AR = new string[2, 10, 10];
+            playersShips_AR_toConvert = playersShipCoor_AR;
+            playersBoards_AR = playersBoardContent_AR;
+            string winner = "";
+            string[] letCoorName_AR = { "A", "B", "C", "D", "E", "F", "G", "H", "I", "J" };
+
+
+            /// Konwersja tablicy [,] współrzędnych statków dla danego gracza na tablicę "List" w celu rozdzielenia stringowych "połączonych" 
+            /// współrzędnych w rozdzielone stringowe znajdujące się w doatkowej tablicy. 
+            List<List<List<string>>> playersShips_AR = new List<List<List<string>>>();   /// gracz -> statek -> współrzędne -> współrzędna
+            List<List<string>> oncePlayerShips__AR = new List<List<string>>();
+            List<string> onceShipCoor_AR = new List<string>();
+            string[] splitVal_AR;
+            for (int i = 0; i < 2; i++)
+            {
+                for (int j = 0; j < 7; j++)
+                {
+                    splitVal_AR = playersShips_AR_toConvert[i, j].Split(" | ");
+                    onceShipCoor_AR = splitVal_AR.Select(x => x.ToString()).ToList();
+                    oncePlayerShips__AR.Add(onceShipCoor_AR);
+                }
+                playersShips_AR.Add(oncePlayerShips__AR);
+            }
+
+            Console.Clear();
+            Console.WriteLine("");
+            Console.WriteLine("               PLAYER 1                       PLAYER 2              ");
+            Console.WriteLine("                                                                    ");
+            Console.WriteLine("         0 1 2 3 4 5 6 7 8 9            0 1 2 3 4 5 6 7 8 9         ");
+            Console.WriteLine("         -------------------            -------------------         ");
+            Console.Write("     ");   /// lewa strona planszy
+                                      /// Wyświetlanie  planszy tablicy za pomocą pętli zagnieżdżonej iterującej tablicę dwuwymiarową:
+            for (int i = 0; i < 10; i++)
+            {
+                Console.Write(letCoorName_AR[i] + " | ");
+                for (int j = 0; j < 10; j++)
+                {
+                    /// tablica trzywymiarowa, (players - 1) - players jest inkrementowane na początku pętli,
+                    /// a indeksy rozpoczynają się od zera, więc daltego mamy (players - 1)
+                    Console.Write(playersBoardContent_AR[0, i, j]);
+                }
+                Console.Write("|       ");
+                Console.Write(letCoorName_AR[i] + " | ");
+                for (int j = 0; j < 10; j++)
+                {
+                    Console.Write(playersBoardContent_AR[1, i, j]);
+                }
+                Console.Write("|");
+                Console.WriteLine("    ");   /// prawa strona planszy
+                if (i < 9)   /// w iteracji dobijamy maksymalnie do 9, bo [i] ma być < 10
+                {
+                    Console.Write("     ");   /// lewa strona planszy
+                }
+                else if (i >= 9) { }
+            }
+            Console.WriteLine("         -------------------            -------------------         ");
+            Console.WriteLine("                                                                    ");
+            Console.WriteLine("- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - ");
+            Console.WriteLine("");
+            Console.ReadLine();
+
+            return winner;
+        }
     }
     public class BoardContentMaker
     {
-        //public List<List<List<List<string>>>> setPlayersShipCoor(List<List<List<List<string>>>> playersShipCoor_AR)
-        //{
-        /// Tworzenie indeksów (do czterowymiarowego List) na współrzędne statków dla obu graczy:
-        //List<List<List<List<string>>>> result = playersShipCoor_AR;
-        //return result;
-        //}
         public string[,,] set_fieldAreaContent_AR()
         {
             /// Tworzenie tablic z graficzną zawartością stanu gry dla wszystkich graczy:
@@ -686,7 +877,7 @@ namespace InputWorkProgram   /// Przestrzeń wykonawcza - miejsce deklaracji kla
     }
     public class ShipBuildChecker
     {
-        public (string[], List<List<int>>) shipCoorBuildChecker(string firstCor, string direction, string length, List<List<List<int>>> availableFields, List<List<int>> fullIndexArray, string[] avalLet_AR, string[] avalNum_AR, int players)
+        public (string[], List<List<int>>, bool) shipCoorBuildChecker(string firstCor, string direction, string length, List<List<List<int>>> availableFields, List<List<int>> fullIndexArray, string[] avalLet_AR, string[] avalNum_AR, int players, bool isDone)
         {
             // Konwersja stringowej formy współrzędnej początkowej na formę intową: (B2 -> A = 0, B = 10, C = 20, ... więc B2 = 10 + 2 = 12)
             string[] brdLetCor_AR = avalLet_AR;
@@ -696,6 +887,7 @@ namespace InputWorkProgram   /// Przestrzeń wykonawcza - miejsce deklaracji kla
             string fstCoor_2_num = fstCoor_string.Substring(1, 1);
             string fstCoor_1_num = "";
             int player = players - 1;
+            bool isResult = isDone;
             for (int i = 0; i < avalLet_AR.Length; i++)
             {
                 if (fstCoor_1_let == brdLetCor_AR[i])
@@ -827,7 +1019,7 @@ namespace InputWorkProgram   /// Przestrzeń wykonawcza - miejsce deklaracji kla
                     if (IS_In_fullIndex_AR_nextCoor < int.Parse(lgt))   // Jeżeli współrzędne statku NIE są dostępne w tablicy RUCHOMEJ - statek nakłada się na inny statek
                     {
                         Console.WriteLine("");
-                        Console.WriteLine("- - - - - - - - - - - - - - - - - - - -");
+                        Console.WriteLine("- - - - - - - - - - - - - - - - - - - - -");
                         Console.WriteLine("");
                         Console.WriteLine("Ship canNOT overlap other ship or ships!");
                         Console.WriteLine("You must give new coordinates.");
@@ -841,10 +1033,11 @@ namespace InputWorkProgram   /// Przestrzeń wykonawcza - miejsce deklaracji kla
                     }
                     else if (IS_In_fullIndex_AR_nextCoor == int.Parse(lgt))   // Jeżeli współrzędne statku są dostępne w tablicy RUCHOMEJ - na planszy jest wolne miejsce
                     {
+                        isResult = true;
                         Console.WriteLine("");
-                        Console.WriteLine("- - - - - - - - - - - - - - -");
+                        Console.WriteLine("- - - - - - - - - - - - - - - - - - - - -");
                         Console.WriteLine("");
-                        Console.WriteLine("Ship coordinates are set!");
+                        Console.WriteLine("Ship coordinates are saved!");
                         Console.WriteLine("Click ENTER key to continue:");
                         Console.WriteLine("");
                         Console.ReadLine();
@@ -874,7 +1067,7 @@ namespace InputWorkProgram   /// Przestrzeń wykonawcza - miejsce deklaracji kla
                 else if (notIsIn_fullAreasBoardAR == fullIndex_AR[player].Count)
                 {
                     Console.WriteLine("");
-                    Console.WriteLine("- - - - - - - - - - - - - - - - - - - -");
+                    Console.WriteLine("- - - - - - - - - - - - - - - - - - - - -");
                     Console.WriteLine("");
                     Console.WriteLine("Ship canNOT overlap other ship or ships!");
                     Console.WriteLine("You must give new coordinates.");
@@ -888,7 +1081,7 @@ namespace InputWorkProgram   /// Przestrzeń wykonawcza - miejsce deklaracji kla
             else if (notIsIn_availableFields < dangerFields_AR.Count)   /// Sytuacja: Statek znajduje się poza planszą
             {
                 Console.WriteLine("");
-                Console.WriteLine("- - - - - - - - - - - - - - - -");
+                Console.WriteLine("- - - - - - - - - - - - - - - - - - - - -");
                 Console.WriteLine("");
                 Console.WriteLine("Ship canNOT located over board!");
                 Console.WriteLine("You must give new coordinates.");
@@ -943,7 +1136,7 @@ namespace InputWorkProgram   /// Przestrzeń wykonawcza - miejsce deklaracji kla
                 //Console.ReadLine();
             }
             else { }
-            return (result, fullIndex_AR);
+            return (result, fullIndex_AR, isResult);
         }
     }
 }
