@@ -541,6 +541,7 @@ namespace InputWorkProgram   /// Przestrzeń wykonawcza - miejsce deklaracji kla
                             isDir = false;
                             isBegAgn_FromDir = true;
                             isCoor = true;   /// Niewidoczne, bo najpierw trzeba ogarnąć kierunek, a potem wyświetlić zapytanie o współrzędną początkową
+                            isDone = false;
                             isDirCoor = false;
                             firstCoor = "";
                             Array.Clear(shipFullCoor, 0, shipFullCoor.Length);
