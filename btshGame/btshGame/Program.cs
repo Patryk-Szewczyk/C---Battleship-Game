@@ -157,6 +157,7 @@ namespace InputWorkProgram   /// Przestrzeń wykonawcza - miejsce deklaracji kla
                 Console.Clear();
                 Console.WriteLine("");
                 Console.WriteLine("Set ships on board for player " + players.ToString());
+                Console.WriteLine("");
                 Console.WriteLine("To continue you must click ENTER key.");
                 Console.WriteLine("");
                 Console.ReadLine();
@@ -232,6 +233,7 @@ namespace InputWorkProgram   /// Przestrzeń wykonawcza - miejsce deklaracji kla
                     if (isBegAgn_FromDir == true && shipPage == 0)
                     {
                         Console.WriteLine("You must set all 7 ships to continue.");
+                        Console.WriteLine("");
                         Console.WriteLine("To continue you must click ENTER key.");
                         Console.WriteLine("");
                         Console.ReadLine();
@@ -319,6 +321,7 @@ namespace InputWorkProgram   /// Przestrzeń wykonawcza - miejsce deklaracji kla
                                 Console.WriteLine("- - - - - - - - - - - - - - - - - - -");
                                 Console.WriteLine("");
                                 Console.WriteLine("Direction is saved!");
+                                Console.WriteLine("");
                                 Console.WriteLine("To continue click ENTER key");
                                 Console.WriteLine("");
                                 Console.ReadLine();
@@ -332,6 +335,7 @@ namespace InputWorkProgram   /// Przestrzeń wykonawcza - miejsce deklaracji kla
                                 Console.WriteLine("");
                                 Console.WriteLine("You write uncorrect value.");
                                 Console.WriteLine("Direction value must be \"B\" or \"R\" !");
+                                Console.WriteLine("");
                                 Console.WriteLine("To continue click ENTER key");
                                 Console.WriteLine("");
                                 Console.ReadLine();
@@ -414,6 +418,7 @@ namespace InputWorkProgram   /// Przestrzeń wykonawcza - miejsce deklaracji kla
                                 Console.WriteLine("");
                                 Console.WriteLine("You don\'t left empty value.");
                                 Console.WriteLine("You can write correct value.");
+                                Console.WriteLine("");
                                 Console.WriteLine("Click ENTER key to continue:");
                                 Console.WriteLine("");
                                 Console.ReadLine();
@@ -428,6 +433,7 @@ namespace InputWorkProgram   /// Przestrzeń wykonawcza - miejsce deklaracji kla
                                     Console.WriteLine("");
                                     Console.WriteLine("Your value\'s length is uncorrect. ");
                                     Console.WriteLine("You must change it.");
+                                    Console.WriteLine("");
                                     Console.WriteLine("Click ENTER key to continue:");
                                     Console.WriteLine("");
                                     Console.ReadLine();
@@ -484,7 +490,7 @@ namespace InputWorkProgram   /// Przestrzeń wykonawcza - miejsce deklaracji kla
                                             }
                                             else if (i > 0)
                                             {
-                                                playerShipCoor += " | " + shipFullCoor[i];
+                                                playerShipCoor += "|" + shipFullCoor[i];
                                             }
                                         }
                                         playersShipCoor_AR[players - 1, shipPage] = playerShipCoor;
@@ -498,6 +504,7 @@ namespace InputWorkProgram   /// Przestrzeń wykonawcza - miejsce deklaracji kla
                                         Console.WriteLine("- - - - - - - - - - - - - - - - - - -");
                                         Console.WriteLine("");
                                         Console.WriteLine("This area NOT exists in our board!");
+                                        Console.WriteLine("");
                                         Console.WriteLine("Click ENTER key to continue:");
                                         Console.WriteLine("");
                                         Console.ReadLine();
@@ -532,6 +539,7 @@ namespace InputWorkProgram   /// Przestrzeń wykonawcza - miejsce deklaracji kla
                             Console.WriteLine("- - - - - - - - - - - - - - - - - - -");
                             Console.WriteLine("");
                             Console.WriteLine("Your ship data is saved!");
+                            Console.WriteLine("");
                             Console.WriteLine("Click ENTER key to continue:");
                             Console.WriteLine("");
                             Console.ReadLine();
@@ -555,6 +563,7 @@ namespace InputWorkProgram   /// Przestrzeń wykonawcza - miejsce deklaracji kla
                             Console.WriteLine("");
                             Console.WriteLine("Your ship data is deleted.");
                             Console.WriteLine("You must posite ship again.");
+                            Console.WriteLine("");
                             Console.WriteLine("Click ENTER key to continue:");
                             Console.WriteLine("");
                             Console.ReadLine();
@@ -572,11 +581,11 @@ namespace InputWorkProgram   /// Przestrzeń wykonawcza - miejsce deklaracji kla
                     if (shipPage == 7 && isSetPlayerShipCoor == true)
                     {
                         /// Informacja o ustawieniu wszystkich statków:
-                        Console.WriteLine("");
                         Console.WriteLine("You set all ships. Now you make a mental");
                         Console.WriteLine("note yours ship with them coordinates");
                         Console.WriteLine("and next to second player and next to");
                         Console.WriteLine("second player ship setting.");
+                        Console.WriteLine("");
                         Console.WriteLine("Click ENTER key to continue:");
                         Console.WriteLine("");
                         Console.ReadLine();
@@ -610,23 +619,66 @@ namespace InputWorkProgram   /// Przestrzeń wykonawcza - miejsce deklaracji kla
             string winner = "";
             string[] letCoorName_AR = { "A", "B", "C", "D", "E", "F", "G", "H", "I", "J" };
 
+            // Test poprawności danych: OK
+            /*Console.Clear();
+            for (int i = 0; i < 2; i++)
+            {
+                Console.WriteLine("PLAYER: " + (i + 1));
+                for (int j = 0; j < 7; j++)
+                {
+                    Console.WriteLine(playersShips_AR_toConvert[i, j]);
+                }
+                Console.WriteLine("");
+            }*/
 
             /// Konwersja tablicy [,] współrzędnych statków dla danego gracza na tablicę "List" w celu rozdzielenia stringowych "połączonych" 
             /// współrzędnych w rozdzielone stringowe znajdujące się w doatkowej tablicy. 
             List<List<List<string>>> playersShips_AR = new List<List<List<string>>>();   /// gracz -> statek -> współrzędne -> współrzędna
-            List<List<string>> oncePlayerShips__AR = new List<List<string>>();
+            List<List<string>> player_1_Ships_AR = new List<List<string>>();
+            List<List<string>> player_2_Ships_AR = new List<List<string>>();
+            playersShips_AR.Add(player_1_Ships_AR);
+            playersShips_AR.Add(player_2_Ships_AR);
             List<string> onceShipCoor_AR = new List<string>();
             string[] splitVal_AR;
+
             for (int i = 0; i < 2; i++)
             {
                 for (int j = 0; j < 7; j++)
                 {
-                    splitVal_AR = playersShips_AR_toConvert[i, j].Split(" | ");
+                    splitVal_AR = playersShips_AR_toConvert[i, j].Split("|");
                     onceShipCoor_AR = splitVal_AR.Select(x => x.ToString()).ToList();
-                    oncePlayerShips__AR.Add(onceShipCoor_AR);
+                    playersShips_AR[i].Add(onceShipCoor_AR);
                 }
-                playersShips_AR.Add(oncePlayerShips__AR);
+                playersShips_AR.Add(playersShips_AR[i]);
             }
+            
+            /// Test poprawności danych: OK
+            /*for (int i = 0; i < 2; i++)
+            {
+                Console.WriteLine("Player " + (i + 1));
+                Console.WriteLine("");
+                for (int j = 0; j < playersShips_AR[i].Count; j++)
+                {
+                    Console.WriteLine("Ship " + (j + 1));
+                    for (int k = 0; k < playersShips_AR[i][j].Count; k++)
+                    {
+                        Console.Write("");
+                        if (k == 0)
+                        {
+                            Console.Write(playersShips_AR[i][j][k]);
+                        }
+                        else if (k > 0)
+                        {
+                            Console.Write(" | " + playersShips_AR[i][j][k]);
+                        }
+                    }
+                    Console.WriteLine("");
+                    Console.WriteLine("");
+                }
+                Console.WriteLine("");
+                Console.WriteLine("");
+                Console.WriteLine("");
+            }*/
 
             Console.Clear();
             Console.WriteLine("");
@@ -645,14 +697,14 @@ namespace InputWorkProgram   /// Przestrzeń wykonawcza - miejsce deklaracji kla
                     /// a indeksy rozpoczynają się od zera, więc daltego mamy (players - 1)
                     Console.Write(playersBoardContent_AR[0, i, j]);
                 }
-                Console.Write("|       ");
+                Console.Write("|      ");
                 Console.Write(letCoorName_AR[i] + " | ");
                 for (int j = 0; j < 10; j++)
                 {
                     Console.Write(playersBoardContent_AR[1, i, j]);
                 }
                 Console.Write("|");
-                Console.WriteLine("    ");   /// prawa strona planszy
+                Console.WriteLine("   ");   /// prawa strona planszy
                 if (i < 9)   /// w iteracji dobijamy maksymalnie do 9, bo [i] ma być < 10
                 {
                     Console.Write("     ");   /// lewa strona planszy
@@ -663,6 +715,15 @@ namespace InputWorkProgram   /// Przestrzeń wykonawcza - miejsce deklaracji kla
             Console.WriteLine("                                                                    ");
             Console.WriteLine("- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - ");
             Console.WriteLine("");
+
+            
+
+            bool isFight = true;
+            ///while (isFight == true)
+            ///{
+                ///
+            ///}
+
             Console.ReadLine();
 
             return winner;
@@ -1024,6 +1085,7 @@ namespace InputWorkProgram   /// Przestrzeń wykonawcza - miejsce deklaracji kla
                         Console.WriteLine("");
                         Console.WriteLine("Ship canNOT overlap other ship or ships!");
                         Console.WriteLine("You must give new coordinates.");
+                        Console.WriteLine("");
                         Console.WriteLine("Click ENTER key to continue:");
                         Console.WriteLine("");
                         Console.ReadLine();
@@ -1039,6 +1101,7 @@ namespace InputWorkProgram   /// Przestrzeń wykonawcza - miejsce deklaracji kla
                         Console.WriteLine("- - - - - - - - - - - - - - - - - - - - -");
                         Console.WriteLine("");
                         Console.WriteLine("Ship coordinates are saved!");
+                        Console.WriteLine("");
                         Console.WriteLine("Click ENTER key to continue:");
                         Console.WriteLine("");
                         Console.ReadLine();
@@ -1072,6 +1135,7 @@ namespace InputWorkProgram   /// Przestrzeń wykonawcza - miejsce deklaracji kla
                     Console.WriteLine("");
                     Console.WriteLine("Ship canNOT overlap other ship or ships!");
                     Console.WriteLine("You must give new coordinates.");
+                    Console.WriteLine("");
                     Console.WriteLine("Click ENTER key to continue:");
                     Console.WriteLine("");
                     Console.ReadLine();
@@ -1086,6 +1150,7 @@ namespace InputWorkProgram   /// Przestrzeń wykonawcza - miejsce deklaracji kla
                 Console.WriteLine("");
                 Console.WriteLine("Ship canNOT located over board!");
                 Console.WriteLine("You must give new coordinates.");
+                Console.WriteLine("");
                 Console.WriteLine("Click ENTER key to continue:");
                 Console.WriteLine("");
                 Console.ReadLine();
