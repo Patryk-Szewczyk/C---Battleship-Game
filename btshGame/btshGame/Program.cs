@@ -307,6 +307,8 @@ namespace InputWorkProgram   /// Przestrzeń wykonawcza - miejsce deklaracji kla
                                 Console.WriteLine("");
                             }
                             Console.WriteLine("");
+                            Console.WriteLine("- - - - - - - - - - - - - - - - - - -");
+                            Console.WriteLine("");
                             Console.WriteLine("\"B\" - vertical position (from top to bottom: A2 -> A2, B2, ...)");
                             Console.WriteLine("\"R\" - horizontal position (from left to right: A2 -> A2, A3, ...)");
                             Console.WriteLine("");
@@ -408,7 +410,9 @@ namespace InputWorkProgram   /// Przestrzeń wykonawcza - miejsce deklaracji kla
                                 Console.WriteLine("");
                             }
                             Console.WriteLine("");
-                            Console.WriteLine("Value from A0 to J9:");
+                            Console.WriteLine("- - - - - - - - - - - - - - - - - - -");
+                            Console.WriteLine("");
+                            Console.WriteLine("Write value from A0 to J9:");
                             Console.WriteLine("");
                             firstCoor = Console.ReadLine();
                             if (firstCoor == null)   /// Sprawdzenie czy współrzędna początkowa nie jest pusta.
@@ -517,7 +521,9 @@ namespace InputWorkProgram   /// Przestrzeń wykonawcza - miejsce deklaracji kla
                     }
                     else if (isDirCoor == true && shipFullCoor[0] != "?")   /// {"?"} Specjalna wartość informująca o wykryciu umieszczenia statku w niedozowlonym miejscu. Jest to wartość RESETOWA ponownego wyznaczenia współrzędnej początkowej
                     {
-                        Console.WriteLine("Do you want save this ship data? Write \"yes\" or \"no\".");
+                        Console.WriteLine("Do you want save this ship data?");
+                        Console.WriteLine("Write \"yes\" or \"no\".");
+                        Console.WriteLine("");
                         wantSave = Console.ReadLine();
                         if (wantSave == "yes" && shipPage < 7)
                         {
@@ -581,10 +587,18 @@ namespace InputWorkProgram   /// Przestrzeń wykonawcza - miejsce deklaracji kla
                     if (shipPage == 7 && isSetPlayerShipCoor == true)
                     {
                         /// Informacja o ustawieniu wszystkich statków:
-                        Console.WriteLine("You set all ships. Now you make a mental");
-                        Console.WriteLine("note yours ship with them coordinates");
-                        Console.WriteLine("and next to second player and next to");
-                        Console.WriteLine("second player ship setting.");
+                        if (players == 1)
+                        {
+                            Console.WriteLine("You set all ships. Now you make a");
+                            Console.WriteLine("mental note yours ship with them");
+                            Console.WriteLine("coordinates and next to second player");
+                        }
+                        else if(players == 2)
+                        {
+                            Console.WriteLine("You set all ships. Now you go to");
+                            Console.WriteLine("game and you begin fight for life!");
+                        }
+                        Console.WriteLine("and next to second player ship setting.");
                         Console.WriteLine("");
                         Console.WriteLine("Click ENTER key to continue:");
                         Console.WriteLine("");
@@ -633,43 +647,107 @@ namespace InputWorkProgram   /// Przestrzeń wykonawcza - miejsce deklaracji kla
 
             /// Konwersja tablicy [,] współrzędnych statków dla danego gracza na tablicę "List" w celu rozdzielenia stringowych "połączonych" 
             /// współrzędnych w rozdzielone stringowe znajdujące się w doatkowej tablicy. 
-            List<List<List<string>>> playersShips_AR = new List<List<List<string>>>();   /// gracz -> statek -> współrzędne -> współrzędna
-            List<List<string>> player_1_Ships_AR = new List<List<string>>();
-            List<List<string>> player_2_Ships_AR = new List<List<string>>();
-            playersShips_AR.Add(player_1_Ships_AR);
-            playersShips_AR.Add(player_2_Ships_AR);
-            List<string> onceShipCoor_AR = new List<string>();
-            string[] splitVal_AR;
+            List<List<List<string>>> playersShips_string_AR = new List<List<List<string>>>();   /// gracz -> statek -> współrzędne -> współrzędna
+            List<List<string>> player_1_Ships_string_AR = new List<List<string>>();
+            List<List<string>> player_2_Ships_string_AR = new List<List<string>>();
+            playersShips_string_AR.Add(player_1_Ships_string_AR);
+            playersShips_string_AR.Add(player_2_Ships_string_AR);
+            List<string> onceShipCoor_string_AR = new List<string>();
+            string[] splitVal_string_AR = { };
 
             for (int i = 0; i < 2; i++)
             {
                 for (int j = 0; j < 7; j++)
                 {
-                    splitVal_AR = playersShips_AR_toConvert[i, j].Split("|");
-                    onceShipCoor_AR = splitVal_AR.Select(x => x.ToString()).ToList();
-                    playersShips_AR[i].Add(onceShipCoor_AR);
+                    splitVal_string_AR = playersShips_AR_toConvert[i, j].Split("|");
+                    onceShipCoor_string_AR = splitVal_string_AR.Select(x => x.ToString()).ToList();
+                    playersShips_string_AR[i].Add(onceShipCoor_string_AR);
                 }
-                playersShips_AR.Add(playersShips_AR[i]);
+                playersShips_string_AR.Add(playersShips_string_AR[i]);
             }
-            
+
             /// Test poprawności danych: OK
             /*for (int i = 0; i < 2; i++)
             {
                 Console.WriteLine("Player " + (i + 1));
                 Console.WriteLine("");
-                for (int j = 0; j < playersShips_AR[i].Count; j++)
+                for (int j = 0; j < 7; j++)
                 {
                     Console.WriteLine("Ship " + (j + 1));
-                    for (int k = 0; k < playersShips_AR[i][j].Count; k++)
+                    for (int k = 0; k < playersShips_string_AR[i][j].Count; k++)
                     {
                         Console.Write("");
                         if (k == 0)
                         {
-                            Console.Write(playersShips_AR[i][j][k]);
+                            Console.Write(playersShips_string_AR[i][j][k]);
                         }
                         else if (k > 0)
                         {
-                            Console.Write(" | " + playersShips_AR[i][j][k]);
+                            Console.Write(" | " + playersShips_string_AR[i][j][k]);
+                        }
+                    }
+                    Console.WriteLine("");
+                    Console.WriteLine("");
+                }
+                Console.WriteLine("");
+                Console.WriteLine("");
+                Console.WriteLine("");
+            }*/
+
+            /// Konwersja tablicy współrzędnych typu: "C2" na współrzędne typu: "22" i konwersja ze sring na int:
+            List<List<List<int>>> playersShips_int_AR = new List<List<List<int>>>();   /// gracz -> statek -> współrzędne -> współrzędna
+            for (int i = 0; i < 2; i++)   /// gracze
+            {
+                List<List<int>> playerShips_int_AR = new List<List<int>>();
+                for (int j = 0; j < 7; j++)   /// statek
+                {
+                    List<int> onceShipCoor_int_AR = new List<int>();
+                    for (int k = 0; k < playersShips_string_AR[i][j].Count; k++)   /// współrzędne
+                    {
+                        // Slicowanie, podmienianie liter na cyfry, łączenie i konwersja na int:
+                        string toSliceVal = playersShips_string_AR[i][j][k];
+                        string sign_1_let = toSliceVal.Substring(0, 1);
+                        string sign_2_num = toSliceVal.Substring(1, 1);
+                        string sign_1_num = "";
+                        string result_string = "";
+                        int result_int = 0;
+                        string[] let_AR = {"A", "B", "C", "D", "E", "F", "G", "H", "I", "J"};
+                        string[] num_AR = {"0", "1", "2", "3", "4", "5", "6", "7", "8", "9"};
+                        for (int l = 0; l < let_AR.Length; l++)
+                        {
+                            if (sign_1_let == let_AR[l])
+                            {
+                                sign_1_num = num_AR[l];
+                            } 
+                            else { }
+                        }
+                        result_string = sign_1_num + sign_2_num;
+                        result_int = int.Parse(result_string);
+                        onceShipCoor_int_AR.Add(result_int);
+                    }
+                    playerShips_int_AR.Add(onceShipCoor_int_AR);
+                }
+                playersShips_int_AR.Add(playerShips_int_AR);
+            }
+
+            /// Test poprawności danych: OK
+            /*for (int i = 0; i < 2; i++)
+            {
+                Console.WriteLine("Player " + (i + 1));
+                Console.WriteLine("");
+                for (int j = 0; j < 7; j++)
+                {
+                    Console.WriteLine("Ship " + (j + 1));
+                    for (int k = 0; k < playersShips_int_AR[i][j].Count; k++)
+                    {
+                        Console.Write("");
+                        if (k == 0)
+                        {
+                            Console.Write(playersShips_int_AR[i][j][k]);
+                        }
+                        else if (k > 0)
+                        {
+                            Console.Write(" | " + playersShips_int_AR[i][j][k]);
                         }
                     }
                     Console.WriteLine("");
@@ -719,10 +797,10 @@ namespace InputWorkProgram   /// Przestrzeń wykonawcza - miejsce deklaracji kla
             
 
             bool isFight = true;
-            ///while (isFight == true)
-            ///{
+            while (isFight == true)
+            {
                 ///
-            ///}
+            }
 
             Console.ReadLine();
 
