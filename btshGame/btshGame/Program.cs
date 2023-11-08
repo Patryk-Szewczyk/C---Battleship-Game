@@ -38,6 +38,10 @@ namespace OutputProgram   /// Przestrzeń wyjściowa - miejce deklaracji obiekt�
             Console.ReadLine();
             // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
             // Gra zapętlona
+            //while (isGameLoop == true)
+            //{
+                // Zapętlenie gry
+            //}
             GameLoop gameLoop = new GameLoop();   /// Tworzenie zmiennej z instancją klasy GameMenu
             (string[,], string[,,]) playersData_AR = gameLoop.setPlayersShips();
             string[,] playersShipCoor_AR = new string[2, 7];
@@ -58,7 +62,8 @@ namespace OutputProgram   /// Przestrzeń wyjściowa - miejce deklaracji obiekt�
 
 namespace InputWorkProgram   /// Przestrzeń wykonawcza - miejsce deklaracji klas z określonymi metodami.
 {
-    public class GameMenu : Program   // Klasa dziedziczna menu gry
+    // Zrób klasę GameLoop
+    public class GameMenu
     {
         public void intro()
         {
@@ -711,14 +716,14 @@ namespace InputWorkProgram   /// Przestrzeń wykonawcza - miejsce deklaracji kla
                         string sign_1_num = "";
                         string result_string = "";
                         int result_int = 0;
-                        string[] let_AR = {"A", "B", "C", "D", "E", "F", "G", "H", "I", "J"};
-                        string[] num_AR = {"0", "1", "2", "3", "4", "5", "6", "7", "8", "9"};
+                        string[] let_AR = { "A", "B", "C", "D", "E", "F", "G", "H", "I", "J" };
+                        string[] num_AR = { "0", "1", "2", "3", "4", "5", "6", "7", "8", "9" };
                         for (int l = 0; l < let_AR.Length; l++)
                         {
                             if (sign_1_let == let_AR[l])
                             {
                                 sign_1_num = num_AR[l];
-                            } 
+                            }
                             else { }
                         }
                         result_string = sign_1_num + sign_2_num;
@@ -794,9 +799,40 @@ namespace InputWorkProgram   /// Przestrzeń wykonawcza - miejsce deklaracji kla
             Console.WriteLine("- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - ");
             Console.WriteLine("");
 
-            
+
 
             bool isFight = true;
+            int player = 0;   /// 0 - none | 1 - player 1 | 2 - player 2
+            string playerReadLine = "";
+            bool isPlayerChoose = false;   /// Do resetu do GAME AGAIN
+
+            while (isPlayerChoose == false)
+            {
+                Console.WriteLine("Choose which player begin game as first.");
+                Console.WriteLine("Write: \"P1\" (player 1) or \"P2\" (player 2) ");
+                playerReadLine = Console.ReadLine();
+                if (playerReadLine == "P1")
+                {
+                    isPlayerChoose = true;
+                    player = 1;
+                }
+                else if (playerReadLine == "P2")
+                {
+                    isPlayerChoose = true;
+                    player = 2;
+                }
+                else
+                {
+                    Console.WriteLine("");
+                    Console.WriteLine("- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -");
+                    Console.WriteLine("");
+                    Console.WriteLine("You write uncorrect value.");
+                    Console.WriteLine("");
+                    Console.WriteLine("Click ENTER key to continue:");
+                }
+            }
+            Console.Clear();
+            Console.WriteLine("You choose: PLAYER " + player.ToString());
             while (isFight == true)
             {
                 ///
