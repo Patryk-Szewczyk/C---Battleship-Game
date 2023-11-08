@@ -762,22 +762,18 @@ namespace InputWorkProgram   /// Przestrzeń wykonawcza - miejsce deklaracji kla
                 Console.WriteLine("");
                 Console.WriteLine("");
             }*/
-
-            Console.Clear();
+            /**Console.Clear();
             Console.WriteLine("");
             Console.WriteLine("               PLAYER 1                       PLAYER 2              ");
             Console.WriteLine("                                                                    ");
             Console.WriteLine("         0 1 2 3 4 5 6 7 8 9            0 1 2 3 4 5 6 7 8 9         ");
             Console.WriteLine("         -------------------            -------------------         ");
-            Console.Write("     ");   /// lewa strona planszy
-                                      /// Wyświetlanie  planszy tablicy za pomocą pętli zagnieżdżonej iterującej tablicę dwuwymiarową:
+            Console.Write("     ");
             for (int i = 0; i < 10; i++)
             {
                 Console.Write(letCoorName_AR[i] + " | ");
                 for (int j = 0; j < 10; j++)
                 {
-                    /// tablica trzywymiarowa, (players - 1) - players jest inkrementowane na początku pętli,
-                    /// a indeksy rozpoczynają się od zera, więc daltego mamy (players - 1)
                     Console.Write(playersBoardContent_AR[0, i, j]);
                 }
                 Console.Write("|      ");
@@ -787,59 +783,244 @@ namespace InputWorkProgram   /// Przestrzeń wykonawcza - miejsce deklaracji kla
                     Console.Write(playersBoardContent_AR[1, i, j]);
                 }
                 Console.Write("|");
-                Console.WriteLine("   ");   /// prawa strona planszy
-                if (i < 9)   /// w iteracji dobijamy maksymalnie do 9, bo [i] ma być < 10
+                Console.WriteLine("   ");
+                if (i < 9)
                 {
-                    Console.Write("     ");   /// lewa strona planszy
+                    Console.Write("     ");
                 }
                 else if (i >= 9) { }
             }
             Console.WriteLine("         -------------------            -------------------         ");
             Console.WriteLine("                                                                    ");
             Console.WriteLine("- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - ");
-            Console.WriteLine("");
+            Console.WriteLine("");**/
 
 
+
+            
+            
+            BoardContentMaker boardContentMaker_Obj = new BoardContentMaker();
+            string[,,] playersBoardFight_AR = boardContentMaker_Obj.set_fieldAreaContent_AR();   // [2, 10, 10]
 
             bool isFight = true;
             int player = 0;   /// 0 - none | 1 - player 1 | 2 - player 2
             string playerReadLine = "";
-            bool isPlayerChoose = false;   /// Do resetu do GAME AGAIN
+            bool isPlayerChoose = false;   /// Do resetu do GAME AGAIN dodatkoweo swich ten uniemożliwia przejścia do strzelania, przed usunięciem wybierania gracza z konsoli.
 
-            while (isPlayerChoose == false)
-            {
-                Console.WriteLine("Choose which player begin game as first.");
-                Console.WriteLine("Write: \"P1\" (player 1) or \"P2\" (player 2) ");
-                playerReadLine = Console.ReadLine();
-                if (playerReadLine == "P1")
-                {
-                    isPlayerChoose = true;
-                    player = 1;
-                }
-                else if (playerReadLine == "P2")
-                {
-                    isPlayerChoose = true;
-                    player = 2;
-                }
-                else
-                {
-                    Console.WriteLine("");
-                    Console.WriteLine("- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -");
-                    Console.WriteLine("");
-                    Console.WriteLine("You write uncorrect value.");
-                    Console.WriteLine("");
-                    Console.WriteLine("Click ENTER key to continue:");
-                }
-            }
-            Console.Clear();
-            Console.WriteLine("You choose: PLAYER " + player.ToString());
+
+
             while (isFight == true)
             {
-                ///
+                Console.Clear();
+                Console.WriteLine("");
+                Console.WriteLine("               PLAYER 1                       PLAYER 2              ");
+                Console.WriteLine("                                                                    ");
+                Console.WriteLine("         0 1 2 3 4 5 6 7 8 9            0 1 2 3 4 5 6 7 8 9         ");
+                Console.WriteLine("         -------------------            -------------------         ");
+                Console.Write("     ");
+                for (int i = 0; i < 10; i++)
+                {
+                    Console.Write(letCoorName_AR[i] + " | ");
+                    for (int j = 0; j < 10; j++)
+                    {
+                        Console.Write(playersBoardFight_AR[0, i, j]);
+                    }
+                    Console.Write("|      ");
+                    Console.Write(letCoorName_AR[i] + " | ");
+                    for (int j = 0; j < 10; j++)
+                    {
+                        Console.Write(playersBoardFight_AR[1, i, j]);
+                    }
+                    Console.Write("|");
+                    Console.WriteLine("   ");
+                    if (i < 9)
+                    {
+                        Console.Write("     ");
+                    }
+                    else if (i >= 9) { }
+                }
+                Console.WriteLine("         -------------------            -------------------         ");
+                Console.WriteLine("                                                                    ");
+                Console.WriteLine("- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - ");
+                Console.WriteLine("");
+                ///while (isPlayerChoose == false)
+                ///{
+                    ///Console.Clear();
+                    /**Console.WriteLine("");
+                    Console.WriteLine("               PLAYER 1                       PLAYER 2              ");
+                    Console.WriteLine("                                                                    ");
+                    Console.WriteLine("         0 1 2 3 4 5 6 7 8 9            0 1 2 3 4 5 6 7 8 9         ");
+                    Console.WriteLine("         -------------------            -------------------         ");
+                    Console.Write("     ");
+                    for (int i = 0; i < 10; i++)
+                    {
+                        Console.Write(letCoorName_AR[i] + " | ");
+                        for (int j = 0; j < 10; j++)
+                        {
+                            Console.Write(playersBoardFight_AR[0, i, j]);
+                        }
+                        Console.Write("|      ");
+                        Console.Write(letCoorName_AR[i] + " | ");
+                        for (int j = 0; j < 10; j++)
+                        {
+                            Console.Write(playersBoardFight_AR[1, i, j]);
+                        }
+                        Console.Write("|");
+                        Console.WriteLine("   ");
+                        if (i < 9)
+                        {
+                            Console.Write("     ");
+                        }
+                        else if (i >= 9) { }
+                    }
+                    Console.WriteLine("         -------------------            -------------------         ");
+                    Console.WriteLine("                                                                    ");
+                    Console.WriteLine("- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - ");
+                    Console.WriteLine("");**/
+                    if (isPlayerChoose == false)
+                    {
+                        Console.WriteLine("Choose which player begin game as first.");
+                        Console.WriteLine("Write: \"P1\" (player 1) or \"P2\" (player 2) ");
+                        playerReadLine = Console.ReadLine();
+                        if (playerReadLine == "P1")
+                        {
+                            isPlayerChoose = true;
+                            player = 1;
+                            Console.WriteLine("");
+                            Console.WriteLine("- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - ");
+                            Console.WriteLine("");
+                            Console.WriteLine("You choose: PLAYER " + player.ToString());
+                            Console.WriteLine("");
+                            Console.WriteLine("Click ENTER key to continue:");
+                            Console.WriteLine("");
+                            Console.ReadLine();
+                        }
+                        else if (playerReadLine == "P2")
+                        {
+                            isPlayerChoose = true;
+                            player = 2;
+                            Console.WriteLine("");
+                            Console.WriteLine("- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - ");
+                            Console.WriteLine("");
+                            Console.WriteLine("You choose: PLAYER " + player.ToString());
+                            Console.WriteLine("");
+                            Console.WriteLine("Click ENTER key to continue:");
+                            Console.WriteLine("");
+                            Console.ReadLine();
+                        }
+                        else
+                        {
+                            Console.WriteLine("");
+                            Console.WriteLine("- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -");
+                            Console.WriteLine("");
+                            Console.WriteLine("You write uncorrect value.");
+                            Console.WriteLine("");
+                            Console.WriteLine("Click ENTER key to continue:");
+                            Console.WriteLine("");
+                            Console.ReadLine();
+                        }
+                    }
+                    /// Przekazujesz gracza jako argument kierunkowy do metody fire() klasy BoardContentMaker
+                    else if (isPlayerChoose == true)
+                    {
+                        Console.WriteLine("Choose field, which you want attack.");
+                        Console.WriteLine("Write value from A0 to J9:");
+                        Console.WriteLine("");
+                        string fireCoor = Console.ReadLine();
+                        if (fireCoor == null)   /// Sprawdzenie czy współrzędna początkowa nie jest pusta.
+                        {
+                            Console.WriteLine("");
+                            Console.WriteLine("- - - - - - - - - - - - - - - - - - -");
+                            Console.WriteLine("");
+                            Console.WriteLine("You don\'t left empty value.");
+                            Console.WriteLine("You can write correct value.");
+                            Console.WriteLine("");
+                            Console.WriteLine("Click ENTER key to continue:");
+                            Console.WriteLine("");
+                            Console.ReadLine();
+
+                        }
+                        else if (fireCoor != null)
+                        {
+                            if (fireCoor.Length != 2)   /// Sprawdzenie czy współrzędna początkowa ma odpowiednią długość.
+                            {
+                                Console.WriteLine("");
+                                Console.WriteLine("- - - - - - - - - - - - - - - - - - -");
+                                Console.WriteLine("");
+                                Console.WriteLine("Your value\'s length is uncorrect. ");
+                                Console.WriteLine("You must change it.");
+                                Console.WriteLine("");
+                                Console.WriteLine("Click ENTER key to continue:");
+                                Console.WriteLine("");
+                                Console.ReadLine();
+                            }
+                            else if (fireCoor.Length == 2)   /// Jeżeli wartość i odpowiednia długość jest, wprawdź poprawność wartości.
+                            {
+                                ///string validVal = selectCoordinates;
+                                string letter = fireCoor.Substring(0, 1);
+                                string number = fireCoor.Substring(1, 1);
+                                string[] avalLet_AR = { "A", "B", "C", "D", "E", "F", "G", "H", "I", "J" };
+                                string[] avalNum_AR = { "0", "1", "2", "3", "4", "5", "6", "7", "8", "9" };
+                                bool isIn_avalLet_AR = false;
+                                bool isIn_avalNum_AR = false;
+                                for (int i = 0; i < avalLet_AR.Length; i++)
+                                {
+                                    /// Sprawdzenie czy pierwszy substringowany indeks współrzędnej początekowej istnieje w tablicy liter:
+                                    if (avalLet_AR[i] == letter)
+                                    {
+                                        isIn_avalLet_AR = true;
+                                    }
+                                    else { }
+                                    /// Sprawdzenie czy drugi substringowany indeks współrzędnej początekowej istnieje w tablicy cyfr:
+                                    if (avalNum_AR[i] == number)
+                                    {
+                                        isIn_avalNum_AR = true;
+                                    }
+                                    else { }
+                                }
+                                if (isIn_avalLet_AR == true && isIn_avalNum_AR == true)
+                                {
+                                    /// Warunki spełnione:   TUTAJ SKOŃCZYŁEŚ - tutaj robisz konwersję na C2 -> 22 i konwersję na int
+                                    int intFireCoor = 0;
+                                    string letToNum = "";
+                                    string joinString = "";
+                                    for (int i = 0; i < avalLet_AR.Length; i++)
+                                    {
+                                        if (letter == avalLet_AR[i])
+                                        {
+                                            letToNum = avalNum_AR[i];
+                                            joinString = letToNum + number;
+                                            intFireCoor = int.Parse(joinString);
+                                        }
+                                        else { }
+                                    }
+                                    Console.WriteLine("");
+                                    Console.WriteLine("- - - - - - - - - - - - - - - - - - -");
+                                    Console.WriteLine("");
+                                    Console.WriteLine("Wybrane współrzędne: " + fireCoor.ToString());
+                                    Console.WriteLine("Skonwertowane współrzędne: " + intFireCoor.ToString());
+                                    Console.WriteLine("");
+                                    Console.WriteLine("Click ENTER key to continue:");
+                                    Console.WriteLine("");
+                                    Console.ReadLine();
+                                }
+                                else if (isIn_avalLet_AR == false || isIn_avalNum_AR == false)
+                                {
+                                    Console.WriteLine("");
+                                    Console.WriteLine("- - - - - - - - - - - - - - - - - - -");
+                                    Console.WriteLine("");
+                                    Console.WriteLine("This area NOT exists in enemy board!");
+                                    Console.WriteLine("");
+                                    Console.WriteLine("Click ENTER key to continue:");
+                                    Console.WriteLine("");
+                                    Console.ReadLine();
+                                }
+                                else { }
+                            }
+                        }
+                    }
+                ///}
             }
-
-            Console.ReadLine();
-
             return winner;
         }
     }
