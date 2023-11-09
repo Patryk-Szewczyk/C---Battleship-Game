@@ -1,9 +1,9 @@
 /// Battleship Game
 
 using System;
-using OutputProgram;   
+using OutputProgram;
 /// Użycie przestrzeni wyjściowej
-using InputWorkProgram;   
+using InputWorkProgram;
 /// Użycie przestrzeni wykonawczej
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
@@ -31,7 +31,7 @@ namespace OutputProgram   /// Przestrzeń wyjściowa - miejce deklaracji obiekt�
 
             //while (isGameLoop == true)
             //{
-                // Zapętlenie gry
+            // Zapętlenie gry
             //}
             GameLoop gameLoop = new GameLoop();   /// Tworzenie zmiennej z instancją klasy GameMenu
             (string[,], string[,,]) playersData_AR = gameLoop.setPlayersShips();
@@ -595,7 +595,7 @@ namespace InputWorkProgram   /// Przestrzeń wykonawcza - miejsce deklaracji kla
                             Console.WriteLine("mental note yours ship with them");
                             Console.WriteLine("coordinates and next to second player.");
                         }
-                        else if(players == 2)
+                        else if (players == 2)
                         {
                             Console.WriteLine("You set all ships. Now you go to");
                             Console.WriteLine("game and you begin fight for life!");
@@ -694,7 +694,7 @@ namespace InputWorkProgram   /// Przestrzeń wykonawcza - miejsce deklaracji kla
             int player = 0;   /// 0 - none | 1 - player 1 | 2 - player 2
             string playerReadLine = "";
             bool isPlayerChoose = false;   /// Do resetu do GAME AGAIN dodatkoweo swich ten uniemożliwia przejścia do strzelania, przed usunięciem wybierania gracza z konsoli.
-            /// Tworzenie dwóch graficznych tablic na status walki dla graczy:
+                                           /// Tworzenie dwóch graficznych tablic na status walki dla graczy:
             BoardContentMaker boardContentMaker_Obj = new BoardContentMaker();
             string[,,] playersBoardFight_AR = boardContentMaker_Obj.set_fieldAreaContent_AR();   // [2, 10, 10]
 
@@ -732,6 +732,64 @@ namespace InputWorkProgram   /// Przestrzeń wykonawcza - miejsce deklaracji kla
                 }
                 Console.WriteLine("         -------------------            -------------------         ");
                 Console.WriteLine("                                                                    ");
+                Console.WriteLine("- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - ");
+                Console.WriteLine("");
+                Console.WriteLine("               PLAYER 1                       PLAYER 2              ");
+                Console.WriteLine("");
+                /// Zrobiłem to ręcznie, ponieważ nie
+                /// Wziąłem zrobiłem to ręcznie, bo nie chciałem bawić się z wyznaczaniem odstępów względem długośći, a nie potrzebna jest tu aukurat pętla:
+                string[] space_AR = {"                   ", "              ", "         ", "    "};
+                for (int j = 0; j < 7; j++)
+                {
+                    Console.Write("   " + (j + 1).ToString() + ". | ");
+                    for (int k = 0; k < playersShips_string_AR[0][j].Count; k++)
+                    {
+                        /// Zrobiłem to na dwie pętle, gyż chciałem mieć odstęp pomiędzy poszczególnyi statkami danego gracza oraz przejście do nowej linii,
+                        /// a to wszystko w tym samym zakresie (FORy).
+                        /// Gracz 1:
+                        if (k == 0)
+                        {
+                            Console.Write(playersShips_string_AR[0][j][k]);
+                        }
+                        else if (k > 0)
+                        {
+                            Console.Write(" | " + playersShips_string_AR[0][j][k]);
+                        }
+                    }
+                    Console.Write(" |");
+                    /// Użyłem switch'a, ponieważ mam dużo opcji z daną wartością do osiągnięcia za pomocą operatora porównania (==):
+                    switch (playersShips_string_AR[0][j].Count)
+                    {
+                        case 2:
+                            Console.Write(space_AR[0]);
+                            break;
+                        case 3:
+                            Console.Write(space_AR[1]);
+                            break;
+                        case 4:
+                            Console.Write(space_AR[2]);
+                            break;
+                        case 5:
+                            Console.Write(space_AR[3]);
+                            break;
+                    }
+                    Console.Write((j + 1).ToString() + ". | ");
+                    for (int k = 0; k < playersShips_string_AR[1][j].Count; k++)
+                    {
+                        /// Gracz 2:
+                        if (k == 0)
+                        {
+                            Console.Write(playersShips_string_AR[1][j][k]);
+                        }
+                        else if (k > 0)
+                        {
+                            Console.Write(" | " + playersShips_string_AR[1][j][k]);
+                        }
+                    }
+                    Console.Write(" |");
+                    Console.WriteLine("");
+                }
+                Console.WriteLine("");
                 Console.WriteLine("- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - ");
                 Console.WriteLine("");
                 if (isPlayerChoose == false)
@@ -791,7 +849,9 @@ namespace InputWorkProgram   /// Przestrzeń wykonawcza - miejsce deklaracji kla
                         player = 0;
                     }
                     // Pyknij ifa-słicza...
-                    Console.WriteLine("Attack PLAYER: " + (player + 1));
+                    Console.WriteLine("PLAYER 1");
+                    Console.WriteLine("");
+                    Console.WriteLine("Attack: PLAYER " + (player + 1));
                     Console.WriteLine("Choose field, which you want attack.");
                     Console.WriteLine("Write value from A0 to J9:");
                     Console.WriteLine("");
@@ -799,7 +859,7 @@ namespace InputWorkProgram   /// Przestrzeń wykonawcza - miejsce deklaracji kla
                     if (fireCoor == null)   /// Sprawdzenie czy współrzędna początkowa nie jest pusta.
                     {
                         Console.WriteLine("");
-                        Console.WriteLine("- - - - - - - - - - - - - - - - - - -");
+                        Console.WriteLine("- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -");
                         Console.WriteLine("");
                         Console.WriteLine("You don\'t left empty value.");
                         Console.WriteLine("You can write correct value.");
@@ -814,7 +874,7 @@ namespace InputWorkProgram   /// Przestrzeń wykonawcza - miejsce deklaracji kla
                         if (fireCoor.Length != 2)   /// Sprawdzenie czy współrzędna początkowa ma odpowiednią długość.
                         {
                             Console.WriteLine("");
-                            Console.WriteLine("- - - - - - - - - - - - - - - - - - -");
+                            Console.WriteLine("- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -");
                             Console.WriteLine("");
                             Console.WriteLine("Your value\'s length is uncorrect. ");
                             Console.WriteLine("You must change it.");
@@ -864,7 +924,7 @@ namespace InputWorkProgram   /// Przestrzeń wykonawcza - miejsce deklaracji kla
                                     else { }
                                 }
                                 Console.WriteLine("");
-                                Console.WriteLine("- - - - - - - - - - - - - - - - - - -");
+                                Console.WriteLine("- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -");
                                 Console.WriteLine("");
                                 Console.WriteLine("Choosed coordinate: " + fireCoor.ToString());
                                 //Console.WriteLine("Skonwertowane współrzędne: " + fireCoorConv);
@@ -884,7 +944,7 @@ namespace InputWorkProgram   /// Przestrzeń wykonawcza - miejsce deklaracji kla
                             else if (isIn_avalLet_AR == false || isIn_avalNum_AR == false)
                             {
                                 Console.WriteLine("");
-                                Console.WriteLine("- - - - - - - - - - - - - - - - - - -");
+                                Console.WriteLine("- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -");
                                 Console.WriteLine("");
                                 Console.WriteLine("This area NOT exists in enemy board!");
                                 Console.WriteLine("");
@@ -1478,7 +1538,7 @@ namespace InputWorkProgram   /// Przestrzeń wykonawcza - miejsce deklaracji kla
                 if (fireCoorToSlice.Length == 1)
                 {
                     int fireCoorConv_s1 = 0;
-                    int fireCoorConv_s2 = int.Parse(fireCoorToSlice.Substring(1, 1));
+                    int fireCoorConv_s2 = int.Parse(fireCoorToSlice.Substring(0, 1));
                     playersBoard_Fight_AR[player, fireCoorConv_s1, fireCoorConv_s2] = "O ";
                 }
                 else if (fireCoorToSlice.Length == 2)
@@ -1513,7 +1573,7 @@ namespace InputWorkProgram   /// Przestrzeń wykonawcza - miejsce deklaracji kla
                 // Lub dodanie do tablicy intowej współrzędnej, aby sprawdzając wartości
                 // jej indeksów sprawdzić czy oddano strzał w to miejsce.
             }
-            return (playerShips_Coor_AR, playersBoard_Fight_AR); 
+            return (playerShips_Coor_AR, playersBoard_Fight_AR);
         }
     }
 }
