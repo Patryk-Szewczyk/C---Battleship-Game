@@ -156,13 +156,13 @@ namespace InputWorkProgram   /// Przestrzeń wykonawcza - miejsce deklaracji kla
             {
                 players += 1;
                 shipPage = 0;
-                Console.Clear();
+                /**Console.Clear();
                 Console.WriteLine("");
                 Console.WriteLine("Set ships on board for player " + players.ToString());
                 Console.WriteLine("");
                 Console.WriteLine("To continue you must click ENTER key.");
                 Console.WriteLine("");
-                Console.ReadLine();
+                Console.ReadLine();**/
                 // Ustawianie statków dla każdego gracza:
                 while (shipPage < 8)   /// - do 6 ustawianie | 7 - komunikat o zakończeniu ustawiania statków dla gracza
                 {
@@ -742,11 +742,13 @@ namespace InputWorkProgram   /// Przestrzeń wykonawcza - miejsce deklaracji kla
                     if (playerReadLine == "P1")
                     {
                         isPlayerChoose = true;
-                        player = 1;
+                        player = 0;
+                        /// Dlaczego 1, a nie zero i u dołu tak samo? Bo w atakowaniu wroga za każdym razem zmieniem tą zmienną: 0 > 1 > 0 > 1,
+                        /// (odpowiedni indeks od razu) kiedy gracze atakują się nawzajem i nie chciałem robić dodatkowego tam bool'owego swicha.
                         Console.WriteLine("");
                         Console.WriteLine("- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - ");
                         Console.WriteLine("");
-                        Console.WriteLine("You choose: PLAYER " + player.ToString());
+                        Console.WriteLine("You choose: PLAYER 1");
                         Console.WriteLine("");
                         Console.WriteLine("Click ENTER key to continue:");
                         Console.WriteLine("");
@@ -755,11 +757,11 @@ namespace InputWorkProgram   /// Przestrzeń wykonawcza - miejsce deklaracji kla
                     else if (playerReadLine == "P2")
                     {
                         isPlayerChoose = true;
-                        player = 2;
+                        player = 1;
                         Console.WriteLine("");
                         Console.WriteLine("- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - ");
                         Console.WriteLine("");
-                        Console.WriteLine("You choose: PLAYER " + player.ToString());
+                        Console.WriteLine("You choose: PLAYER 2");
                         Console.WriteLine("");
                         Console.WriteLine("Click ENTER key to continue:");
                         Console.WriteLine("");
@@ -780,6 +782,16 @@ namespace InputWorkProgram   /// Przestrzeń wykonawcza - miejsce deklaracji kla
                 /// Przekazujesz gracza jako argument kierunkowy do metody fire() klasy BoardContentMaker
                 else if (isPlayerChoose == true)
                 {
+                    if (player == 0)
+                    {
+                        player = 1;
+                    }
+                    else if (player == 1)
+                    {
+                        player = 0;
+                    }
+                    // Pyknij ifa-słicza...
+                    Console.WriteLine("Attack PLAYER: " + (player + 1));
                     Console.WriteLine("Choose field, which you want attack.");
                     Console.WriteLine("Write value from A0 to J9:");
                     Console.WriteLine("");
@@ -838,24 +850,24 @@ namespace InputWorkProgram   /// Przestrzeń wykonawcza - miejsce deklaracji kla
                             if (isIn_avalLet_AR == true && isIn_avalNum_AR == true)
                             {
                                 /// Konwersja: "D2" -> "32" (część potrzebnych rzeczy znajduje się na górze)
-                                int intFireCoor = 0;
                                 string letToNum = "";
-                                string joinString = "";
+                                string joinVal = "";
+                                int fireCoorConv = 0;
                                 for (int i = 0; i < avalLet_AR.Length; i++)
                                 {
                                     if (letter == avalLet_AR[i])
                                     {
                                         letToNum = avalNum_AR[i];
-                                        joinString = letToNum + number;
-                                        intFireCoor = int.Parse(joinString);
+                                        joinVal = letToNum + number;
+                                        fireCoorConv = int.Parse(joinVal);
                                     }
                                     else { }
                                 }
                                 Console.WriteLine("");
                                 Console.WriteLine("- - - - - - - - - - - - - - - - - - -");
                                 Console.WriteLine("");
-                                Console.WriteLine("Wybrane współrzędne: " + fireCoor.ToString());
-                                Console.WriteLine("Skonwertowane współrzędne: " + intFireCoor.ToString());
+                                Console.WriteLine("Choosed coordinate: " + fireCoor.ToString());
+                                //Console.WriteLine("Skonwertowane współrzędne: " + fireCoorConv);
                                 Console.WriteLine("");
                                 Console.WriteLine("Click ENTER key to continue:");
                                 Console.WriteLine("");
@@ -865,7 +877,7 @@ namespace InputWorkProgram   /// Przestrzeń wykonawcza - miejsce deklaracji kla
                                 // graficzną tablicę na strzały, intową tablicę wspołrzędnych, player i fireCoor.
                                 // Metoda ta zwracać będzie zmodyfikowaną graficzną tablicę na strzały i zmodywfikowaną intową tablicę współrzędnych.
                                 ShipCannon shipCannon = new ShipCannon();
-                                (List<List<List<int>>>, string[,,]) tuples_2 = shipCannon.fire(playersShips_int_AR, playersBoardFight_AR, intFireCoor, player);
+                                (List<List<List<int>>>, string[,,]) tuples_2 = shipCannon.fire(playersShips_int_AR, playersBoardFight_AR, fireCoorConv, player);
                                 playersShips_int_AR = tuples_2.Item1;
                                 playersBoardFight_AR = tuples_2.Item2;
                             }
@@ -1365,9 +1377,10 @@ namespace InputWorkProgram   /// Przestrzeń wykonawcza - miejsce deklaracji kla
     }
     public class ShipCannon
     {
-        public (List<List<List<int>>>, string[,,]) fire(List<List<List<int>>> playersShips_int_AR, string[,,] playersBoardFight_AR, int intFireCoor, int player)
+        public (List<List<List<int>>>, string[,,]) fire(List<List<List<int>>> playersShips_int_AR, string[,,] playersBoardFight_AR, int fireCoorConv, int player)
         {
             /// Test poprawności danych: OK
+            /**Console.Clear();
             Console.WriteLine("");
             Console.WriteLine("Test poprawności danych:");
             Console.WriteLine("");
@@ -1396,7 +1409,8 @@ namespace InputWorkProgram   /// Przestrzeń wykonawcza - miejsce deklaracji kla
                 Console.WriteLine("");
                 Console.WriteLine("");
                 Console.WriteLine("");
-            }
+            }**/
+            /**
             string[] letCoorName_AR = { "A", "B", "C", "D", "E", "F", "G", "H", "I", "J" };
             Console.WriteLine("");
             Console.WriteLine("               PLAYER 1                       PLAYER 2              ");
@@ -1429,8 +1443,77 @@ namespace InputWorkProgram   /// Przestrzeń wykonawcza - miejsce deklaracji kla
             Console.WriteLine("                                                                    ");
             Console.WriteLine("- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - ");
             Console.WriteLine("");
-            Console.ReadLine();
-            return (playersShips_int_AR, playersBoardFight_AR); 
+            Console.ReadLine();**/
+
+            /// Deklaracja returnowych zmiennych:
+            List<List<List<int>>> playerShips_Coor_AR = new List<List<List<int>>>();
+            playerShips_Coor_AR = playersShips_int_AR;
+            string[,,] playersBoard_Fight_AR = new string[2, 10, 10];
+            playersBoard_Fight_AR = playersBoardFight_AR;
+
+            /// Logika strzelania:
+            int NOTIS_in_playerShipBoard_counter = 0;
+            int NOTIS_in_playerShipBoard_target = 0;
+            for (int i = 0; i < 7; i++)
+            {
+                for (int j = 0; j < playerShips_Coor_AR[player][i].Count; j++)
+                {
+                    NOTIS_in_playerShipBoard_target += 1;
+                    if (fireCoorConv == playerShips_Coor_AR[player][i][j])
+                    {
+                        /// TRAFIENIE
+                    }
+                    else if (fireCoorConv != playerShips_Coor_AR[player][i][j])
+                    {
+                        /// PUDŁO
+                        NOTIS_in_playerShipBoard_counter += 1;
+                    }
+                }
+                //Console.WriteLine("");
+            }
+            if (NOTIS_in_playerShipBoard_counter == NOTIS_in_playerShipBoard_target)   /// 21 na [2, 2, 2, 3, 3, 4, 5]
+            {
+                /// Pudło - aktualizacja tablicy zawartości stanu bitwy:
+                string fireCoorToSlice = fireCoorConv.ToString();
+                if (fireCoorToSlice.Length == 1)
+                {
+                    int fireCoorConv_s1 = 0;
+                    int fireCoorConv_s2 = int.Parse(fireCoorToSlice.Substring(1, 1));
+                    playersBoard_Fight_AR[player, fireCoorConv_s1, fireCoorConv_s2] = "O ";
+                }
+                else if (fireCoorToSlice.Length == 2)
+                {
+                    int fireCoorConv_s1 = int.Parse(fireCoorToSlice.Substring(0, 1));
+                    int fireCoorConv_s2 = int.Parse(fireCoorToSlice.Substring(1, 1));
+                    playersBoard_Fight_AR[player, fireCoorConv_s1, fireCoorConv_s2] = "O ";
+                }
+
+                // Splicowanie tablicy STAŁEJ intowej w celu uniemożliwienia ponownego strzału
+                // Lub dodanie do tablicy intowej współrzędnej, aby sprawdzając wartości
+                // jej indeksów sprawdzić czy oddano strzał w to miejsce. 
+            }
+            else if (NOTIS_in_playerShipBoard_counter < NOTIS_in_playerShipBoard_target)
+            {
+                /// Trafienie - aktualizacja tablicy zawartości stanu bitwy:
+                string fireCoorToSlice = fireCoorConv.ToString();
+                if (fireCoorToSlice.Length == 1)
+                {
+                    int fireCoorConv_s1 = 0;
+                    int fireCoorConv_s2 = int.Parse(fireCoorToSlice.Substring(0, 1));
+                    playersBoard_Fight_AR[player, fireCoorConv_s1, fireCoorConv_s2] = "X ";
+                }
+                else if (fireCoorToSlice.Length == 2)
+                {
+                    int fireCoorConv_s1 = int.Parse(fireCoorToSlice.Substring(0, 1));
+                    int fireCoorConv_s2 = int.Parse(fireCoorToSlice.Substring(1, 1));
+                    playersBoard_Fight_AR[player, fireCoorConv_s1, fireCoorConv_s2] = "X ";
+                }
+
+                // Splicowanie tablicy STAŁEJ intowej w celu uniemożliwienia ponownego strzału
+                // Lub dodanie do tablicy intowej współrzędnej, aby sprawdzając wartości
+                // jej indeksów sprawdzić czy oddano strzał w to miejsce.
+            }
+            return (playerShips_Coor_AR, playersBoard_Fight_AR); 
         }
     }
 }
