@@ -414,7 +414,7 @@ namespace InputWorkProgram   /// Przestrzeń wykonawcza - miejsce deklaracji kla
                             Console.WriteLine("");
                             Console.WriteLine("- - - - - - - - - - - - - - - - - - -");
                             Console.WriteLine("");
-                            Console.WriteLine("Write value from A0 to J9:");
+                            Console.WriteLine("Write value from A0 to J8:");
                             Console.WriteLine("");
                             firstCoor = Console.ReadLine();
                             if (firstCoor == null)   /// Sprawdzenie czy współrzędna początkowa nie jest pusta.
@@ -533,7 +533,7 @@ namespace InputWorkProgram   /// Przestrzeń wykonawcza - miejsce deklaracji kla
                             // kod
                             /// Aktualizacja planszy poprzez umieszczeni na niej nowego statku
                             BoardContentMaker shipBuildChecker_Obj = new BoardContentMaker();
-                            (string[,,], List<List<int>>) updBrdData = shipBuildChecker_Obj.updateBoardContent(fullIndex_AR, shipFullCoor, playersBoardContent_AR, players);
+                            (string[,,], List<List<int>>) updBrdData = shipBuildChecker_Obj.updateBoardContent(fullIndex_AR, shipFullCoor, playersBoardContent_AR, players, shipPage);
                             playersBoardContent_AR = updBrdData.Item1;
                             fullIndex_AR = updBrdData.Item2;
                             // Koniec ustawiania statków dla danego gracza: (switch)
@@ -691,7 +691,7 @@ namespace InputWorkProgram   /// Przestrzeń wykonawcza - miejsce deklaracji kla
 
             // Zmienne potrzebne do walki
             bool isFight = true;
-            int player = 0;   /// 0 - none | 1 - player 1 | 2 - player 2
+            int player = 0;
             string playerReadLine = "";
             bool isPlayerChoose = false;   /// Do resetu do GAME AGAIN dodatkoweo swich ten uniemożliwia przejścia do strzelania, przed usunięciem wybierania gracza z konsoli.
                                            /// Tworzenie dwóch graficznych tablic na status walki dla graczy:
@@ -731,10 +731,6 @@ namespace InputWorkProgram   /// Przestrzeń wykonawcza - miejsce deklaracji kla
                     else if (i >= 9) { }
                 }
                 Console.WriteLine("         -------------------            -------------------         ");
-                Console.WriteLine("                                                                    ");
-                Console.WriteLine("- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - ");
-                Console.WriteLine("");
-                Console.WriteLine("               PLAYER 1                       PLAYER 2              ");
                 Console.WriteLine("");
                 /// Zrobiłem to ręcznie, ponieważ nie
                 /// Wziąłem zrobiłem to ręcznie, bo nie chciałem bawić się z wyznaczaniem odstępów względem długośći, a nie potrzebna jest tu aukurat pętla:
@@ -790,8 +786,6 @@ namespace InputWorkProgram   /// Przestrzeń wykonawcza - miejsce deklaracji kla
                     Console.WriteLine("");
                 }
                 Console.WriteLine("");
-                Console.WriteLine("- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - ");
-                Console.WriteLine("");
                 if (isPlayerChoose == false)
                 {
                     Console.WriteLine("Choose which player begin game as first.");
@@ -804,8 +798,6 @@ namespace InputWorkProgram   /// Przestrzeń wykonawcza - miejsce deklaracji kla
                         /// Dlaczego 1, a nie zero i u dołu tak samo? Bo w atakowaniu wroga za każdym razem zmieniem tą zmienną: 0 > 1 > 0 > 1,
                         /// (odpowiedni indeks od razu) kiedy gracze atakują się nawzajem i nie chciałem robić dodatkowego tam bool'owego swicha.
                         Console.WriteLine("");
-                        Console.WriteLine("- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - ");
-                        Console.WriteLine("");
                         Console.WriteLine("You choose: PLAYER 1");
                         Console.WriteLine("");
                         Console.WriteLine("Click ENTER key to continue:");
@@ -817,8 +809,6 @@ namespace InputWorkProgram   /// Przestrzeń wykonawcza - miejsce deklaracji kla
                         isPlayerChoose = true;
                         player = 1;
                         Console.WriteLine("");
-                        Console.WriteLine("- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - ");
-                        Console.WriteLine("");
                         Console.WriteLine("You choose: PLAYER 2");
                         Console.WriteLine("");
                         Console.WriteLine("Click ENTER key to continue:");
@@ -828,8 +818,6 @@ namespace InputWorkProgram   /// Przestrzeń wykonawcza - miejsce deklaracji kla
                     else
                     {
                         Console.WriteLine("");
-                        Console.WriteLine("- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -");
-                        Console.WriteLine("");
                         Console.WriteLine("You write uncorrect value.");
                         Console.WriteLine("");
                         Console.WriteLine("Click ENTER key to continue:");
@@ -837,9 +825,9 @@ namespace InputWorkProgram   /// Przestrzeń wykonawcza - miejsce deklaracji kla
                         Console.ReadLine();
                     }
                 }
-                /// Przekazujesz gracza jako argument kierunkowy do metody fire() klasy BoardContentMaker
                 else if (isPlayerChoose == true)
                 {
+                    int controlPlayer = player;
                     if (player == 0)
                     {
                         player = 1;
@@ -848,8 +836,7 @@ namespace InputWorkProgram   /// Przestrzeń wykonawcza - miejsce deklaracji kla
                     {
                         player = 0;
                     }
-                    // Pyknij ifa-słicza...
-                    Console.WriteLine("PLAYER 1");
+                    Console.WriteLine("PLAYER " + (controlPlayer + 1).ToString());
                     Console.WriteLine("");
                     Console.WriteLine("Attack: PLAYER " + (player + 1));
                     Console.WriteLine("Choose field, which you want attack.");
@@ -858,8 +845,6 @@ namespace InputWorkProgram   /// Przestrzeń wykonawcza - miejsce deklaracji kla
                     string fireCoor = Console.ReadLine();
                     if (fireCoor == null)   /// Sprawdzenie czy współrzędna początkowa nie jest pusta.
                     {
-                        Console.WriteLine("");
-                        Console.WriteLine("- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -");
                         Console.WriteLine("");
                         Console.WriteLine("You don\'t left empty value.");
                         Console.WriteLine("You can write correct value.");
@@ -874,9 +859,7 @@ namespace InputWorkProgram   /// Przestrzeń wykonawcza - miejsce deklaracji kla
                         if (fireCoor.Length != 2)   /// Sprawdzenie czy współrzędna początkowa ma odpowiednią długość.
                         {
                             Console.WriteLine("");
-                            Console.WriteLine("- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -");
-                            Console.WriteLine("");
-                            Console.WriteLine("Your value\'s length is uncorrect. ");
+                            Console.WriteLine("Your value\'s length is uncorrect.");
                             Console.WriteLine("You must change it.");
                             Console.WriteLine("");
                             Console.WriteLine("Click ENTER key to continue:");
@@ -924,18 +907,13 @@ namespace InputWorkProgram   /// Przestrzeń wykonawcza - miejsce deklaracji kla
                                     else { }
                                 }
                                 Console.WriteLine("");
-                                Console.WriteLine("- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -");
-                                Console.WriteLine("");
                                 Console.WriteLine("Choosed coordinate: " + fireCoor.ToString());
-                                //Console.WriteLine("Skonwertowane współrzędne: " + fireCoorConv);
+                                ///Console.WriteLine("Skonwertowane współrzędne: " + fireCoorConv);
                                 Console.WriteLine("");
                                 Console.WriteLine("Click ENTER key to continue:");
                                 Console.WriteLine("");
                                 Console.ReadLine();
 
-                                // MUSISZ UTWORZYĆ NOWĄ metodę fire() w klasie BoardContentMaker lub w nowej klasie i przekazać tam:
-                                // graficzną tablicę na strzały, intową tablicę wspołrzędnych, player i fireCoor.
-                                // Metoda ta zwracać będzie zmodyfikowaną graficzną tablicę na strzały i zmodywfikowaną intową tablicę współrzędnych.
                                 ShipCannon shipCannon = new ShipCannon();
                                 (List<List<List<int>>>, string[,,]) tuples_2 = shipCannon.fire(playersShips_int_AR, playersBoardFight_AR, fireCoorConv, player);
                                 playersShips_int_AR = tuples_2.Item1;
@@ -943,8 +921,6 @@ namespace InputWorkProgram   /// Przestrzeń wykonawcza - miejsce deklaracji kla
                             }
                             else if (isIn_avalLet_AR == false || isIn_avalNum_AR == false)
                             {
-                                Console.WriteLine("");
-                                Console.WriteLine("- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -");
                                 Console.WriteLine("");
                                 Console.WriteLine("This area NOT exists in enemy board!");
                                 Console.WriteLine("");
@@ -1095,15 +1071,16 @@ namespace InputWorkProgram   /// Przestrzeń wykonawcza - miejsce deklaracji kla
 
             return mainArray;
         }
-        public (string[,,], List<List<int>>) updateBoardContent(List<List<int>> fullIndex_AR, string[] shipFullCoor, string[,,] playersBoardContent_AR, int players)
+        public (string[,,], List<List<int>>) updateBoardContent(List<List<int>> fullIndex_AR, string[] shipFullCoor, string[,,] playersBoardContent_AR, int players, int shipPage)
         {
-            // Deklaracja gółwnych zmiennych:
+            /// Deklaracja gółwnych zmiennych:
             List<List<int>> splicedBoard_AR = new List<List<int>>();   /// RUCHOMA fizyczna tablica dostępnych pól na statki
             splicedBoard_AR = fullIndex_AR;
             string[,,] outputBoardData = playersBoardContent_AR;   /// STAŁA graficzna tablica na statki (zmiany w wartościach STAŁEJ tablicy)
-            int player = players - 1;   // players będzie zawyżone o 1, bo od razu w pętli nastepuje inkrementacja, a indeksy zaczynają się od 0
+            int player = players - 1;   /// players będzie zawyżone o 1, bo od razu w pętli nastepuje inkrementacja, a indeksy zaczynają się od 0
+            string currentShip = (shipPage + 1).ToString() + " ";   /// aktualna strona, dlatego + 1
 
-            // Konwersja stringowej formy współrzędnej początkowej na formę intową: (B2 -> A = 0, B = 10, C = 20, ... więc B2 = 10 + 2 = 12)
+            /// Konwersja stringowej formy współrzędnej początkowej na formę intową: (B2 -> A = 0, B = 10, C = 20, ... więc B2 = 10 + 2 = 12)
             string[] brdLetCor_AR = { "A", "B", "C", "D", "E", "F", "G", "H", "I", "J" };
             string[] brdNumCor_AR = { "0", "1", "2", "3", "4", "5", "6", "7", "8", "9" };
             List<string> fullCoor_string = new List<string>();
@@ -1131,7 +1108,7 @@ namespace InputWorkProgram   /// Przestrzeń wykonawcza - miejsce deklaracji kla
                 result_int = result_string.Select(x => int.Parse(x)).ToList();
                 //Console.WriteLine(result_int[i]);
                 /// Aktualizowanie tablicy   /// UWAGA: "outputBoardData" to tablica dwuwymiarowa 10x10
-                outputBoardData[player, int.Parse(fullCoor_string_1_num[i]), int.Parse(fullCoor_string_2_num[i])] = "S ";
+                outputBoardData[player, int.Parse(fullCoor_string_1_num[i]), int.Parse(fullCoor_string_2_num[i])] = currentShip;   // np.: "6 "
             }
 
             // WEŹ PRZEKAŻ PARAMETR NUMERU STATKU I PRZEKAŻ JEGO WARTOŚĆ DO STRINGA WARTOŚCI POJAWIENIA SIĘ STATKU, ABY BYŁO WIADOMO GDZIE KTÓRY JEST!
@@ -1171,7 +1148,7 @@ namespace InputWorkProgram   /// Przestrzeń wykonawcza - miejsce deklaracji kla
     {
         public (string[], List<List<int>>, bool) shipCoorBuildChecker(string firstCor, string direction, string length, List<List<List<int>>> availableFields, List<List<int>> fullIndexArray, string[] avalLet_AR, string[] avalNum_AR, int players, bool isDone)
         {
-            // Konwersja stringowej formy współrzędnej początkowej na formę intową: (B2 -> A = 0, B = 10, C = 20, ... więc B2 = 10 + 2 = 12)
+            /// Konwersja stringowej formy współrzędnej początkowej na formę intową: (B2 -> A = 0, B = 10, C = 20, ... więc B2 = 10 + 2 = 12)
             string[] brdLetCor_AR = avalLet_AR;
             string[] brdNumCor_AR = avalNum_AR;
             string fstCoor_string = firstCor;
