@@ -1,12 +1,15 @@
 /// Battleship Game
 
 using System;
-using OutputProgram;   /// Użycie przestrzeni wyjściowej
-using InputWorkProgram;   /// Użycie przestrzeni wykonawczej
+using OutputProgram;   
+/// Użycie przestrzeni wyjściowej
+using InputWorkProgram;   
+/// Użycie przestrzeni wykonawczej
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using System.Collections.Generic;
 using System.Runtime.Versioning;
+using System.Runtime.ExceptionServices;
 
 /// Zrobiłem dwie przesrzenie nazw. Pierwsza jest na klasę główną z główną metodę Main(), która z klasą pełni funkcję tworzenia poszczególnych instancji następujących po sobie
 /// klas wykonawczyh, które pełnią rolę osobnych komponentów. Druga przestrzeń nazw zawiera ów klasy wynonawcze i inne klasy zwracające wartości do klas wykonawczych.
@@ -17,27 +20,15 @@ namespace OutputProgram   /// Przestrzeń wyjściowa - miejce deklaracji obiekt�
     {
         static void Main(string[] args)   /// Główna metoda - odpowiednik natychmiastowej samowywołującej się funkcji z JavaScript ("Immediately-invoked")
         {
+            /// KOMPONENTY:
+
             /// Intro gry:
             GameMenu gameMenu_Obj = new GameMenu();   /// Tworzenie zmiennej z instancją klasy GameMenu
             gameMenu_Obj.intro();   /// Ekran tytułowy
 
             /// Instrukcja gry
-            Console.WriteLine("To continue with the instructions, click ENTER key");
-            Console.WriteLine("");
-            Console.ReadLine();   /// Aby przejść dalej do kolejnej pseudo-strony konsoli (metoda "Console.Clear()") trzeba kliknąć ENTER
-            gameMenu_Obj.instruction();   /// Byle tylko był kliknięty ENTER
-            //
-            // WEŹ PÓŹNIEJ POZYCJONOWANIE STATKÓW GRACZA 1 I 2 ORAZ ICH GRĘ W PĘTLĘ WHILE I ODTWARZAJ PONOWNIE JAKO PONOWNĄ GRĘ!
-            // Na końcu tej instrukcji warunkowej będzie zapytanie co robimy po grze.
-            // Jeżeli gracz wybierze opcję ponowna gra, pętla wykona się ponownie, a z nią od nowa wszystkie punkty.
-            // Jeżeli gracz wybierze napisy końcowe, zostaną puszczone napisy końcowe tak jak to sobie zaplanowałeś w głowie...
-            //
-            // Gra "właściwa"
-            Console.WriteLine("To continue with the ship positing, click ENTER key");
-            Console.WriteLine("");
-            Console.ReadLine();
-            // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-            // Gra zapętlona
+            gameMenu_Obj.instruction();
+
             //while (isGameLoop == true)
             //{
                 // Zapętlenie gry
@@ -85,6 +76,9 @@ namespace InputWorkProgram   /// Przestrzeń wykonawcza - miejsce deklaracji kla
             Console.WriteLine("");
             Console.WriteLine("- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -");
             Console.WriteLine("");
+            Console.WriteLine("To continue with the instructions, click ENTER key");
+            Console.WriteLine("");
+            Console.ReadLine();   /// Aby przejść dalej do kolejnej pseudo-strony konsoli (metoda "Console.Clear()") trzeba kliknąć ENTER
         }
         public void instruction()
         {
@@ -119,6 +113,9 @@ namespace InputWorkProgram   /// Przestrzeń wykonawcza - miejsce deklaracji kla
             Console.WriteLine("");
             Console.WriteLine("- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -");
             Console.WriteLine("");
+            Console.WriteLine("To continue with the ship positing, click ENTER key");
+            Console.WriteLine("");
+            Console.ReadLine();
         }
     }
     public class GameLoop
@@ -635,19 +632,6 @@ namespace InputWorkProgram   /// Przestrzeń wykonawcza - miejsce deklaracji kla
             playersShips_AR_toConvert = playersShipCoor_AR;
             playersBoards_AR = playersBoardContent_AR;
             string winner = "";
-            string[] letCoorName_AR = { "A", "B", "C", "D", "E", "F", "G", "H", "I", "J" };
-
-            // Test poprawności danych: OK
-            /*Console.Clear();
-            for (int i = 0; i < 2; i++)
-            {
-                Console.WriteLine("PLAYER: " + (i + 1));
-                for (int j = 0; j < 7; j++)
-                {
-                    Console.WriteLine(playersShips_AR_toConvert[i, j]);
-                }
-                Console.WriteLine("");
-            }*/
 
             /// Konwersja tablicy [,] współrzędnych statków dla danego gracza na tablicę "List" w celu rozdzielenia stringowych "połączonych" 
             /// współrzędnych w rozdzielone stringowe znajdujące się w doatkowej tablicy. 
@@ -658,7 +642,6 @@ namespace InputWorkProgram   /// Przestrzeń wykonawcza - miejsce deklaracji kla
             playersShips_string_AR.Add(player_2_Ships_string_AR);
             List<string> onceShipCoor_string_AR = new List<string>();
             string[] splitVal_string_AR = { };
-
             for (int i = 0; i < 2; i++)
             {
                 for (int j = 0; j < 7; j++)
@@ -669,34 +652,6 @@ namespace InputWorkProgram   /// Przestrzeń wykonawcza - miejsce deklaracji kla
                 }
                 playersShips_string_AR.Add(playersShips_string_AR[i]);
             }
-
-            /// Test poprawności danych: OK
-            /*for (int i = 0; i < 2; i++)
-            {
-                Console.WriteLine("Player " + (i + 1));
-                Console.WriteLine("");
-                for (int j = 0; j < 7; j++)
-                {
-                    Console.WriteLine("Ship " + (j + 1));
-                    for (int k = 0; k < playersShips_string_AR[i][j].Count; k++)
-                    {
-                        Console.Write("");
-                        if (k == 0)
-                        {
-                            Console.Write(playersShips_string_AR[i][j][k]);
-                        }
-                        else if (k > 0)
-                        {
-                            Console.Write(" | " + playersShips_string_AR[i][j][k]);
-                        }
-                    }
-                    Console.WriteLine("");
-                    Console.WriteLine("");
-                }
-                Console.WriteLine("");
-                Console.WriteLine("");
-                Console.WriteLine("");
-            }*/
 
             /// Konwersja tablicy współrzędnych typu: "C2" na współrzędne typu: "22" i konwersja ze sring na int:
             List<List<List<int>>> playersShips_int_AR = new List<List<List<int>>>();   /// gracz -> statek -> współrzędne -> współrzędna
@@ -734,80 +689,16 @@ namespace InputWorkProgram   /// Przestrzeń wykonawcza - miejsce deklaracji kla
                 playersShips_int_AR.Add(playerShips_int_AR);
             }
 
-            /// Test poprawności danych: OK
-            /*for (int i = 0; i < 2; i++)
-            {
-                Console.WriteLine("Player " + (i + 1));
-                Console.WriteLine("");
-                for (int j = 0; j < 7; j++)
-                {
-                    Console.WriteLine("Ship " + (j + 1));
-                    for (int k = 0; k < playersShips_int_AR[i][j].Count; k++)
-                    {
-                        Console.Write("");
-                        if (k == 0)
-                        {
-                            Console.Write(playersShips_int_AR[i][j][k]);
-                        }
-                        else if (k > 0)
-                        {
-                            Console.Write(" | " + playersShips_int_AR[i][j][k]);
-                        }
-                    }
-                    Console.WriteLine("");
-                    Console.WriteLine("");
-                }
-                Console.WriteLine("");
-                Console.WriteLine("");
-                Console.WriteLine("");
-            }*/
-            /**Console.Clear();
-            Console.WriteLine("");
-            Console.WriteLine("               PLAYER 1                       PLAYER 2              ");
-            Console.WriteLine("                                                                    ");
-            Console.WriteLine("         0 1 2 3 4 5 6 7 8 9            0 1 2 3 4 5 6 7 8 9         ");
-            Console.WriteLine("         -------------------            -------------------         ");
-            Console.Write("     ");
-            for (int i = 0; i < 10; i++)
-            {
-                Console.Write(letCoorName_AR[i] + " | ");
-                for (int j = 0; j < 10; j++)
-                {
-                    Console.Write(playersBoardContent_AR[0, i, j]);
-                }
-                Console.Write("|      ");
-                Console.Write(letCoorName_AR[i] + " | ");
-                for (int j = 0; j < 10; j++)
-                {
-                    Console.Write(playersBoardContent_AR[1, i, j]);
-                }
-                Console.Write("|");
-                Console.WriteLine("   ");
-                if (i < 9)
-                {
-                    Console.Write("     ");
-                }
-                else if (i >= 9) { }
-            }
-            Console.WriteLine("         -------------------            -------------------         ");
-            Console.WriteLine("                                                                    ");
-            Console.WriteLine("- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - ");
-            Console.WriteLine("");**/
-
-
-
-            
-            
-            BoardContentMaker boardContentMaker_Obj = new BoardContentMaker();
-            string[,,] playersBoardFight_AR = boardContentMaker_Obj.set_fieldAreaContent_AR();   // [2, 10, 10]
-
+            // Zmienne potrzebne do walki
             bool isFight = true;
             int player = 0;   /// 0 - none | 1 - player 1 | 2 - player 2
             string playerReadLine = "";
             bool isPlayerChoose = false;   /// Do resetu do GAME AGAIN dodatkoweo swich ten uniemożliwia przejścia do strzelania, przed usunięciem wybierania gracza z konsoli.
+            /// Tworzenie dwóch graficznych tablic na status walki dla graczy:
+            BoardContentMaker boardContentMaker_Obj = new BoardContentMaker();
+            string[,,] playersBoardFight_AR = boardContentMaker_Obj.set_fieldAreaContent_AR();   // [2, 10, 10]
 
-
-
+            /// Pętla walki:
             while (isFight == true)
             {
                 Console.Clear();
@@ -817,6 +708,7 @@ namespace InputWorkProgram   /// Przestrzeń wykonawcza - miejsce deklaracji kla
                 Console.WriteLine("         0 1 2 3 4 5 6 7 8 9            0 1 2 3 4 5 6 7 8 9         ");
                 Console.WriteLine("         -------------------            -------------------         ");
                 Console.Write("     ");
+                string[] letCoorName_AR = { "A", "B", "C", "D", "E", "F", "G", "H", "I", "J" };
                 for (int i = 0; i < 10; i++)
                 {
                     Console.Write(letCoorName_AR[i] + " | ");
@@ -969,8 +861,13 @@ namespace InputWorkProgram   /// Przestrzeń wykonawcza - miejsce deklaracji kla
                                 Console.WriteLine("");
                                 Console.ReadLine();
 
-                                // MUSISZ UTWORZYĆ NOWĄ metodę fire() w klasie BoardContentMaker lub w nowej klasie i przekazać tam tablicę na strzały, fireCoor i player
-
+                                // MUSISZ UTWORZYĆ NOWĄ metodę fire() w klasie BoardContentMaker lub w nowej klasie i przekazać tam:
+                                // graficzną tablicę na strzały, intową tablicę wspołrzędnych, player i fireCoor.
+                                // Metoda ta zwracać będzie zmodyfikowaną graficzną tablicę na strzały i zmodywfikowaną intową tablicę współrzędnych.
+                                ShipCannon shipCannon = new ShipCannon();
+                                (List<List<List<int>>>, string[,,]) tuples_2 = shipCannon.fire(playersShips_int_AR, playersBoardFight_AR, intFireCoor, player);
+                                playersShips_int_AR = tuples_2.Item1;
+                                playersBoardFight_AR = tuples_2.Item2;
                             }
                             else if (isIn_avalLet_AR == false || isIn_avalNum_AR == false)
                             {
@@ -1464,6 +1361,76 @@ namespace InputWorkProgram   /// Przestrzeń wykonawcza - miejsce deklaracji kla
             }
             else { }
             return (result, fullIndex_AR, isResult);
+        }
+    }
+    public class ShipCannon
+    {
+        public (List<List<List<int>>>, string[,,]) fire(List<List<List<int>>> playersShips_int_AR, string[,,] playersBoardFight_AR, int intFireCoor, int player)
+        {
+            /// Test poprawności danych: OK
+            Console.WriteLine("");
+            Console.WriteLine("Test poprawności danych:");
+            Console.WriteLine("");
+            for (int i = 0; i < 2; i++)
+            {
+                Console.WriteLine("Player " + (i + 1));
+                Console.WriteLine("");
+                for (int j = 0; j < 7; j++)
+                {
+                    Console.WriteLine("Ship " + (j + 1));
+                    for (int k = 0; k < playersShips_int_AR[i][j].Count; k++)
+                    {
+                        Console.Write("");
+                        if (k == 0)
+                        {
+                            Console.Write(playersShips_int_AR[i][j][k]);
+                        }
+                        else if (k > 0)
+                        {
+                            Console.Write(" | " + playersShips_int_AR[i][j][k]);
+                        }
+                    }
+                    Console.WriteLine("");
+                    Console.WriteLine("");
+                }
+                Console.WriteLine("");
+                Console.WriteLine("");
+                Console.WriteLine("");
+            }
+            string[] letCoorName_AR = { "A", "B", "C", "D", "E", "F", "G", "H", "I", "J" };
+            Console.WriteLine("");
+            Console.WriteLine("               PLAYER 1                       PLAYER 2              ");
+            Console.WriteLine("                                                                    ");
+            Console.WriteLine("         0 1 2 3 4 5 6 7 8 9            0 1 2 3 4 5 6 7 8 9         ");
+            Console.WriteLine("         -------------------            -------------------         ");
+            Console.Write("     ");
+            for (int i = 0; i < 10; i++)
+            {
+                Console.Write(letCoorName_AR[i] + " | ");
+                for (int j = 0; j < 10; j++)
+                {
+                    Console.Write(playersBoardFight_AR[0, i, j]);
+                }
+                Console.Write("|      ");
+                Console.Write(letCoorName_AR[i] + " | ");
+                for (int j = 0; j < 10; j++)
+                {
+                    Console.Write(playersBoardFight_AR[1, i, j]);
+                }
+                Console.Write("|");
+                Console.WriteLine("   ");
+                if (i < 9)
+                {
+                    Console.Write("     ");
+                }
+                else if (i >= 9) { }
+            }
+            Console.WriteLine("         -------------------            -------------------         ");
+            Console.WriteLine("                                                                    ");
+            Console.WriteLine("- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - ");
+            Console.WriteLine("");
+            Console.ReadLine();
+            return (playersShips_int_AR, playersBoardFight_AR); 
         }
     }
 }
