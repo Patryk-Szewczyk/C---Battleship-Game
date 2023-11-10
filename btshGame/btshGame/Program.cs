@@ -913,14 +913,30 @@ namespace InputWorkProgram   /// Przestrzeń wykonawcza - miejsce deklaracji kla
                                     }
                                     else { }
                                 }
-                                isReturn = true;
-                                Console.WriteLine("");
-                                Console.WriteLine("Choosed coordinate: " + fireCoor.ToString());
-                                ///Console.WriteLine("Skonwertowane współrzędne: " + fireCoorConv);
-                                Console.WriteLine("");
-                                Console.WriteLine("Click ENTER key to continue:");
-                                Console.WriteLine("");
-                                Console.ReadLine();
+
+                                /// Sprawdzanie czy wybrana współrzędna istnieje w tablicy współrzędnych:
+                                if (playersBoardFight_AR[player, int.Parse(letToNum), int.Parse(number)] == "X " || playersBoardFight_AR[player, int.Parse(letToNum), int.Parse(number)] == "O ")
+                                {
+                                    isReturn = false;
+                                    Console.WriteLine("");
+                                    Console.WriteLine("You already attacked this field.");
+                                    Console.WriteLine("");
+                                    Console.WriteLine("Click ENTER key to continue:");
+                                    Console.WriteLine("");
+                                    Console.ReadLine();
+                                }
+                                else
+                                {
+                                    isReturn = true;
+                                    Console.WriteLine("");
+                                    Console.WriteLine("Choosed coordinate: " + fireCoor.ToString());
+                                    ///Console.WriteLine("Skonwertowane współrzędne: " + fireCoorConv);
+                                    Console.WriteLine("");
+                                    Console.WriteLine("Click ENTER key to continue:");
+                                    Console.WriteLine("");
+                                    Console.ReadLine();
+                                }
+
 
                                 ShipCannon shipCannon = new ShipCannon();
                                 (List<List<List<int>>>, string[,,]) tuples_2 = shipCannon.fire(playersShips_int_AR, playersBoardFight_AR, fireCoorConv, player);
