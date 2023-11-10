@@ -692,9 +692,11 @@ namespace InputWorkProgram   /// Przestrzeń wykonawcza - miejsce deklaracji kla
             // Zmienne potrzebne do walki
             bool isFight = true;
             int player = 0;
+            int controlPlayer = player;
             string playerReadLine = "";
             bool isPlayerChoose = false;   /// Do resetu do GAME AGAIN dodatkoweo swich ten uniemożliwia przejścia do strzelania, przed usunięciem wybierania gracza z konsoli.
                                            /// Tworzenie dwóch graficznych tablic na status walki dla graczy:
+            bool isReturn = true;   /// Switch - zrobiłem go, aby zatrzymywać się na tym samym graczu, kiedy poda niepoprawną współrzędną i poda współrzędną, którą już podał.
             BoardContentMaker boardContentMaker_Obj = new BoardContentMaker();
             string[,,] playersBoardFight_AR = boardContentMaker_Obj.set_fieldAreaContent_AR();   // [2, 10, 10]
 
@@ -827,15 +829,20 @@ namespace InputWorkProgram   /// Przestrzeń wykonawcza - miejsce deklaracji kla
                 }
                 else if (isPlayerChoose == true)
                 {
-                    int controlPlayer = player;
-                    if (player == 0)
+                    if (isReturn == true)
                     {
-                        player = 1;
+                        isReturn = false;
+                        controlPlayer = player;
+                        if (player == 0)
+                        {
+                            player = 1;
+                        }
+                        else if (player == 1)
+                        {
+                            player = 0;
+                        }
                     }
-                    else if (player == 1)
-                    {
-                        player = 0;
-                    }
+                    else { }
                     Console.WriteLine("PLAYER " + (controlPlayer + 1).ToString());
                     Console.WriteLine("");
                     Console.WriteLine("Attack: PLAYER " + (player + 1));
@@ -845,9 +852,9 @@ namespace InputWorkProgram   /// Przestrzeń wykonawcza - miejsce deklaracji kla
                     string fireCoor = Console.ReadLine();
                     if (fireCoor == null)   /// Sprawdzenie czy współrzędna początkowa nie jest pusta.
                     {
+                        isReturn = false;
                         Console.WriteLine("");
-                        Console.WriteLine("You don\'t left empty value.");
-                        Console.WriteLine("You can write correct value.");
+                        Console.WriteLine("You can\'t left empty value.");
                         Console.WriteLine("");
                         Console.WriteLine("Click ENTER key to continue:");
                         Console.WriteLine("");
@@ -858,9 +865,9 @@ namespace InputWorkProgram   /// Przestrzeń wykonawcza - miejsce deklaracji kla
                     {
                         if (fireCoor.Length != 2)   /// Sprawdzenie czy współrzędna początkowa ma odpowiednią długość.
                         {
+                            isReturn = false;
                             Console.WriteLine("");
                             Console.WriteLine("Your value\'s length is uncorrect.");
-                            Console.WriteLine("You must change it.");
                             Console.WriteLine("");
                             Console.WriteLine("Click ENTER key to continue:");
                             Console.WriteLine("");
@@ -906,6 +913,7 @@ namespace InputWorkProgram   /// Przestrzeń wykonawcza - miejsce deklaracji kla
                                     }
                                     else { }
                                 }
+                                isReturn = true;
                                 Console.WriteLine("");
                                 Console.WriteLine("Choosed coordinate: " + fireCoor.ToString());
                                 ///Console.WriteLine("Skonwertowane współrzędne: " + fireCoorConv);
@@ -921,6 +929,7 @@ namespace InputWorkProgram   /// Przestrzeń wykonawcza - miejsce deklaracji kla
                             }
                             else if (isIn_avalLet_AR == false || isIn_avalNum_AR == false)
                             {
+                                isReturn = false;
                                 Console.WriteLine("");
                                 Console.WriteLine("This area NOT exists in enemy board!");
                                 Console.WriteLine("");
