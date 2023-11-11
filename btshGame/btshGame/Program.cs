@@ -101,15 +101,16 @@ namespace InputWorkProgram   /// Przestrzeń wykonawcza - miejsce deklaracji kla
             Console.WriteLine("5. The player boards have dimensions of 10 x 10 fields.");
             Console.WriteLine("6. When placing ships, ships canNOT leave the board and canNOT overlap each other.");
             Console.WriteLine("7. After placing the ships on the boards, you can start the game.");
-            Console.WriteLine("8. At the beginning, all squares of the board are marked with the sign: \"#\" on the board.");
-            Console.WriteLine("9. A hit ship is marked with an \"H\" on the board.");
-            Console.WriteLine("10. The sunken ship is marked with a series of \"S\" characters, relative to its position on the board.");
-            Console.WriteLine("11. The miss is marked with an \"M\" on the board.");
-            Console.WriteLine("12. To attack an opponent, the player must enter coordinates such like: \"H8\" and click ENTER.");
-            Console.WriteLine("13. Players take turns shooting.");
-            Console.WriteLine("14. The winner is the one who defeats his enemy.");
-            Console.WriteLine("15. The winner wins \"PAngular\". (traditional programmer's christmas meal)");
-            Console.WriteLine("16. After game players can play game again or get in game credits.");
+            Console.WriteLine("8. At the beginning, all squares of the board are marked with the sign \"~\" on the board.");
+            Console.WriteLine("9. A hit ship is marked with a series of number from 1 to 7 according to ship number on the board.");
+            Console.WriteLine("10. The hit is marked with an \"X\" on the board.");
+            Console.WriteLine("11. The miss is marked with an \"O\" on the board.");
+            Console.WriteLine("12. The sunken ship is marked with a series of number from 1 to 7 according to its position on the board.");
+            Console.WriteLine("13. To attack an opponent, the player must enter coordinates such like: \"H8\".");
+            Console.WriteLine("14. Players shooting together by turns.");
+            Console.WriteLine("15. The winner is this one who defeats his enemy.");
+            Console.WriteLine("16. The winner wins \"PAngular\" - traditional programmer's christmas meal.");
+            Console.WriteLine("17. After game players can play game again or get in game credits.");
             Console.WriteLine("");
             Console.WriteLine("- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -");
             Console.WriteLine("");
@@ -700,6 +701,8 @@ namespace InputWorkProgram   /// Przestrzeń wykonawcza - miejsce deklaracji kla
             BoardContentMaker boardContentMaker_Obj = new BoardContentMaker();
             /// Tworzenie dwóch graficznych tablic na status walki dla graczy:
             string[,,] playersBoardFight_AR = boardContentMaker_Obj.set_fieldAreaContent_AR();   // [2, 10, 10]
+            List<List<int>> playersBoardFight_intToSplice_AR = new List<List<int>>();
+            playersBoardFight_intToSplice_AR = boardContentMaker_Obj.set_fullIndex_AR();
 
             /// Pętla walki:
             while (isFight == true)
@@ -734,6 +737,8 @@ namespace InputWorkProgram   /// Przestrzeń wykonawcza - miejsce deklaracji kla
                     else if (i >= 9) { }
                 }
                 Console.WriteLine("         -------------------            -------------------         ");
+                Console.WriteLine("");
+                Console.WriteLine("- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - ");
                 Console.WriteLine("");
                 /// Zrobiłem to ręcznie, ponieważ nie
                 /// Wziąłem zrobiłem to ręcznie, bo nie chciałem bawić się z wyznaczaniem odstępów względem długośći, a nie potrzebna jest tu aukurat pętla:
@@ -788,6 +793,8 @@ namespace InputWorkProgram   /// Przestrzeń wykonawcza - miejsce deklaracji kla
                     Console.Write(" |");
                     Console.WriteLine("");
                 }
+                Console.WriteLine("");
+                Console.WriteLine("- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - ");
                 Console.WriteLine("");
                 if (isWinner == true)
                 {
@@ -954,11 +961,12 @@ namespace InputWorkProgram   /// Przestrzeń wykonawcza - miejsce deklaracji kla
                                 }
 
                                 ShipCannon shipCannon = new ShipCannon();
-                                (List<List<List<int>>>, string[,,], bool, string) tuples_2 = shipCannon.fire(playersShips_int_AR, playersBoardFight_AR, fireCoorConv, player);
+                                (List<List<List<int>>>, string[,,], List<List<int>>, bool, string) tuples_2 = shipCannon.fire(playersShips_int_AR, playersBoardFight_AR, playersBoardFight_intToSplice_AR, fireCoorConv, player);
                                 playersShips_int_AR = tuples_2.Item1;
                                 playersBoardFight_AR = tuples_2.Item2;
-                                isWinner = tuples_2.Item3;
-                                winner = tuples_2.Item4;
+                                playersBoardFight_intToSplice_AR = tuples_2.Item3;
+                                isWinner = tuples_2.Item4;
+                                winner = tuples_2.Item5;
                             }
                             else if (isIn_avalLet_AR == false || isIn_avalNum_AR == false)
                             {
@@ -1463,7 +1471,7 @@ namespace InputWorkProgram   /// Przestrzeń wykonawcza - miejsce deklaracji kla
     }
     public class ShipCannon
     {
-        public (List<List<List<int>>>, string[,,], bool, string) fire(List<List<List<int>>> playersShips_int_AR, string[,,] playersBoardFight_AR, int fireCoorConv, int player)
+        public (List<List<List<int>>>, string[,,], List<List<int>>, bool, string) fire(List<List<List<int>>> playersShips_int_AR, string[,,] playersBoardFight_AR, List<List<int>> playersBoardFight_intToSplice_AR, int fireCoorConv, int player)
         {
             /// Test poprawności danych: OK
             /**Console.Clear();
@@ -1535,6 +1543,8 @@ namespace InputWorkProgram   /// Przestrzeń wykonawcza - miejsce deklaracji kla
             List<List<List<int>>> playerShips_Coor_AR = new List<List<List<int>>>();
             playerShips_Coor_AR = playersShips_int_AR;
             string[,,] playersBoard_Fight_AR = new string[2, 10, 10];
+            List<List<int>> playerBoardFight_toSplice_AR = new List<List<int>>();
+            playerBoardFight_toSplice_AR = playersBoardFight_intToSplice_AR;
             playersBoard_Fight_AR = playersBoardFight_AR;
             bool isWinner = false;
             string winner = "?";
@@ -1557,97 +1567,109 @@ namespace InputWorkProgram   /// Przestrzeń wykonawcza - miejsce deklaracji kla
                 }
                 //Console.WriteLine("");
             }
-            if (isHit == false)
-            {
-                /// Pudło - aktualizacja tablicy zawartości stanu bitwy:
-                string fireCoorToSlice = fireCoorConv.ToString();
-                if (fireCoorToSlice.Length == 1)
-                {
-                    int fireCoorConv_s1 = 0;
-                    int fireCoorConv_s2 = int.Parse(fireCoorToSlice.Substring(0, 1));
-                    playersBoard_Fight_AR[player, fireCoorConv_s1, fireCoorConv_s2] = "O ";
-                }
-                else if (fireCoorToSlice.Length == 2)
-                {
-                    int fireCoorConv_s1 = int.Parse(fireCoorToSlice.Substring(0, 1));
-                    int fireCoorConv_s2 = int.Parse(fireCoorToSlice.Substring(1, 1));
-                    playersBoard_Fight_AR[player, fireCoorConv_s1, fireCoorConv_s2] = "O ";
-                }
 
-                // Splicowanie tablicy STAŁEJ intowej w celu uniemożliwienia ponownego strzału
-                // Lub dodanie do tablicy intowej współrzędnej, aby sprawdzając wartości
-                // jej indeksów sprawdzić czy oddano strzał w to miejsce. 
-            }
-            else if (isHit == true)
+            /// SPLICOWANIE tablicy List w celu uniknięcia nakładania się oznaczeń odnośnie statków:
+            for (int i = 0; i < playerBoardFight_toSplice_AR[player].Count; i++)
             {
-                isHit = false;
-                /// Trafienie - aktualizacja tablicy zawartości stanu bitwy:
-                string fireCoorToSlice = fireCoorConv.ToString();
-                if (fireCoorToSlice.Length == 1)
+                if (fireCoorConv == playerBoardFight_toSplice_AR[player][i])
                 {
-                    int fireCoorConv_s1 = 0;
-                    int fireCoorConv_s2 = int.Parse(fireCoorToSlice.Substring(0, 1));
-                    playersBoard_Fight_AR[player, fireCoorConv_s1, fireCoorConv_s2] = "X ";
-                }
-                else if (fireCoorToSlice.Length == 2)
-                {
-                    int fireCoorConv_s1 = int.Parse(fireCoorToSlice.Substring(0, 1));
-                    int fireCoorConv_s2 = int.Parse(fireCoorToSlice.Substring(1, 1));
-                    playersBoard_Fight_AR[player, fireCoorConv_s1, fireCoorConv_s2] = "X ";
-                }
-
-                // Splicowanie STAŁEJ tablicy intowej:
-                int[,] allShipsLength_AR = new int[2, 7];
-                /// Tablica na długości ainekdów statków w tablicy splicowanej - w celu ustalenia czy 
-                /// dany statek jest zatopiony (jeśli jego długość w tablicy wynosi 0 [splicowanie])
-                //Console.Clear();
-                for (int i = 0; i < 7; i++)
-                {
-                    for (int j = 0; j < playersShips_int_AR[player][i].Count; j++)
-                    {   
-                        if (playersShips_int_AR[player][i][j] == fireCoorConv)
+                    // Pole to istnieje - czyli strzał był dostępny:
+                    
+                    // Splicowanie:
+                    int startIndex_1 = playerBoardFight_toSplice_AR[player].IndexOf(fireCoorConv);
+                    playerBoardFight_toSplice_AR[player].RemoveRange(startIndex_1, 1);
+                    
+                    // Logika strzału: (dalsza część)
+                    if (isHit == false)
+                    {
+                        /// Pudło - aktualizacja tablicy zawartości stanu bitwy:
+                        string fireCoorToSlice = fireCoorConv.ToString();
+                        if (fireCoorToSlice.Length == 1)
                         {
-                            int startIndex = playersShips_int_AR[player][i].IndexOf(fireCoorConv);
-                            playersShips_int_AR[player][i].RemoveRange(startIndex, 1);
+                            int fireCoorConv_s1 = 0;
+                            int fireCoorConv_s2 = int.Parse(fireCoorToSlice.Substring(0, 1));
+                            playersBoard_Fight_AR[player, fireCoorConv_s1, fireCoorConv_s2] = "O ";
                         }
-                        else {}
+                        else if (fireCoorToSlice.Length == 2)
+                        {
+                            int fireCoorConv_s1 = int.Parse(fireCoorToSlice.Substring(0, 1));
+                            int fireCoorConv_s2 = int.Parse(fireCoorToSlice.Substring(1, 1));
+                            playersBoard_Fight_AR[player, fireCoorConv_s1, fireCoorConv_s2] = "O ";
+                        }
                     }
-                    // Pobranie zaktualizowanej długości tablicy danego statku
-                    int curShipLength = playersShips_int_AR[player][i].Count;
-                    //Console.WriteLine("Długośc statku " + (i + 1).ToString() + ": " + curShipLength.ToString());
-                    allShipsLength_AR[player, i] = curShipLength;
-                }
-                //Console.ReadLine();
-                
+                    else if (isHit == true)
+                    {
+                        isHit = false;
+                        /// Trafienie - aktualizacja tablicy zawartości stanu bitwy:
+                        string fireCoorToSlice = fireCoorConv.ToString();
+                        if (fireCoorToSlice.Length == 1)
+                        {
+                            int fireCoorConv_s1 = 0;
+                            int fireCoorConv_s2 = int.Parse(fireCoorToSlice.Substring(0, 1));
+                            playersBoard_Fight_AR[player, fireCoorConv_s1, fireCoorConv_s2] = "X ";
+                        }
+                        else if (fireCoorToSlice.Length == 2)
+                        {
+                            int fireCoorConv_s1 = int.Parse(fireCoorToSlice.Substring(0, 1));
+                            int fireCoorConv_s2 = int.Parse(fireCoorToSlice.Substring(1, 1));
+                            playersBoard_Fight_AR[player, fireCoorConv_s1, fireCoorConv_s2] = "X ";
+                        }
 
-                /// Sprawdzenie w której planszy jakiego gracza są zatopione wszystkie statki
-                int isSunken = 0;
-                /// Wziąłem 7, bo nie wiem czy w ogóle da się przeitrować względem długości string[,], a dokładniej względem pierwszego wymiar, tzn. według "player"
-                for (int i = 0; i < 7; i++)
-                {
-                    if (allShipsLength_AR[player, i] == 0)
-                    {
-                        isSunken += 1;
-                    }
-                    else {}
-                }
-                if (isSunken == 7)
-                {
-                    if (player == 0)
-                    {
-                        player = 1;
-                    }
-                    else if (player == 1)
-                    {
-                        player = 0;
-                    }
-                    winner = "P" + (player + 1).ToString();
-                    isWinner = true;
-                }
+                        /// Splicowanie RUCHOMEJ tablicy intowej:
+                        int[,] allShipsLength_AR = new int[2, 7];
+                        /// Tablica na długości ainekdów statków w tablicy splicowanej - w celu ustalenia czy 
+                        /// dany statek jest zatopiony (jeśli jego długość w tablicy wynosi 0 [splicowanie])
+                        for (int x = 0; x < 7; x++)
+                        {
+                            for (int y = 0; y < playersShips_int_AR[player][x].Count; y++)
+                            {
+                                if (playersShips_int_AR[player][x][y] == fireCoorConv)
+                                {
+                                    int startIndex_2 = playersShips_int_AR[player][x].IndexOf(fireCoorConv);
+                                    playersShips_int_AR[player][x].RemoveRange(startIndex_2, 1);
+                                }
+                                else { }
+                            }
+                            /// Pobranie zaktualizowanej długości tablicy danego statku
+                            int curShipLength = playersShips_int_AR[player][x].Count;
+                            allShipsLength_AR[player, x] = curShipLength;
+                        }
 
+
+                        /// Sprawdzenie w której planszy jakiego gracza są zatopione wszystkie statki
+                        int isSunken = 0;
+                        /// Wziąłem 7, bo nie wiem czy w ogóle da się przeitrować względem długości string[,], a dokładniej względem pierwszego wymiar, tzn. według "player"
+                        for (int x = 0; x < 7; x++)
+                        {
+                            if (allShipsLength_AR[player, x] == 0)
+                            {
+                                isSunken += 1;
+                            }
+                            else { }
+                        }
+                        if (isSunken == 7)
+                        {
+                            if (player == 0)
+                            {
+                                player = 1;
+                            }
+                            else if (player == 1)
+                            {
+                                player = 0;
+                            }
+                            winner = "P" + (player + 1).ToString();
+                            isWinner = true;
+                        }
+
+                    }
+                }
+                else if (fireCoorConv != playerBoardFight_toSplice_AR[player][i])
+                {
+                    // Pole to nie istnieje czyli strzał był niedostępny:
+                }
             }
 
-            return (playerShips_Coor_AR, playersBoard_Fight_AR, isWinner, winner);
+            return (playerShips_Coor_AR, playersBoard_Fight_AR, playerBoardFight_toSplice_AR, isWinner, winner);
         }
     }
 }
