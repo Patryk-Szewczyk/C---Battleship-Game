@@ -1,10 +1,8 @@
 /// Battleship Game
 
 using System;
-using OutputProgram;
-/// Użycie przestrzeni wyjściowej
-using InputWorkProgram;
-/// Użycie przestrzeni wykonawczej
+using OutputProgram;   /// Użycie przestrzeni wyjściowej
+using InputWorkProgram;   /// Użycie przestrzeni wykonawczej
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using System.Collections.Generic;
@@ -44,7 +42,13 @@ namespace OutputProgram   /// Przestrzeń wyjściowa - miejce deklaracji obiekt�
             playersBoardContent_AR = playersData_AR.Item2;   /// DO SPRAWDZENIA!
             // metoda: fight()   // argument: playersShipCoor_AR & playersBoardContent_AR
             string winner = gameLoop.fight(playersShipCoor_AR, playersBoardContent_AR);
-            // metoda: prize()   // argument: winner
+            // Nagroda:
+            Prize prize = new Prize();
+            prize.winnerInfo(winner);
+
+            GameCredits gameCredits = new GameCredits();
+            gameCredits.showCredits();
+
             // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
             // Ekran końcowy i napisy końcowe
         }
@@ -105,7 +109,7 @@ namespace InputWorkProgram   /// Przestrzeń wykonawcza - miejsce deklaracji kla
             Console.WriteLine("9. A hit ship is marked with a series of number from 1 to 7 according to ship number on the board.");
             Console.WriteLine("10. The hit is marked with an \"X\" on the board.");
             Console.WriteLine("11. The miss is marked with an \"O\" on the board.");
-            Console.WriteLine("12. The sunken ship is marked with a series of number from 1 to 7 according to its position on the board.");
+            Console.WriteLine("12. If you sink enemy ship, this ship coordinates emerge under boards in players ships info.");
             Console.WriteLine("13. To attack an opponent, the player must enter coordinates such like: \"H8\".");
             Console.WriteLine("14. Players shooting together by turns.");
             Console.WriteLine("15. The winner is this one who defeats his enemy.");
@@ -1002,12 +1006,63 @@ namespace InputWorkProgram   /// Przestrzeń wykonawcza - miejsce deklaracji kla
                 if (isFight == false)
                 {
                     Console.WriteLine("");
-                    Console.WriteLine("WYGRYWA GRACZ: " + (controlPlayer + 1).ToString());
+                    Console.WriteLine("WINS: PLAYER " + (controlPlayer + 1).ToString());
+                    Console.WriteLine("");
+                    Console.WriteLine("Click ENTER key to continue:");
                     Console.WriteLine("");
                     Console.ReadLine();
                 }
             }
             return winner;
+        }
+    }
+    public class Prize
+    {
+        public void winnerInfo(string winner)
+        {
+            string winPlayer = winner;
+            Console.Clear();
+            if (winner == "P1")
+            {
+                Console.WriteLine("BB BB BB  BB  BBBB  BB  BBBB  BB  BBBBBBBB  BBBBBBB         BBBBBBB   BB          BBBB    BB    BB  BBBBBBBB  BBBBBBB       BBB     ");
+                Console.WriteLine("BB BB BB  BB  BB BB BB  BB BB BB  BB        BB    BB  BB    BB    BB  BB         BB  BB    BB  BB   BB        BB    BB     BB BB    ");
+                Console.WriteLine("BB BB BB  BB  BB BB BB  BB BB BB  BB        BB    BB        BB    BB  BB        BB    BB    BBBB    BB        BB    BB    BB  BB    ");
+                Console.WriteLine("BB BB BB  BB  BB BB BB  BB BB BB  BBBBBBBB  BBBBBBB         BBBBBBB   BB        BBBBBBBB     BB     BBBBBBBB  BBBBBBB         BB    ");
+                Console.WriteLine("BB BB BB  BB  BB BB BB  BB BB BB  BB        BB    BB        BB        BB        BB    BB     BB     BB        BB    BB        BB    ");
+                Console.WriteLine("BB BB BB  BB  BB BB BB  BB BB BB  BB        BB    BB  BB    BB        BB        BB    BB     BB     BB        BB    BB        BB    ");
+                Console.WriteLine("BBBBBBBB  BB  BB  BBBB  BB  BBBB  BBBBBBBB  BB    BB        BB        BBBBBBBB  BB    BB     BB     BBBBBBBB  BB    BB       BBBB   ");
+                Console.WriteLine("");
+                Console.WriteLine("- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -");
+                Console.WriteLine("");
+                Console.WriteLine("The battle wins PLAYER 1. This player get prize in the image of 10 000 $");
+            }
+            else if (winner == "P2")
+            {
+                Console.WriteLine("BB BB BB  BB  BBBB  BB  BBBB  BB  BBBBBBBB  BBBBBBB         BBBBBBB   BB          BBBB    BB    BB  BBBBBBBB  BBBBBBB      BBBBBB   ");
+                Console.WriteLine("BB BB BB  BB  BB BB BB  BB BB BB  BB        BB    BB  BB    BB    BB  BB         BB  BB    BB  BB   BB        BB    BB    BB    BB  ");
+                Console.WriteLine("BB BB BB  BB  BB BB BB  BB BB BB  BB        BB    BB        BB    BB  BB        BB    BB    BBBB    BB        BB    BB         BB    ");
+                Console.WriteLine("BB BB BB  BB  BB BB BB  BB BB BB  BBBBBBBB  BBBBBBB         BBBBBBB   BB        BBBBBBBB     BB     BBBBBBBB  BBBBBBB        BBB     ");
+                Console.WriteLine("BB BB BB  BB  BB BB BB  BB BB BB  BB        BB    BB        BB        BB        BB    BB     BB     BB        BB    BB      BB      ");
+                Console.WriteLine("BB BB BB  BB  BB BB BB  BB BB BB  BB        BB    BB  BB    BB        BB        BB    BB     BB     BB        BB    BB     BB       ");
+                Console.WriteLine("BBBBBBBB  BB  BB  BBBB  BB  BBBB  BBBBBBBB  BB    BB        BB        BBBBBBBB  BB    BB     BB     BBBBBBBB  BB    BB     BBBBBBB  ");
+                Console.WriteLine("");
+                Console.WriteLine("- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -");
+                Console.WriteLine("");
+                Console.WriteLine("The battle wins PLAYER 2. This player get prize in the image of 10 000 $");
+            }
+            Console.WriteLine("");
+            Console.WriteLine("Do you want game again? If no, you will pass to game credits.");
+            Console.WriteLine("");
+            string wantGameAgain = Console.ReadLine();
+            //
+            // TUTAJ SKOŃCZYŁEŚ!!!!!!!!!!!!
+        }
+    }
+    public class GameCredits
+    {
+        public void showCredits()
+        {
+            //
         }
     }
     public class BoardContentMaker
@@ -1491,72 +1546,6 @@ namespace InputWorkProgram   /// Przestrzeń wykonawcza - miejsce deklaracji kla
     {
         public (List<List<List<int>>>, List<List<List<string>>>, string[,,], List<List<int>>, bool, string) fire(List<List<List<int>>> playersShips_int_AR, List<List<List<string>>> playersShips_string_AR, List<List<List<string>>> playersShips_unknown_AR, string[,,] playersBoardFight_AR, List<List<int>> playersBoardFight_intToSplice_AR, int fireCoorConv, int player)
         {
-            /// Test poprawności danych: OK
-            /**Console.Clear();
-            Console.WriteLine("");
-            Console.WriteLine("Test poprawności danych:");
-            Console.WriteLine("");
-            for (int i = 0; i < 2; i++)
-            {
-                Console.WriteLine("Player " + (i + 1));
-                Console.WriteLine("");
-                for (int j = 0; j < 7; j++)
-                {
-                    Console.WriteLine("Ship " + (j + 1));
-                    for (int k = 0; k < playersShips_int_AR[i][j].Count; k++)
-                    {
-                        Console.Write("");
-                        if (k == 0)
-                        {
-                            Console.Write(playersShips_int_AR[i][j][k]);
-                        }
-                        else if (k > 0)
-                        {
-                            Console.Write(" | " + playersShips_int_AR[i][j][k]);
-                        }
-                    }
-                    Console.WriteLine("");
-                    Console.WriteLine("");
-                }
-                Console.WriteLine("");
-                Console.WriteLine("");
-                Console.WriteLine("");
-            }**/
-            /**
-            string[] letCoorName_AR = { "A", "B", "C", "D", "E", "F", "G", "H", "I", "J" };
-            Console.WriteLine("");
-            Console.WriteLine("               PLAYER 1                       PLAYER 2              ");
-            Console.WriteLine("                                                                    ");
-            Console.WriteLine("         0 1 2 3 4 5 6 7 8 9            0 1 2 3 4 5 6 7 8 9         ");
-            Console.WriteLine("         -------------------            -------------------         ");
-            Console.Write("     ");
-            for (int i = 0; i < 10; i++)
-            {
-                Console.Write(letCoorName_AR[i] + " | ");
-                for (int j = 0; j < 10; j++)
-                {
-                    Console.Write(playersBoardFight_AR[0, i, j]);
-                }
-                Console.Write("|      ");
-                Console.Write(letCoorName_AR[i] + " | ");
-                for (int j = 0; j < 10; j++)
-                {
-                    Console.Write(playersBoardFight_AR[1, i, j]);
-                }
-                Console.Write("|");
-                Console.WriteLine("   ");
-                if (i < 9)
-                {
-                    Console.Write("     ");
-                }
-                else if (i >= 9) { }
-            }
-            Console.WriteLine("         -------------------            -------------------         ");
-            Console.WriteLine("                                                                    ");
-            Console.WriteLine("- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - ");
-            Console.WriteLine("");
-            Console.ReadLine();**/
-
             /// Deklaracja głównych zmiennych:
             List<List<List<int>>> playerShips_Coor_AR = new List<List<List<int>>>();
             playerShips_Coor_AR = playersShips_int_AR;
