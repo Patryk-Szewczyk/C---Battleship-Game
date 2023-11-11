@@ -695,9 +695,10 @@ namespace InputWorkProgram   /// Przestrzeń wykonawcza - miejsce deklaracji kla
             int controlPlayer = player;
             string playerReadLine = "";
             bool isPlayerChoose = false;   /// Do resetu do GAME AGAIN dodatkoweo swich ten uniemożliwia przejścia do strzelania, przed usunięciem wybierania gracza z konsoli.
-                                           /// Tworzenie dwóch graficznych tablic na status walki dla graczy:
             bool isReturn = true;   /// Switch - zrobiłem go, aby zatrzymywać się na tym samym graczu, kiedy poda niepoprawną współrzędną i poda współrzędną, którą już podał.
+            bool isWinner = false;   /// Jeżeli jest zwycięzca, to zatrzymaj zapytnia o atakowanie gracza i aktykuj komunikat o wygranej.
             BoardContentMaker boardContentMaker_Obj = new BoardContentMaker();
+            /// Tworzenie dwóch graficznych tablic na status walki dla graczy:
             string[,,] playersBoardFight_AR = boardContentMaker_Obj.set_fieldAreaContent_AR();   // [2, 10, 10]
 
             /// Pętla walki:
@@ -788,7 +789,22 @@ namespace InputWorkProgram   /// Przestrzeń wykonawcza - miejsce deklaracji kla
                     Console.WriteLine("");
                 }
                 Console.WriteLine("");
-                if (isPlayerChoose == false)
+                if (isWinner == true)
+                {
+                    isFight = false;
+                    /// "isFigth" jest odpowiedzialny za robienie pętli, w której są plansze
+                    /// i informacje o statkach, graczy i z tego powidyj nie mogę użyć
+                    /// bezpoścrednio switcha isFight. Gdybym go użył, pętal zakończyłaby
+                    /// działanie, zanim pojawiłby się komunikat o wygranej.
+                    /// Mogłem to obejść, nie robiąc takiej mechaniki, a
+                    /// poprostu w metodzie fire() lub tej dać u dołu infrmacje o wygranej
+                    /// kopiując plansze i informacje o statkach, ALE po co, skoro mogę
+                    /// rozwiązać to, zaoszczędzając kilkadziesiąt linijek kodu?
+                    /// Dodatkowo gdybym zrobił to w pętli z "isFight", to informacja o
+                    /// wygranej wyświetliłąby sie po informacji o zapisanej wspólrzędnej, 
+                    /// a ja chcę ją mieś osobnoo.
+                }
+                if (isPlayerChoose == false && isFight == true)
                 {
                     Console.WriteLine("Choose which player begin game as first.");
                     Console.WriteLine("Write: \"P1\" (player 1) or \"P2\" (player 2) ");
@@ -827,7 +843,7 @@ namespace InputWorkProgram   /// Przestrzeń wykonawcza - miejsce deklaracji kla
                         Console.ReadLine();
                     }
                 }
-                else if (isPlayerChoose == true)
+                else if (isPlayerChoose == true && isFight == true)
                 {
                     if (isReturn == true)
                     {
@@ -914,7 +930,7 @@ namespace InputWorkProgram   /// Przestrzeń wykonawcza - miejsce deklaracji kla
                                     else { }
                                 }
 
-                                /// Sprawdzanie czy wybrana współrzędna istnieje w tablicy współrzędnych:
+                                /// Sprawdzanie czy wybrana współrzędna istnieje w tablicy współrzędnych: (tablica stringoaw [,,])
                                 if (playersBoardFight_AR[player, int.Parse(letToNum), int.Parse(number)] == "X " || playersBoardFight_AR[player, int.Parse(letToNum), int.Parse(number)] == "O ")
                                 {
                                     isReturn = false;
@@ -937,11 +953,12 @@ namespace InputWorkProgram   /// Przestrzeń wykonawcza - miejsce deklaracji kla
                                     Console.ReadLine();
                                 }
 
-
                                 ShipCannon shipCannon = new ShipCannon();
-                                (List<List<List<int>>>, string[,,]) tuples_2 = shipCannon.fire(playersShips_int_AR, playersBoardFight_AR, fireCoorConv, player);
+                                (List<List<List<int>>>, string[,,], bool, string) tuples_2 = shipCannon.fire(playersShips_int_AR, playersBoardFight_AR, fireCoorConv, player);
                                 playersShips_int_AR = tuples_2.Item1;
                                 playersBoardFight_AR = tuples_2.Item2;
+                                isWinner = tuples_2.Item3;
+                                winner = tuples_2.Item4;
                             }
                             else if (isIn_avalLet_AR == false || isIn_avalNum_AR == false)
                             {
@@ -955,6 +972,13 @@ namespace InputWorkProgram   /// Przestrzeń wykonawcza - miejsce deklaracji kla
                             }
                         }
                     }
+                }
+                if (isFight == false)
+                {
+                    Console.WriteLine("");
+                    Console.WriteLine("WYGRYWA GRACZ: " + (controlPlayer + 1).ToString());
+                    Console.WriteLine("");
+                    Console.ReadLine();
                 }
             }
             return winner;
@@ -1439,7 +1463,7 @@ namespace InputWorkProgram   /// Przestrzeń wykonawcza - miejsce deklaracji kla
     }
     public class ShipCannon
     {
-        public (List<List<List<int>>>, string[,,]) fire(List<List<List<int>>> playersShips_int_AR, string[,,] playersBoardFight_AR, int fireCoorConv, int player)
+        public (List<List<List<int>>>, string[,,], bool, string) fire(List<List<List<int>>> playersShips_int_AR, string[,,] playersBoardFight_AR, int fireCoorConv, int player)
         {
             /// Test poprawności danych: OK
             /**Console.Clear();
@@ -1512,28 +1536,28 @@ namespace InputWorkProgram   /// Przestrzeń wykonawcza - miejsce deklaracji kla
             playerShips_Coor_AR = playersShips_int_AR;
             string[,,] playersBoard_Fight_AR = new string[2, 10, 10];
             playersBoard_Fight_AR = playersBoardFight_AR;
+            bool isWinner = false;
+            string winner = "?";
 
             /// Logika strzelania:
-            int NOTIS_in_playerShipBoard_counter = 0;
-            int NOTIS_in_playerShipBoard_target = 0;
+            bool isHit = false;
             for (int i = 0; i < 7; i++)
             {
-                for (int j = 0; j < playerShips_Coor_AR[player][i].Count; j++)
+                for (int j = 0; j < playerShips_Coor_AR[player][i].Count; j++)   /// 
                 {
-                    NOTIS_in_playerShipBoard_target += 1;
                     if (fireCoorConv == playerShips_Coor_AR[player][i][j])
                     {
                         /// TRAFIENIE
+                        isHit = true;
                     }
                     else if (fireCoorConv != playerShips_Coor_AR[player][i][j])
                     {
                         /// PUDŁO
-                        NOTIS_in_playerShipBoard_counter += 1;
                     }
                 }
                 //Console.WriteLine("");
             }
-            if (NOTIS_in_playerShipBoard_counter == NOTIS_in_playerShipBoard_target)   /// 21 na [2, 2, 2, 3, 3, 4, 5]
+            if (isHit == false)
             {
                 /// Pudło - aktualizacja tablicy zawartości stanu bitwy:
                 string fireCoorToSlice = fireCoorConv.ToString();
@@ -1554,8 +1578,9 @@ namespace InputWorkProgram   /// Przestrzeń wykonawcza - miejsce deklaracji kla
                 // Lub dodanie do tablicy intowej współrzędnej, aby sprawdzając wartości
                 // jej indeksów sprawdzić czy oddano strzał w to miejsce. 
             }
-            else if (NOTIS_in_playerShipBoard_counter < NOTIS_in_playerShipBoard_target)
+            else if (isHit == true)
             {
+                isHit = false;
                 /// Trafienie - aktualizacja tablicy zawartości stanu bitwy:
                 string fireCoorToSlice = fireCoorConv.ToString();
                 if (fireCoorToSlice.Length == 1)
@@ -1571,11 +1596,58 @@ namespace InputWorkProgram   /// Przestrzeń wykonawcza - miejsce deklaracji kla
                     playersBoard_Fight_AR[player, fireCoorConv_s1, fireCoorConv_s2] = "X ";
                 }
 
-                // Splicowanie tablicy STAŁEJ intowej w celu uniemożliwienia ponownego strzału
-                // Lub dodanie do tablicy intowej współrzędnej, aby sprawdzając wartości
-                // jej indeksów sprawdzić czy oddano strzał w to miejsce.
+                // Splicowanie STAŁEJ tablicy intowej:
+                int[,] allShipsLength_AR = new int[2, 7];
+                /// Tablica na długości ainekdów statków w tablicy splicowanej - w celu ustalenia czy 
+                /// dany statek jest zatopiony (jeśli jego długość w tablicy wynosi 0 [splicowanie])
+                //Console.Clear();
+                for (int i = 0; i < 7; i++)
+                {
+                    for (int j = 0; j < playersShips_int_AR[player][i].Count; j++)
+                    {   
+                        if (playersShips_int_AR[player][i][j] == fireCoorConv)
+                        {
+                            int startIndex = playersShips_int_AR[player][i].IndexOf(fireCoorConv);
+                            playersShips_int_AR[player][i].RemoveRange(startIndex, 1);
+                        }
+                        else {}
+                    }
+                    // Pobranie zaktualizowanej długości tablicy danego statku
+                    int curShipLength = playersShips_int_AR[player][i].Count;
+                    //Console.WriteLine("Długośc statku " + (i + 1).ToString() + ": " + curShipLength.ToString());
+                    allShipsLength_AR[player, i] = curShipLength;
+                }
+                //Console.ReadLine();
+                
+
+                /// Sprawdzenie w której planszy jakiego gracza są zatopione wszystkie statki
+                int isSunken = 0;
+                /// Wziąłem 7, bo nie wiem czy w ogóle da się przeitrować względem długości string[,], a dokładniej względem pierwszego wymiar, tzn. według "player"
+                for (int i = 0; i < 7; i++)
+                {
+                    if (allShipsLength_AR[player, i] == 0)
+                    {
+                        isSunken += 1;
+                    }
+                    else {}
+                }
+                if (isSunken == 7)
+                {
+                    if (player == 0)
+                    {
+                        player = 1;
+                    }
+                    else if (player == 1)
+                    {
+                        player = 0;
+                    }
+                    winner = "P" + (player + 1).ToString();
+                    isWinner = true;
+                }
+
             }
-            return (playerShips_Coor_AR, playersBoard_Fight_AR);
+
+            return (playerShips_Coor_AR, playersBoard_Fight_AR, isWinner, winner);
         }
     }
 }
