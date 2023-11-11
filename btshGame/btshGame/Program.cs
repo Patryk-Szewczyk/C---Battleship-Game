@@ -654,6 +654,23 @@ namespace InputWorkProgram   /// Przestrzeń wykonawcza - miejsce deklaracji kla
                 playersShips_string_AR.Add(playersShips_string_AR[i]);
             }
 
+            // Tablica zanaków zapytania "?":
+            List<List<List<string>>> playersShips_unknown_AR = new List<List<List<string>>>();
+            for (int i = 0; i < 2; i++)
+            {
+                List<List<string>> playersShips_unknown_NS1_AR = new List<List<string>>();
+                for (int j = 0; j < 7; j++)
+                {
+                    List<string> playersShips_unknown_NS2_AR = new List<string>();
+                    for (int k = 0; k < playersShips_string_AR[i][j].Count; k++)
+                    {
+                        playersShips_unknown_NS2_AR.Add("??");
+                    }
+                    playersShips_unknown_NS1_AR.Add(playersShips_unknown_NS2_AR);
+                }
+                playersShips_unknown_AR.Add(playersShips_unknown_NS1_AR);
+            }
+
             /// Konwersja tablicy współrzędnych typu: "C2" na współrzędne typu: "22" i konwersja ze sring na int:
             List<List<List<int>>> playersShips_int_AR = new List<List<List<int>>>();   /// gracz -> statek -> współrzędne -> współrzędna
             for (int i = 0; i < 2; i++)   /// gracze
@@ -709,20 +726,20 @@ namespace InputWorkProgram   /// Przestrzeń wykonawcza - miejsce deklaracji kla
             {
                 Console.Clear();
                 Console.WriteLine("");
-                Console.WriteLine("               PLAYER 1                       PLAYER 2              ");
-                Console.WriteLine("                                                                    ");
-                Console.WriteLine("         0 1 2 3 4 5 6 7 8 9            0 1 2 3 4 5 6 7 8 9         ");
-                Console.WriteLine("         -------------------            -------------------         ");
+                Console.WriteLine("                 PLAYER 1                         PLAYER 2              ");
+                Console.WriteLine("                                                                        ");
+                Console.WriteLine("           0 1 2 3 4 5 6 7 8 9              0 1 2 3 4 5 6 7 8 9         ");
+                Console.WriteLine("           -------------------              -------------------         ");
                 Console.Write("     ");
                 string[] letCoorName_AR = { "A", "B", "C", "D", "E", "F", "G", "H", "I", "J" };
                 for (int i = 0; i < 10; i++)
                 {
-                    Console.Write(letCoorName_AR[i] + " | ");
+                    Console.Write("  " + letCoorName_AR[i] + " | ");
                     for (int j = 0; j < 10; j++)
                     {
                         Console.Write(playersBoardFight_AR[0, i, j]);
                     }
-                    Console.Write("|      ");
+                    Console.Write("|        ");
                     Console.Write(letCoorName_AR[i] + " | ");
                     for (int j = 0; j < 10; j++)
                     {
@@ -736,33 +753,33 @@ namespace InputWorkProgram   /// Przestrzeń wykonawcza - miejsce deklaracji kla
                     }
                     else if (i >= 9) { }
                 }
-                Console.WriteLine("         -------------------            -------------------         ");
+                Console.WriteLine("           -------------------              -------------------         ");
                 Console.WriteLine("");
-                Console.WriteLine("- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - ");
+                Console.WriteLine("- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - ");
                 Console.WriteLine("");
                 /// Zrobiłem to ręcznie, ponieważ nie
                 /// Wziąłem zrobiłem to ręcznie, bo nie chciałem bawić się z wyznaczaniem odstępów względem długośći, a nie potrzebna jest tu aukurat pętla:
                 string[] space_AR = {"                   ", "              ", "         ", "    "};
                 for (int j = 0; j < 7; j++)
                 {
-                    Console.Write("   " + (j + 1).ToString() + ". | ");
-                    for (int k = 0; k < playersShips_string_AR[0][j].Count; k++)
+                    Console.Write("       " + (j + 1).ToString() + ". | ");
+                    for (int k = 0; k < playersShips_unknown_AR[0][j].Count; k++)   /// Poprzednio: "playersShips_string_AR"
                     {
                         /// Zrobiłem to na dwie pętle, gyż chciałem mieć odstęp pomiędzy poszczególnyi statkami danego gracza oraz przejście do nowej linii,
                         /// a to wszystko w tym samym zakresie (FORy).
                         /// Gracz 1:
                         if (k == 0)
                         {
-                            Console.Write(playersShips_string_AR[0][j][k]);
+                            Console.Write(playersShips_unknown_AR[0][j][k]);
                         }
                         else if (k > 0)
                         {
-                            Console.Write(" | " + playersShips_string_AR[0][j][k]);
+                            Console.Write(" | " + playersShips_unknown_AR[0][j][k]);
                         }
                     }
                     Console.Write(" |");
                     /// Użyłem switch'a, ponieważ mam dużo opcji z daną wartością do osiągnięcia za pomocą operatora porównania (==):
-                    switch (playersShips_string_AR[0][j].Count)
+                    switch (playersShips_unknown_AR[0][j].Count)
                     {
                         case 2:
                             Console.Write(space_AR[0]);
@@ -778,23 +795,23 @@ namespace InputWorkProgram   /// Przestrzeń wykonawcza - miejsce deklaracji kla
                             break;
                     }
                     Console.Write((j + 1).ToString() + ". | ");
-                    for (int k = 0; k < playersShips_string_AR[1][j].Count; k++)
+                    for (int k = 0; k < playersShips_unknown_AR[1][j].Count; k++)
                     {
                         /// Gracz 2:
                         if (k == 0)
                         {
-                            Console.Write(playersShips_string_AR[1][j][k]);
+                            Console.Write(playersShips_unknown_AR[1][j][k]);
                         }
                         else if (k > 0)
                         {
-                            Console.Write(" | " + playersShips_string_AR[1][j][k]);
+                            Console.Write(" | " + playersShips_unknown_AR[1][j][k]);
                         }
                     }
                     Console.Write(" |");
                     Console.WriteLine("");
                 }
                 Console.WriteLine("");
-                Console.WriteLine("- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - ");
+                Console.WriteLine("- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - ");
                 Console.WriteLine("");
                 if (isWinner == true)
                 {
@@ -961,12 +978,13 @@ namespace InputWorkProgram   /// Przestrzeń wykonawcza - miejsce deklaracji kla
                                 }
 
                                 ShipCannon shipCannon = new ShipCannon();
-                                (List<List<List<int>>>, string[,,], List<List<int>>, bool, string) tuples_2 = shipCannon.fire(playersShips_int_AR, playersBoardFight_AR, playersBoardFight_intToSplice_AR, fireCoorConv, player);
+                                (List<List<List<int>>>, List<List<List<string>>>, string[,,], List<List<int>>, bool, string) tuples_2 = shipCannon.fire(playersShips_int_AR, playersShips_string_AR, playersShips_unknown_AR, playersBoardFight_AR, playersBoardFight_intToSplice_AR, fireCoorConv, player);
                                 playersShips_int_AR = tuples_2.Item1;
-                                playersBoardFight_AR = tuples_2.Item2;
-                                playersBoardFight_intToSplice_AR = tuples_2.Item3;
-                                isWinner = tuples_2.Item4;
-                                winner = tuples_2.Item5;
+                                playersShips_unknown_AR = tuples_2.Item2;
+                                playersBoardFight_AR = tuples_2.Item3;
+                                playersBoardFight_intToSplice_AR = tuples_2.Item4;
+                                isWinner = tuples_2.Item5;
+                                winner = tuples_2.Item6;
                             }
                             else if (isIn_avalLet_AR == false || isIn_avalNum_AR == false)
                             {
@@ -1471,7 +1489,7 @@ namespace InputWorkProgram   /// Przestrzeń wykonawcza - miejsce deklaracji kla
     }
     public class ShipCannon
     {
-        public (List<List<List<int>>>, string[,,], List<List<int>>, bool, string) fire(List<List<List<int>>> playersShips_int_AR, string[,,] playersBoardFight_AR, List<List<int>> playersBoardFight_intToSplice_AR, int fireCoorConv, int player)
+        public (List<List<List<int>>>, List<List<List<string>>>, string[,,], List<List<int>>, bool, string) fire(List<List<List<int>>> playersShips_int_AR, List<List<List<string>>> playersShips_string_AR, List<List<List<string>>> playersShips_unknown_AR, string[,,] playersBoardFight_AR, List<List<int>> playersBoardFight_intToSplice_AR, int fireCoorConv, int player)
         {
             /// Test poprawności danych: OK
             /**Console.Clear();
@@ -1539,9 +1557,13 @@ namespace InputWorkProgram   /// Przestrzeń wykonawcza - miejsce deklaracji kla
             Console.WriteLine("");
             Console.ReadLine();**/
 
-            /// Deklaracja returnowych zmiennych:
+            /// Deklaracja głównych zmiennych:
             List<List<List<int>>> playerShips_Coor_AR = new List<List<List<int>>>();
             playerShips_Coor_AR = playersShips_int_AR;
+            List<List<List<string>>> PlayerShip_Stat_AR = new List<List<List<string>>>();
+            PlayerShip_Stat_AR = playersShips_string_AR;
+            List<List<List<string>>> unknownSign_AR = new List<List<List<string>>>();
+            unknownSign_AR = playersShips_unknown_AR;
             string[,,] playersBoard_Fight_AR = new string[2, 10, 10];
             List<List<int>> playerBoardFight_toSplice_AR = new List<List<int>>();
             playerBoardFight_toSplice_AR = playersBoardFight_intToSplice_AR;
@@ -1553,9 +1575,9 @@ namespace InputWorkProgram   /// Przestrzeń wykonawcza - miejsce deklaracji kla
             bool isHit = false;
             for (int i = 0; i < 7; i++)
             {
-                for (int j = 0; j < playerShips_Coor_AR[player][i].Count; j++)   /// 
+                for (int j = 0; j < playerShips_Coor_AR[player][i].Count; j++)
                 {
-                    if (fireCoorConv == playerShips_Coor_AR[player][i][j])
+                    if (fireCoorConv == playerShips_Coor_AR[player][i][j])   /// Czy wybran współrzędna jest w RUCHOMEJ tablicy współrzędnych przeciwnika?
                     {
                         /// TRAFIENIE
                         isHit = true;
@@ -1569,7 +1591,7 @@ namespace InputWorkProgram   /// Przestrzeń wykonawcza - miejsce deklaracji kla
             }
 
             /// SPLICOWANIE tablicy List w celu uniknięcia nakładania się oznaczeń odnośnie statków:
-            for (int i = 0; i < playerBoardFight_toSplice_AR[player].Count; i++)
+            for (int i = 0; i < playerBoardFight_toSplice_AR[player].Count; i++)   /// Czy wybrana współrzęnda jest w RUCHOMEJ tablicy dostępnych pól graficznego stanu biewy?
             {
                 if (fireCoorConv == playerBoardFight_toSplice_AR[player][i])
                 {
@@ -1635,19 +1657,23 @@ namespace InputWorkProgram   /// Przestrzeń wykonawcza - miejsce deklaracji kla
                             allShipsLength_AR[player, x] = curShipLength;
                         }
 
-
                         /// Sprawdzenie w której planszy jakiego gracza są zatopione wszystkie statki
                         int isSunken = 0;
-                        /// Wziąłem 7, bo nie wiem czy w ogóle da się przeitrować względem długości string[,], a dokładniej względem pierwszego wymiar, tzn. według "player"
-                        for (int x = 0; x < 7; x++)
+                        /// Wziąłem 7, bo nie wiem czy w ogóle da się przeitrować względem długości string[,], a dokładniej względem pierwszego wymiar, tzn. według "player".
+                        for (int x = 0; x < 7; x++)   /// Jeżeli któryś ze statków jest pusty (chodzi o tablicę) - inaczej zatopiony, to wartość nieznana statku "??" jest usupełniana o współrzędne:
                         {
                             if (allShipsLength_AR[player, x] == 0)
                             {
                                 isSunken += 1;
+                                int shipIndex = x;
+                                for (int y = 0; y < unknownSign_AR[player][shipIndex].Count; y++)
+                                {
+                                    unknownSign_AR[player][shipIndex][y] = playersShips_string_AR[player][shipIndex][y];
+                                }
                             }
                             else { }
                         }
-                        if (isSunken == 7)
+                        if (isSunken == 7)   /// Jeżeli zatopiono 7 statków, dany gracz wygrywa":
                         {
                             if (player == 0)
                             {
@@ -1669,7 +1695,7 @@ namespace InputWorkProgram   /// Przestrzeń wykonawcza - miejsce deklaracji kla
                 }
             }
 
-            return (playerShips_Coor_AR, playersBoard_Fight_AR, playerBoardFight_toSplice_AR, isWinner, winner);
+            return (playerShips_Coor_AR, unknownSign_AR, playersBoard_Fight_AR, playerBoardFight_toSplice_AR, isWinner, winner);
         }
     }
 }
