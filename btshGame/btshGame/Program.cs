@@ -1074,7 +1074,7 @@ namespace InputWorkProgram   /// Przestrzeń wykonawcza - miejsce deklaracji kla
             return wantGameAgain;
         }
     }
-    public class BoardContentMaker : GameLoop
+    public class BoardContentMaker : GameProper
     {
         public string[,,] set_fieldAreaContent_AR()
         {
@@ -1244,7 +1244,7 @@ namespace InputWorkProgram   /// Przestrzeń wykonawcza - miejsce deklaracji kla
             return (outputBoardData, splicedBoard_AR);
         }
     }
-    public class ShipBuildChecker : GameLoop
+    public class ShipBuildChecker : GameProper
     {
         public (string[], List<List<int>>, bool) shipCoorBuildChecker(string firstCor, string direction, string length, List<List<List<int>>> availableFields, List<List<int>> fullIndexArray, string[] avalLet_AR, string[] avalNum_AR, int players, bool isDone)
         {
@@ -1480,7 +1480,7 @@ namespace InputWorkProgram   /// Przestrzeń wykonawcza - miejsce deklaracji kla
             return (result, fullIndex_AR, isResult);
         }
     }
-    public class ShipCannon : GameLoop
+    public class ShipCannon : GameProper
     {
         public (List<List<List<int>>>, List<List<List<string>>>, string[,,], List<List<int>>, bool, string) fire(List<List<List<int>>> playersShips_int_AR, List<List<List<string>>> playersShips_string_AR, List<List<List<string>>> playersShips_unknown_AR, string[,,] playersBoardFight_AR, List<List<int>> playersBoardFight_intToSplice_AR, int fireCoorConv, int player)
         {
