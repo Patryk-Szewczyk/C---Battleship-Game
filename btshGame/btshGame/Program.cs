@@ -23,44 +23,20 @@ namespace OutputProgram   /// Przestrzeń wyjściowa - miejce deklaracji obiekt�
             gameMenu_Obj.intro();   /// Ekran tytułowy
             gameMenu_Obj.instruction();   /// Instrukcja gry
 
-            /// Gra - zapętlenie gry: (w celu umożliwienia ponownej gry)
-            string isGameLoop = "yes";
-            while (isGameLoop == "yes")
-            {
-                /// Tworzenie instancji klasy GameMenu:
-                Game game = new Game();
-
-                /// Ustawianie statków:
-                (string[,], string[,,]) playersData_AR = game.setPlayersShips();
-                string[,] playersShipCoor_AR = new string[2, 7];
-                /// Użyłem tego typu tablicy ([,,]), gdyż wyświetlanie danych z tablic i wkładanie do nich zmodyfikowanych wartości jest 
-                /// łatwiejsze, niż w przypadku innych (do już określonych indeksowo na każdą zagnieżdżoną tablicę, nie tak jak w 
-                /// generyku List<typ>, gdzie swobodnie można dodawać wartości do indeksów tak jak w JS z .appendChild())
-                string[,,] playersBoardContent_AR = new string[2, 10, 10];
-                playersShipCoor_AR = playersData_AR.Item1;
-                playersBoardContent_AR = playersData_AR.Item2;
-
-                /// Walka:
-                string winner = game.fight(playersShipCoor_AR, playersBoardContent_AR);
-
-                /// Nagroda:
-                Prize prize = new Prize();
-                isGameLoop = prize.winnerInfo(winner);
-            }
+            /// Gra:
+            GameLoop gameLoop = new GameLoop();
+            gameLoop.activeGameLoop();
 
             /// Napisy końcowe:
             GameCredits gameCredits = new GameCredits();
             gameCredits.showCredits();
-
-            // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-            // Ekran końcowy i napisy końcowe
         }
     }
 }
 
 namespace InputWorkProgram   /// Przestrzeń wykonawcza - miejsce deklaracji klas z określonymi metodami.
 {
-    public class GameIntro
+    public class GameIntro : Program
     {
         public void intro()
         {
@@ -75,7 +51,7 @@ namespace InputWorkProgram   /// Przestrzeń wykonawcza - miejsce deklaracji kla
             Console.WriteLine("- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -");
             Console.WriteLine("");
             Console.WriteLine("Battleship [Version 1.00]");
-            Console.WriteLine("(c) Patryk Szewczyk. All rights reserved.");   // Prawa autorskie zastrzeżone. Tylko do własnego użytku. Zakaz kopiowana i zarabiania na tym produkcie.
+            Console.WriteLine("Copyright (c) Patryk Szewczyk. All rights reserved.");   /// Prawa autorskie zastrzeżone. Tylko do własnego użytku. Zakaz kopiowana i zarabiania na tym produkcie.
             Console.WriteLine("");
             Console.WriteLine("Battleship Game is simple game which depend of sunking ships between players.");
             Console.WriteLine("To start game you must do a few activites to mainly set ships.");
@@ -127,14 +103,70 @@ namespace InputWorkProgram   /// Przestrzeń wykonawcza - miejsce deklaracji kla
             Console.ReadLine();
         }
     }
-    public class Game
+    public class GameLoop : Program
+    {
+        public void activeGameLoop()
+        {
+            /// Gra - zapętlenie gry: (w celu umożliwienia ponownej gry)
+            string isGameLoop = "yes";
+            while (isGameLoop == "yes")   /// Zapętlenie gry, w celu umożliwienia ponownego zagrania  w nią:
+            {
+                /// Tworzenie instancji klasy GameMenu:
+                GameProper game = new GameProper();
+
+                /// Ustawianie statków:
+                (string[,], string[,,]) playersData_AR = game.setPlayersShips();
+                string[,] playersShipCoor_AR = new string[2, 7];
+                /// Użyłem tego typu tablicy ([,,]), gdyż wyświetlanie danych z tablic i wkładanie do nich zmodyfikowanych wartości jest 
+                /// łatwiejsze, niż w przypadku innych (do już określonych indeksowo na każdą zagnieżdżoną tablicę, nie tak jak w 
+                /// generyku List<typ>, gdzie swobodnie można dodawać wartości do indeksów tak jak w JS z .appendChild())
+                string[,,] playersBoardContent_AR = new string[2, 10, 10];
+                playersShipCoor_AR = playersData_AR.Item1;
+                playersBoardContent_AR = playersData_AR.Item2;
+
+                /// Walka:
+                string winner = game.fight(playersShipCoor_AR, playersBoardContent_AR);
+
+                /// Nagroda:
+                Prize prize = new Prize();
+                isGameLoop = prize.winnerInfo(winner);
+            }
+        }
+    }
+    public class GameCredits : Program
+    {
+        public void showCredits()
+        {
+            Console.Clear();
+            Console.WriteLine(" BBBBBB     BBBB    BBBBBBBB  BBBBBBBB     BBBBBBB  BBBBBBB   BBBBBBBB  BBBBBB    BB  BBBBBBBB   BBBBBBB");
+            Console.WriteLine("BB    BB   BB  BB   BB BB BB  BB          BB        BB    BB  BB        BB   BB   BB     BB     BB      ");
+            Console.WriteLine("BB        BB    BB  BB BB BB  BB          BB        BB    BB  BB        BB    BB  BB     BB     BB      ");
+            Console.WriteLine("BB  BBBB  BBBBBBBB  BB BB BB  BBBBBBBB    BB        BBBBBBB   BBBBBBBB  BB    BB  BB     BB      BBBBBB ");
+            Console.WriteLine("BB    BB  BB    BB  BB BB BB  BB          BB        BB    BB  BB        BB    BB  BB     BB           BB");
+            Console.WriteLine("BB    BB  BB    BB  BB BB BB  BB          BB        BB    BB  BB        BB   BB   BB     BB           BB");
+            Console.WriteLine(" BBBBBB   BB    BB  BB BB BB  BBBBBBBB     BBBBBBB  BB    BB  BBBBBBBB  BBBBBB    BB     BB     BBBBBBB ");
+            Console.WriteLine("");
+            Console.WriteLine("- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - ");
+            Console.WriteLine("");
+            Console.WriteLine("Thank you very much for the time, which you spent playing my game.");
+            Console.WriteLine("");
+            Console.WriteLine("Game author: Patryk Szewczyk - AHNS computer science's student - 1 INF");
+            Console.WriteLine("");
+            Console.WriteLine("");
+            Console.WriteLine("");
+            Console.WriteLine("Click ENTER key to end program:");
+            Console.WriteLine("");
+            Console.ReadLine();
+            Console.Clear();
+        }
+    }
+    public class GameProper : GameLoop
     {
         public (string[,], string[,,]) setPlayersShips()
         {
             /// Tworzenie instancji klasy "BoardContentMaker" i wywołanie metoda odpowiadaojący za tablice związane z plansza:
             BoardContentMaker boardContentMaker_Obj = new BoardContentMaker();
-            string[,] playersShipCoor_AR = new string[2, 7];
-
+            string[,] playersShipCoor_AR = new string[2, 7];   /// Tablica na współrzędne statków wszystkich graczy (współrzędne statku są jednym stringiem, który później jest rozdzielany i konwertowany według potrzeb.)
             string[,,] playersBoardContent_AR = boardContentMaker_Obj.set_fieldAreaContent_AR();   /// [2, 10, 10]
             List<List<int>> fullIndex_AR = boardContentMaker_Obj.set_fullIndex_AR();   /// Osobna metoda z return
             List<List<List<int>>> availableFields_AR = boardContentMaker_Obj.set_availableFields_AR();   /// Osobna metoda z return
@@ -937,6 +969,7 @@ namespace InputWorkProgram   /// Przestrzeń wykonawcza - miejsce deklaracji kla
                                     Console.ReadLine();
                                 }
 
+                                /// Tworzenie instancji klasy strzelania i odpalanie medoty odpowiedzialnej za logikę strzelania:
                                 ShipCannon shipCannon = new ShipCannon();
                                 (List<List<List<int>>>, List<List<List<string>>>, string[,,], List<List<int>>, bool, string) tuples_2 = shipCannon.fire(playersShips_int_AR, playersShips_string_AR, playersShips_unknown_AR, playersBoardFight_AR, playersBoardFight_intToSplice_AR, fireCoorConv, player);
                                 playersShips_int_AR = tuples_2.Item1;
@@ -972,7 +1005,7 @@ namespace InputWorkProgram   /// Przestrzeń wykonawcza - miejsce deklaracji kla
             return winner;
         }
     }
-    public class Prize
+    public class Prize : GameLoop
     {
         public string winnerInfo(string winner)
         {
@@ -1045,34 +1078,7 @@ namespace InputWorkProgram   /// Przestrzeń wykonawcza - miejsce deklaracji kla
             return wantGameAgain;
         }
     }
-    public class GameCredits
-    {
-        public void showCredits()
-        {
-            Console.Clear();
-            Console.WriteLine(" BBBBBB     BBBB    BBBBBBBB  BBBBBBBB     BBBBBBB  BBBBBBB   BBBBBBBB  BBBBBB    BB  BBBBBBBB   BBBBBBB");
-            Console.WriteLine("BB    BB   BB  BB   BB BB BB  BB          BB        BB    BB  BB        BB   BB   BB     BB     BB      ");
-            Console.WriteLine("BB        BB    BB  BB BB BB  BB          BB        BB    BB  BB        BB    BB  BB     BB     BB      ");
-            Console.WriteLine("BB   BBB  BBBBBBBB  BB BB BB  BBBBBBBB    BB        BBBBBBB   BBBBBBBB  BB    BB  BB     BB      BBBBBB ");
-            Console.WriteLine("BB    BB  BB    BB  BB BB BB  BB          BB        BB    BB  BB        BB    BB  BB     BB           BB");
-            Console.WriteLine("BB    BB  BB    BB  BB BB BB  BB          BB        BB    BB  BB        BB   BB   BB     BB           BB");
-            Console.WriteLine(" BBBBBB   BB    BB  BB BB BB  BBBBBBBB     BBBBBBB  BB    BB  BBBBBBBB  BBBBBB    BB     BB     BBBBBBB ");
-            Console.WriteLine("");
-            Console.WriteLine("- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - ");
-            Console.WriteLine("");
-            Console.WriteLine("Thank you very much for the time, which you spent playing my game.");
-            Console.WriteLine("");
-            Console.WriteLine("Game author: Patryk Szewczyk - AHNS computer science's student - 1 INF");
-            Console.WriteLine("");
-            Console.WriteLine("");
-            Console.WriteLine("");
-            Console.WriteLine("Click ENTER key to end program:");
-            Console.WriteLine("");
-            Console.ReadLine();
-            Console.Clear();
-        }
-    }
-    public class BoardContentMaker
+    public class BoardContentMaker : GameLoop
     {
         public string[,,] set_fieldAreaContent_AR()
         {
@@ -1242,7 +1248,7 @@ namespace InputWorkProgram   /// Przestrzeń wykonawcza - miejsce deklaracji kla
             return (outputBoardData, splicedBoard_AR);
         }
     }
-    public class ShipBuildChecker
+    public class ShipBuildChecker : GameLoop
     {
         public (string[], List<List<int>>, bool) shipCoorBuildChecker(string firstCor, string direction, string length, List<List<List<int>>> availableFields, List<List<int>> fullIndexArray, string[] avalLet_AR, string[] avalNum_AR, int players, bool isDone)
         {
@@ -1478,7 +1484,7 @@ namespace InputWorkProgram   /// Przestrzeń wykonawcza - miejsce deklaracji kla
             return (result, fullIndex_AR, isResult);
         }
     }
-    public class ShipCannon
+    public class ShipCannon : GameLoop
     {
         public (List<List<List<int>>>, List<List<List<string>>>, string[,,], List<List<int>>, bool, string) fire(List<List<List<int>>> playersShips_int_AR, List<List<List<string>>> playersShips_string_AR, List<List<List<string>>> playersShips_unknown_AR, string[,,] playersBoardFight_AR, List<List<int>> playersBoardFight_intToSplice_AR, int fireCoorConv, int player)
         {
@@ -1610,7 +1616,6 @@ namespace InputWorkProgram   /// Przestrzeń wykonawcza - miejsce deklaracji kla
                             winner = "P" + (player + 1).ToString();
                             isWinner = true;
                         }
-
                     }
                 }
                 else if (fireCoorConv != playerBoardFight_toSplice_AR[player][i])
@@ -1618,7 +1623,6 @@ namespace InputWorkProgram   /// Przestrzeń wykonawcza - miejsce deklaracji kla
                     /// Pole to nie istnieje czyli strzał był niedostępny:
                 }
             }
-
             return (playerShips_Coor_AR, unknownSign_AR, playersBoard_Fight_AR, playerBoardFight_toSplice_AR, isWinner, winner);
         }
     }
