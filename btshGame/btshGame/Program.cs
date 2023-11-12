@@ -1,13 +1,9 @@
 /// Battleship Game
 
-using System;
-using OutputProgram;   /// Użycie przestrzeni wyjściowej
-using InputWorkProgram;   /// Użycie przestrzeni wykonawczej
-using System.Runtime.CompilerServices;
-using System.Runtime.InteropServices;
-using System.Collections.Generic;
-using System.Runtime.Versioning;
-using System.Runtime.ExceptionServices;
+using System;   /// Użycie podstawowej biblioteki C#.
+using OutputProgram;   /// Użycie przestrzeni wyjściowej.
+using InputWorkProgram;   /// Użycie przestrzeni wykonawczej.
+using System.Collections.Generic;   /// Użycie biblioteki, któa taje typ generyczny "List".
 
 /// Zrobiłem dwie przesrzenie nazw. Pierwsza jest na klasę główną z główną metodę Main(), która z klasą pełni funkcję tworzenia poszczególnych instancji następujących po sobie
 /// klas wykonawczyh, które pełnią rolę osobnych komponentów. Druga przestrzeń nazw zawiera ów klasy wynonawcze i inne klasy zwracające wartości do klas wykonawczych.
