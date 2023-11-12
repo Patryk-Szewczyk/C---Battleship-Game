@@ -195,38 +195,33 @@ namespace InputWorkProgram   /// Przestrzeń wykonawcza - miejsce deklaracji kla
                         Console.WriteLine("Set " + (shipPage + 1).ToString() + "/7 ship:");
                         Console.WriteLine("Type: " + shipTypeName_AR[shipPage]);
                         Console.WriteLine("Length: " + shipLengthName_AR[shipPage]);
-                    }
-                    else if (shipPage == 7)
-                    {
-                        Console.WriteLine("Set " + shipPage.ToString() + "/7 ship:");
-                        Console.WriteLine("Type: " + shipTypeName_AR[shipPage - 1]);
-                        Console.WriteLine("Length: " + shipLengthName_AR[shipPage - 1]);
-                    }
-                    if (isDir == false)
-                    {
-                        Console.WriteLine("Direction: ?");
-                    }
-                    else if (isDir == true)
-                    {
-                        Console.WriteLine("Direction: " + selectDirection);
-                    }
-                    if (isCoor == true)
-                    {
-                        Console.WriteLine("Coordination: ?");
-                    }
-                    else if (isCoor == false)
-                    {
-                        Console.Write("Coordination:");
-                        for (int i = 0; i < shipFullCoor.Length; i++)
+                        if (isDir == false)
                         {
-                            Console.Write(" | " + shipFullCoor[i]);
+                            Console.WriteLine("Direction: ?");
                         }
-                        Console.Write(" |");
+                        else if (isDir == true)
+                        {
+                            Console.WriteLine("Direction: " + selectDirection);
+                        }
+                        if (isCoor == true)
+                        {
+                            Console.WriteLine("Coordination: ?");
+                        }
+                        else if (isCoor == false)
+                        {
+                            Console.Write("Coordination:");
+                            for (int i = 0; i < shipFullCoor.Length; i++)
+                            {
+                                Console.Write(" | " + shipFullCoor[i]);
+                            }
+                            Console.Write(" |");
+                            Console.WriteLine("");
+                        }
+                        Console.WriteLine("");
+                        Console.WriteLine("- - - - - - - - - - - - - - - - - - -");
                         Console.WriteLine("");
                     }
-                    Console.WriteLine("");
-                    Console.WriteLine("- - - - - - - - - - - - - - - - - - -");
-                    Console.WriteLine("");
+                    else { }
                     if (isBegAgn_FromDir == true && shipPage == 0)
                     {
                         Console.WriteLine("You must set all 7 ships to continue.");
@@ -274,38 +269,33 @@ namespace InputWorkProgram   /// Przestrzeń wykonawcza - miejsce deklaracji kla
                                 Console.WriteLine("Set " + (shipPage + 1).ToString() + "/7 ship:");
                                 Console.WriteLine("Type: " + shipTypeName_AR[shipPage]);
                                 Console.WriteLine("Length: " + shipLengthName_AR[shipPage]);
-                            }
-                            else if (shipPage == 7)
-                            {
-                                Console.WriteLine("Set " + shipPage.ToString() + "/7 ship:");
-                                Console.WriteLine("Type: " + shipTypeName_AR[shipPage - 1]);
-                                Console.WriteLine("Length: " + shipLengthName_AR[shipPage - 1]);
-                            }
-                            if (isDir == false)
-                            {
-                                Console.WriteLine("Direction: ?");
-                            }
-                            else if (isDir == true)
-                            {
-                                Console.WriteLine("Direction: " + selectDirection);
-                            }
-                            if (isCoor == true)
-                            {
-                                Console.WriteLine("Coordination: ?");
-                            }
-                            else if (isCoor == false)
-                            {
-                                Console.Write("Coordination:");
-                                for (int i = 0; i < shipFullCoor.Length; i++)
+                                if (isDir == false)
                                 {
-                                    Console.Write(" | " + shipFullCoor[i]);
+                                    Console.WriteLine("Direction: ?");
                                 }
-                                Console.Write(" |");
+                                else if (isDir == true)
+                                {
+                                    Console.WriteLine("Direction: " + selectDirection);
+                                }
+                                if (isCoor == true)
+                                {
+                                    Console.WriteLine("Coordination: ?");
+                                }
+                                else if (isCoor == false)
+                                {
+                                    Console.Write("Coordination:");
+                                    for (int i = 0; i < shipFullCoor.Length; i++)
+                                    {
+                                        Console.Write(" | " + shipFullCoor[i]);
+                                    }
+                                    Console.Write(" |");
+                                    Console.WriteLine("");
+                                }
+                                Console.WriteLine("");
+                                Console.WriteLine("- - - - - - - - - - - - - - - - - - -");
                                 Console.WriteLine("");
                             }
-                            Console.WriteLine("");
-                            Console.WriteLine("- - - - - - - - - - - - - - - - - - -");
-                            Console.WriteLine("");
+                            else { }
                             Console.WriteLine("\"B\" - vertical position (from top to bottom: A2 -> A2, B2, ...)");
                             Console.WriteLine("\"R\" - horizontal position (from left to right: A2 -> A2, A3, ...)");
                             Console.WriteLine("");
@@ -372,46 +362,43 @@ namespace InputWorkProgram   /// Przestrzeń wykonawcza - miejsce deklaracji kla
                             Console.WriteLine("                                     ");
                             Console.WriteLine("- - - - - - - - - - - - - - - - - - -");
                             Console.WriteLine("");
+                            /// Użyłęm to boola, ponieważ kiedy wyznaczę ostatni statek normalnie pojawi się niewiadomy stan 7 statku,
+                            /// który jest już ustawiony, a dobrze byłoby gdyby te informacje wraz z kreską "- - " zniknęły.
                             if (shipPage < 7)   /// 7 jest przeznaczone tylko dla komunikato o zakończeniu ustawianai statków dla gracza. W poniższych sytuacjach trzeba zmniejszyć o 1, gdyż w przeciwnym razie lecimy o 1 statek do góry, przez co mam złe wartości liczbowe i błąd w Array (RangeOf)
                             {
                                 Console.WriteLine("Set " + (shipPage + 1).ToString() + "/7 ship:");
                                 Console.WriteLine("Type: " + shipTypeName_AR[shipPage]);
                                 Console.WriteLine("Length: " + shipLengthName_AR[shipPage]);
-                            }
-                            else if (shipPage == 7)
-                            {
-                                Console.WriteLine("Set " + shipPage.ToString() + "/7 ship:");
-                                Console.WriteLine("Type: " + shipTypeName_AR[shipPage - 1]);
-                                Console.WriteLine("Length: " + shipLengthName_AR[shipPage - 1]);
-                            }
-                            if (isDir == false)
-                            {
-                                Console.WriteLine("Direction: ?");
-                            }
-                            else if (isDir == true)
-                            {
-                                Console.WriteLine("Direction: " + selectDirection);
-                            }
-                            if (isCoor == true || isDone == false)   /// isDone - kiedy nie ma określonych współrzędnych, lub nie przeszły testu poprawności
-                            {
-                                Console.WriteLine("Coordination: ?");
-                            }
-                            else if (isCoor == false && isDone == true)   /// isDone - współrzędne przeszły testy poprawności i są ustalone. Musiałem to zrobić, gdyż w pewnym momencie pojawiało się niechciane puste pole bez "?".
-                            {
-                                Console.Write("Coordination:");
-                                for (int i = 0; i < shipFullCoor.Length; i++)
+                                if (isDir == false)
                                 {
-                                    Console.Write(" | " + shipFullCoor[i]);
+                                    Console.WriteLine("Direction: ?");
                                 }
-                                Console.Write(" |");
+                                else if (isDir == true)
+                                {
+                                    Console.WriteLine("Direction: " + selectDirection);
+                                }
+                                if (isCoor == true || isDone == false)   /// isDone - kiedy nie ma określonych współrzędnych, lub nie przeszły testu poprawności
+                                {
+                                    Console.WriteLine("Coordination: ?");
+                                }
+                                else if (isCoor == false && isDone == true)   /// isDone - współrzędne przeszły testy poprawności i są ustalone. Musiałem to zrobić, gdyż w pewnym momencie pojawiało się niechciane puste pole bez "?".
+                                {
+                                    Console.Write("Coordination:");
+                                    for (int i = 0; i < shipFullCoor.Length; i++)
+                                    {
+                                        Console.Write(" | " + shipFullCoor[i]);
+                                    }
+                                    Console.Write(" |");
+                                    Console.WriteLine("");
+                                }
                                 Console.WriteLine("");
+                                Console.WriteLine("- - - - - - - - - - - - - - - - - - -");
+                                Console.WriteLine("");
+                                Console.WriteLine("Write value from A0 to J8:");
+                                Console.WriteLine("");
+                                firstCoor = Console.ReadLine();
                             }
-                            Console.WriteLine("");
-                            Console.WriteLine("- - - - - - - - - - - - - - - - - - -");
-                            Console.WriteLine("");
-                            Console.WriteLine("Write value from A0 to J8:");
-                            Console.WriteLine("");
-                            firstCoor = Console.ReadLine();
+                            else { }
                             if (firstCoor.Length != 2)   /// Sprawdzenie czy współrzędna początkowa ma odpowiednią długość.
                             {
                                 Console.WriteLine("");
@@ -700,15 +687,15 @@ namespace InputWorkProgram   /// Przestrzeń wykonawcza - miejsce deklaracji kla
             {
                 Console.Clear();
                 Console.WriteLine("");
-                Console.WriteLine("                 PLAYER 1                         PLAYER 2              ");
-                Console.WriteLine("                                                                        ");
-                Console.WriteLine("           0 1 2 3 4 5 6 7 8 9              0 1 2 3 4 5 6 7 8 9         ");
-                Console.WriteLine("           -------------------              -------------------         ");
+                Console.WriteLine("                  PLAYER 1                         PLAYER 2              ");
+                Console.WriteLine("                                                                         ");
+                Console.WriteLine("            0 1 2 3 4 5 6 7 8 9              0 1 2 3 4 5 6 7 8 9         ");
+                Console.WriteLine("            -------------------              -------------------         ");
                 Console.Write("     ");
                 string[] letCoorName_AR = { "A", "B", "C", "D", "E", "F", "G", "H", "I", "J" };
                 for (int i = 0; i < 10; i++)
                 {
-                    Console.Write("  " + letCoorName_AR[i] + " | ");
+                    Console.Write("   " + letCoorName_AR[i] + " | ");
                     for (int j = 0; j < 10; j++)
                     {
                         Console.Write(playersBoardFight_AR[0, i, j]);
@@ -727,16 +714,16 @@ namespace InputWorkProgram   /// Przestrzeń wykonawcza - miejsce deklaracji kla
                     }
                     else if (i >= 9) { }
                 }
-                Console.WriteLine("           -------------------              -------------------         ");
+                Console.WriteLine("            -------------------              -------------------         ");
                 Console.WriteLine("");
-                Console.WriteLine("- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - ");
+                Console.WriteLine("- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -");
                 Console.WriteLine("");
                 /// Zrobiłem to ręcznie, ponieważ nie
                 /// Wziąłem zrobiłem to ręcznie, bo nie chciałem bawić się z wyznaczaniem odstępów względem długośći, a nie potrzebna jest tu aukurat pętla:
                 string[] space_AR = {"                   ", "              ", "         ", "    "};
                 for (int j = 0; j < 7; j++)
                 {
-                    Console.Write("       " + (j + 1).ToString() + ". | ");
+                    Console.Write("        " + (j + 1).ToString() + ". | ");
                     for (int k = 0; k < playersShips_unknown_AR[0][j].Count; k++)   /// Poprzednio: "playersShips_string_AR"
                     {
                         /// Zrobiłem to na dwie pętle, gyż chciałem mieć odstęp pomiędzy poszczególnyi statkami danego gracza oraz przejście do nowej linii,
@@ -785,7 +772,7 @@ namespace InputWorkProgram   /// Przestrzeń wykonawcza - miejsce deklaracji kla
                     Console.WriteLine("");
                 }
                 Console.WriteLine("");
-                Console.WriteLine("- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - ");
+                Console.WriteLine("- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -");
                 Console.WriteLine("");
                 if (isWinner == true)
                 {
@@ -805,7 +792,7 @@ namespace InputWorkProgram   /// Przestrzeń wykonawcza - miejsce deklaracji kla
                 if (isPlayerChoose == false && isFight == true)
                 {
                     Console.WriteLine("Choose which player begin game as first.");
-                    Console.WriteLine("Write: \"P1\" (player 1) or \"P2\" (player 2) ");
+                    Console.WriteLine("Write: \"P1\" (player 1) or \"P2\" (player 2)");
                     playerReadLine = Console.ReadLine();
                     if (playerReadLine == "P1")
                     {
@@ -1079,6 +1066,10 @@ namespace InputWorkProgram   /// Przestrzeń wykonawcza - miejsce deklaracji kla
             Console.WriteLine("");
             Console.WriteLine("");
             Console.WriteLine("");
+            Console.WriteLine("Click ENTER key to end program:");
+            Console.WriteLine("");
+            Console.ReadLine();
+            Console.Clear();
         }
     }
     public class BoardContentMaker
@@ -1599,7 +1590,7 @@ namespace InputWorkProgram   /// Przestrzeń wykonawcza - miejsce deklaracji kla
                             {
                                 isSunken += 1;
                                 int shipIndex = x;   /// Statek, którego długość wynosi 0 (pusta tablica współrzędnych statku [trafienie = usunięcie danej współrzędnej]), czyli który jest zatopony
-                                for (int y = 0; y < unknownSign_AR[player][shipIndex].Count; y++)
+                                for (int y = 0; y < unknownSign_AR[player][shipIndex].Count; y++)   /// Dla statkó którego długość wynosi 0 wpisz w "??" jest współrzędne.
                                 {
                                     unknownSign_AR[player][shipIndex][y] = playersShips_string_AR[player][shipIndex][y];
                                 }
