@@ -1,0 +1,40 @@
+## Dokumentacja
+
+1. Opis ogólny projektu
+Battleship to strategiczno-planszowa gra komputerowa dla dwóch osób. Każdy z graczy posiada po dwie plansze o wielkości, 10x10 pól. Pola oznaczone są poprzez współrzędne literami od "A" do "J" i liczbami "0" do "9". Każdy gracz ustawia swoje statki na planszy. Po ustawieniu statków zaczyna się bitwa, którą wygrywa ten gracz, który zatopi wszystkie statki swojego przeciwnika. Na drugim zaznacza trafione statki przeciwnika i oddane przez siebie strzały. Statki ustawiane są w pionie lub poziomie, w taki sposób, aby nie wychodziły poza planszę oraz nie nakładały się na siebie. Łącznie jest 7 statków o różnej długości. Długość zaczyna się od 2 pól, a kończy na 5 polach. Trafienie okrętu przeciwnika polega na strzale, który jest odgadnięciem położenia jakiegoś statku. Strzały oddawane są naprzemiennie, poprzez podanie współrzędnych pola (np. "B5"). Zatopienie statku ma miejsce wówczas, gdy gracz odgadnie położenie całego statku. O chybieniu informuje gracza znak "O" pojawiający się na polu, które ostrzeliwał. Trafienie jest oznaczane znakiem "X". Wygrywa ten, kto pierwszy zatopi wszystkie statki przeciwnika. 
+Gra nieco różni się od oryginału, czego przejawem jest regulacja niektórych zasad. Zabieg ten ma na celu zwiększenie elestyczności i efektywności rozgrywki oraz stanowi swego rodzaju oryginalny pomysł na rozgrywkę.
+
+2. Cele projektu
+Głównym celem projektu jest przede wszystkim wzbudzenie ciekawości i zachwytu u osób rozpoczynających naukę programowania, bądź osób, które planują ów naukę oraz zaprezentowanie im możliwości języka C# wykorzystując do tego podstawową znajomość składni ów języka, w tym: właściwości, metod i klas. Bardzo często, jak nie zawsze programy konsolowe i ich tworzenie wprawia nowicjuszy programowania w osłupienie i agonię, związane z zetknięciem się z nigdy dotąd nieznanym środowiskiem programistycznym oraz językiem programowania, którego działania ci nowicjesze nie rozumią w znacznej części, bądź wcale. Sposób działania gry, jak również jej funkcje mają zachęcić tych ludzi do podjęcia pożądnej i wytęzonej nauki proramowania oraz wzmożyć w nich chęć trwania w tejże nauce. Pomijając główny cel, projekt ten stanowi także źródło rozrywki i relaksu przeznaczone dla dwójki osób.
+
+3. Informacje o autorze
+Autorem programu jest: Patryk Szewczyk - uczeń Akademii Handlowej Nauk Stosowanych 1 semestru na kierunku: Informatyka. Autor zakazuje kopiowania i udostępniania gry, korzystania z niej w celach marketingowych i sprzedawania jej jako samodzielnego produktu.
+
+4. Struktura programu
+Cały program jest napisany w oparciu o programowanie obiektowe. Program składa się z dwóch przestrzeni nazw odpowiedzialnych za dołączenie do programu odpowiednich bibliotek oraz dwóch przestrzeni nazw zawierających na kod programu: "OutputProgram" i "InputWorkProgram". W przestrzeni "OutputProgram" znajduje się główna klasa programu "Program" ze swoją główną metodą "Main(string[] arg)", która wywołuje proceduralnie kod, w którym znajdują się polecenia dotyczące tworzenia instancji klas z przestrzeni "InputWorkProgram", która pełni funkcję przestrzeni wykonawczej. Przestrzeń wykonawcza jest przestrzenią, w której wykonywane są wszystkie operacje odnośnie gry. W grze wielokrotnie jest użyta pętla while, która pełni funkcję ponownego wykonania danego bloku kodu, dzięki czemu możliwe jest wykonanie takich operacji jak ponowne ułożenie statku, jeżeli źle go ułożyliśmym, jak również umożliwia ponowną grę po zakończeniu bieżącej.
+
+5. Działanie programu
+Działanie programu rozpoczyna się i kończy tylko i wyłącznie w metodzie "Main()" klasy "Program", wyjściowej przestrzeni nazw "OutputProgram". Lecąc od samej góry tworzymy instancje poszczególnych klas z wykonawczej przestrzni nazw "InputWorkProgram". Kiedy wywołamy metodę danej instancji, przechodzimy do danej metody danej klady wykonawczaj przestrzeni nazw. W wykonawczej przestrzeni nazw w celu uporządkowania kodu użyto dziedziczenia do wskazania które klasy są nadrzędna, a które potomne. Mapa dziedziczenia klas przedstawia się następująco:
+Program ---> Game Intro,
+             GameLoop, -----> GameProper, ---> BoardContentMaker,
+             GameCredits      Prize            ShipBuildChecker,
+                                               ShipCannon
+W praktyce dziedziczenie nie jest w ogóle potrzebne, ale tak jak napisano powyżej ma ono zasadnicze znaczenie w porządkowaniu klas. 
+Kod programu jest kompilowany i wywoływany od góry do dołu tylko i wyłącznie w klasie Program, a jako że znajdują się w niej polecenia dotyczące utworzenia instancji trzech klas potomnych i wywołania ich metod, program zatrzyma się na instancji GameLoop, aby utworzyć wszystkie instancjie klas potomnych z klasy "GameLoop", wykona ich metody i dopiero ruszy dalej do utworzenia instancji klasy GameCredits. Reasumując, patrząc na mapę widać, że zanim program dotrze do utworzenia instancji klasy "GameCredits" i wywołania jej metody, utworzy wszystkie instancje klas podomnych klasy "GameLoop".
+Szczególną uwagę trzeba zwrócić na klasę "GameLoop" która jest jedną wielką pętlą, umożliwiającą na ponowną grę, kiedy gracze zdecydują się ponownie zagrać, po uprzednio zakończonej sesji. W klasach potomnych tejże klasy ("GameProper, Prize") mamy do czynienia z kolejnymi pętlami, a w "GameProper" aż z kilkoma zagnieżdżonymi, dzięki którym przy małym nakładzie kodu można wyznaczyć statki dla dwóch grach, zresetować współrzędne danego statku, jak również całą grę, w celu ponownego zagrania w nią.
+
+6. Biblioteki
+W programie znajdują się dwie przestrzeni nazw odpowiedzialnych za dołączanie określonych bibliotek. Są to kolejno: System, System.Runtime.CompilerServices, System.Runtime.InteropServices, System.Collections.Generic, System.Runtime.Versioning, System.Runtime.ExceptionServices.
+"System" - zawiera podstawowe typy i klasy, takie jak "Console", czy "String".
+"System.Collections.Generic" - oferuje generyczne kolekcje, takie jak "List".
+
+
+
+
+
+6. Szczegółowy opis zawartości przestrzeni nazw "OutputProgram"
+Przestrzeń nazw "OutputProgram" jak to zostało wcześniej napisane posiada tylko jedną klasę i metodę, która wykonuje proceduralnie następjące linie kodu. W "OutputProgram" tworzy się instancje klas z przestrzeni nazw "InputWorkProgram", które pełnią swego rodzaju funkcję poszczególnych komponentów tego programu. Komponenty te można wywołać w dowolnej kolejności z tym samym efektem, co w ustalonej w programie kolejności. Dzieje się tak z tego względu, iż pomiędzy metodami instancji klas przestrzeni nazw "InputWorkProgram" nie ma żadnego przekazywania zwracanych wartości.
+W metodzie "Main" klasy "Program" przestrzeni nazw "OutputProgram" są tworzone trzy instancje poszczególnych klas: "GameIntro", "GameLoop" i "GameCredits". Klasy te znajdują się w wykonawczej przestrzni nazw "InputWorkProgram".
+Klasa "GameIntro" "intro()" odpowiada za wyświetlenie wprowadzenia do gry, w którym znajdują się kolejno: tytuł gry, licencja, informacja o grze, prośba o maksymalizację okna konsoli i komunikat o przejściu dalej. Komunikatów o przejściu dalej jest cała masa. Aby przejść dalej należy kliknąć przycisk "Enter". Metoda "insruction()", odpowiada za wyświetlenie instrukcji gry, wraz z komunikatem  o przejściu dalej.
+Klasa "GameLoop" odpowiada za wywoływanie kodu gry w pętli, dopóki gracze po zakończonej rozgrywce zdecydują się zakończyć grę. Klasa ta zawiera 
+Klasa "Game Credits" wyświetla informacje o zakończeniu gry, w tym podziękowania, informacje o autorze i komunikat o zakończeniu programu po kliknięciu klawisza "Enter".
