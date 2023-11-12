@@ -23,12 +23,15 @@ namespace OutputProgram   /// Przestrzeń wyjściowa - miejce deklaracji obiekt�
             gameMenu_Obj.intro();   /// Ekran tytułowy
             gameMenu_Obj.instruction();   /// Instrukcja gry
 
-            // Gra - zapętlenie gry: (w celu umożliwienia ponownej gry)
+            /// Gra - zapętlenie gry: (w celu umożliwienia ponownej gry)
             string isGameLoop = "yes";
             while (isGameLoop == "yes")
             {
-                Game gameLoop = new Game();   /// Tworzenie zmiennej z instancją klasy GameMenu
-                (string[,], string[,,]) playersData_AR = gameLoop.setPlayersShips();
+                /// Tworzenie instancji klasy GameMenu:
+                Game game = new Game();
+
+                /// Ustawianie statków:
+                (string[,], string[,,]) playersData_AR = game.setPlayersShips();
                 string[,] playersShipCoor_AR = new string[2, 7];
                 /// Użyłem tego typu tablicy ([,,]), gdyż wyświetlanie danych z tablic i wkładanie do nich zmodyfikowanych wartości jest 
                 /// łatwiejsze, niż w przypadku innych (do już określonych indeksowo na każdą zagnieżdżoną tablicę, nie tak jak w 
@@ -36,8 +39,10 @@ namespace OutputProgram   /// Przestrzeń wyjściowa - miejce deklaracji obiekt�
                 string[,,] playersBoardContent_AR = new string[2, 10, 10];
                 playersShipCoor_AR = playersData_AR.Item1;
                 playersBoardContent_AR = playersData_AR.Item2;
+
                 /// Walka:
-                string winner = gameLoop.fight(playersShipCoor_AR, playersBoardContent_AR);
+                string winner = game.fight(playersShipCoor_AR, playersBoardContent_AR);
+
                 /// Nagroda:
                 Prize prize = new Prize();
                 isGameLoop = prize.winnerInfo(winner);
