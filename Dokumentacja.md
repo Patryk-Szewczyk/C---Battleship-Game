@@ -15,16 +15,16 @@ Cały program jest napisany w oparciu o programowanie obiektowe. Program składa
 
 5. Działanie programu:
 Działanie programu rozpoczyna się i kończy tylko i wyłącznie w metodzie "Main()" klasy "Program", wyjściowej przestrzeni nazw "OutputProgram". Lecąc od samej góry tworzymy instancje poszczególnych klas z wykonawczej przestrzni nazw "InputWorkProgram". Kiedy wywołamy metodę danej instancji, przechodzimy do danej metody danej klady wykonawczaj przestrzeni nazw. W wykonawczej przestrzeni nazw w celu uporządkowania kodu użyto dziedziczenia do wskazania które klasy są nadrzędna, a które potomne. Mapa dziedziczenia klas przedstawia się następująco:
-    Program ---> Game Intro,
-                GameLoop, -----> GameProper, ---> BoardContentMaker,
-                GameCredits      Prize            ShipBuildChecker,
-                                                ShipCannon
+Program ---> Game Intro,
+             GameLoop, -----> GameProper, ---> BoardContentMaker,
+             GameCredits      Prize            ShipBuildChecker,
+                                               ShipCannon
 W praktyce dziedziczenie nie jest w ogóle potrzebne, ale tak jak napisano powyżej ma ono zasadnicze znaczenie w porządkowaniu klas. 
 Kod programu jest kompilowany i wywoływany od góry do dołu tylko i wyłącznie w klasie Program, a jako że znajdują się w niej polecenia dotyczące utworzenia instancji trzech klas potomnych i wywołania ich metod, program zatrzyma się na instancji GameLoop, aby utworzyć wszystkie instancjie klas potomnych z klasy "GameLoop", wykona ich metody i dopiero ruszy dalej do utworzenia instancji klasy GameCredits. Reasumując, patrząc na mapę widać, że zanim program dotrze do utworzenia instancji klasy "GameCredits" i wywołania jej metody, utworzy wszystkie instancje klas podomnych klasy "GameLoop".
 Szczególną uwagę trzeba zwrócić na klasę "GameLoop" która jest jedną wielką pętlą, umożliwiającą na ponowną grę, kiedy gracze zdecydują się ponownie zagrać, po uprzednio zakończonej sesji. W klasach potomnych tejże klasy ("GameProper", "Prize") mamy do czynienia z kolejnymi pętlami, a w "GameProper" aż z kilkoma zagnieżdżonymi, dzięki którym przy małym nakładzie kodu można wyznaczyć statki dla dwóch grach, zresetować współrzędne danego statku, jak również całą grę, w celu ponownego zagrania w nią.
 
-6. Biblioteki:
-W programie znajdują się dwie przestrzeni nazw odpowiedzialnych za dołączanie określonych bibliotek. Są to kolejno: System, System.Runtime.CompilerServices, System.Runtime.InteropServices, System.Collections.Generic, System.Runtime.Versioning, System.Runtime.ExceptionServices.
+6. Technologie i Biblioteki:
+Program został napisany w całości w języku programowania C# bez użycia frameworków. W programie znajdują się dwie przestrzenie nazw odpowiedzialnych za dołączanie określonych bibliotek. Są to kolejno: System i System.Collections.Generic.
 "System" - zawiera podstawowe typy i klasy, takie jak "Console", czy "String".
 "System.Collections.Generic" - oferuje generyczne kolekcje, takie jak "List".
 
@@ -35,6 +35,32 @@ Klasa "GameIntro" "intro()" odpowiada za wyświetlenie wprowadzenia do gry, w kt
 Klasa "GameLoop" odpowiada za wywoływanie "właściwego" kodu gry w pętli, dopóki gracze po zakończonej rozgrywce zdecydują się zakończyć grę. Szczegóły odnośnie tej klasy i jej klas potomnych będą omówione dalej.
 Klasa "Game Credits" wyświetla informacje o zakończeniu gry, w tym podziękowania, informacje o autorze i komunikat o zakończeniu programu po kliknięciu klawisza "Enter".
 
+7. Klasy przestrzeni nazw "InputWorkProgram":
+W "InputWorkProgram" realizowane są wszytskie operacje związane z grą. Działanie programu w tej przestrzeni opiera się na tworzeniu danych instancji klas i wywoływaniu ich metod. Tak przedstawia się plan klas i kierunek wywoływania kodu odnośnie klas:
+Game Intro,
+GameLoop, -----> GameProper, ---> BoardContentMaker,
+GameCredits      Prize            ShipBuildChecker,
+                                  ShipCannon
+Zaczynając od samej góry program tworzy instancję klasy "GameIntro" i wywołuje jej metody. Następnie idzie do klasy "GameLoop" i robi dokładnie to samo, z tą różnicą, iż tworzy w niej instancje klas "GameProper" i Prize, gdzie wywołuje także ich metody. Po wywołaniu ich metod program przechodzi do "GameCredits", gdzie kończy się gra. W "GameProper" dzieje się to samo co w "GameLoop" - program tworzy instancje klas podomnych "BoardContentMaker", "ShipBuildChecker" i "ShipCannon" klasy nadrzędnej "GameProper".
+Poniżej znajduje się szczegółowy opis wszystkich klas i ich metod z przestrzeni nazw "InputWorkProgram".
+
+8. "GameIntro":
+"GameIntro" odpowiada za wyświetlenie wprowadzenie do gry oraz instrukcji obsługi gry. Klasa ta ma dwie metody, którymi są "intro()" i "instruction()".
+Metoda "intro()" wyświetla na samej górze tytuł gry, który jest napiany w znakach "B". Dalej wyświetla tytuł gry pisany "normalnie" oraz informacje o prawach autorskich. Następnie ukazuje krótki opis gry, wyjaśniający na czy ona polega. Następnie ostrzega użytkownika o błędach, które pojawią się, gdy ten nie zmaksymalizuje swojego ekranu konsoli, w celu pełniego kasowania jej zawartości. Na końcu tej metody znajduje się komnikat, który informuje gracza, że aby przejść dalej trzeba nacisnąć klawisz "Enter". Takich komunikatów jest bardzo dużo w programie, gdyż odpowiadają one za uniemożliwienie niekontrolowanego przejścia dalej, aby np. gracz nie został przeniesiony automatycznie dalej, czego skutkiem byłoby nie dostrzeżenie przez niego przykładowo instrukcji obsługi gry, gdyż zmiana strony nastąpiłaby w zbyt którkim odstępie czasu, aby gracz mógł wychwycić stronę z instrukcją.
+Metoda "instruction()" powoduje wyświetlenie się napisu "INSTRUCTION" składającego się ze znaków "B" i 17 punktów, które mówią o zasadach gry. Na końcu tak jak przy każdej stronie, bądź przy danym etapie pojawia się komunikat o przejściu dalej - tutaj o przejściu do pozycjonowania statków na planszach graczy.
+
+9. "GameLoop":
+
+10. "GameCredits":
+Klasa"GameCredits" zawiera tylko jedną metodę - "showCredits()", która wyświetla napis "GAME CREDITS", składający się ze znaków "B", za pod nim podziękowanie za grę, wraz z informacją o autorze gry. Na dole znajduje się komunikat, informujący o końcu programu, który nastąpi, jeśli zostanie naciśnięty klawisz "Enter".
+
+11. Testy:
+Program ten był wielokrotnie testowany na różnych etapach produkcji. Celem testów było sprawdzenie poprawności działania programu i znalezienie wszystkich możliwych do wystąpienia błędów, z zamiarem likwidacji ich. W celu osiągnięcia jak największej wydajności pracy oraz związanego z tym zminimalizowania występowania błędów, program był często poddawany testom jednostkowym, poszczególnych części metod danych klas i finalnie przy testowaniu działania całych metod oraz zwracania z nich przetworzinych (w nich) zmiennych do innych metod tej samej klasy. Linie kodu odpowiedzialne za testy zostały usunięte, z powodu przejścia przez program wszystkich testów oraz w celu zwiększenia estetyki kodu.
+
+12. Bibliografia:
+Do utworzenia programu użyto wiedzy z następujących źródeł:
+C# 9.0 Leksykon Kieszonkowy - Joseph Albahari, Ben Albahari
+W3School
 
 
 
