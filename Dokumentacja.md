@@ -15,10 +15,10 @@ Cały program jest napisany w oparciu o programowanie obiektowe. Program składa
 
 5. Działanie programu:
 Działanie programu rozpoczyna się i kończy tylko i wyłącznie w metodzie "Main()" klasy "Program", wyjściowej przestrzeni nazw "OutputProgram". Lecąc od samej góry tworzymy instancje poszczególnych klas z wykonawczej przestrzni nazw "InputWorkProgram". Kiedy wywołamy metodę danej instancji, przechodzimy do danej metody danej klady wykonawczaj przestrzeni nazw. W wykonawczej przestrzeni nazw w celu uporządkowania kodu użyto dziedziczenia do wskazania które klasy są nadrzędna, a które potomne. Mapa dziedziczenia klas przedstawia się następująco:
-`Program ---> Game Intro,`
-             `GameLoop, -----> GameProper, ---> BoardContentMaker,`
-             `GameCredits      Prize            ShipBuildChecker,`
-                                               `ShipCannon`
+`Program ---> Game Intro,                                          `
+`             GameLoop, -----> GameProper, ---> BoardContentMaker, `
+`             GameCredits      Prize            ShipBuildChecker,  `
+`                                               ShipCannon         `
 W praktyce dziedziczenie nie jest w ogóle potrzebne, ale tak jak napisano powyżej ma ono zasadnicze znaczenie w porządkowaniu klas. 
 Kod programu jest kompilowany i wywoływany od góry do dołu tylko i wyłącznie w klasie Program, a jako że znajdują się w niej polecenia dotyczące utworzenia instancji trzech klas potomnych i wywołania ich metod, program zatrzyma się na instancji GameLoop, aby utworzyć wszystkie instancjie klas potomnych z klasy "GameLoop", wykona ich metody i dopiero ruszy dalej do utworzenia instancji klasy GameCredits. Reasumując, patrząc na mapę widać, że zanim program dotrze do utworzenia instancji klasy "GameCredits" i wywołania jej metody, utworzy wszystkie instancje klas podomnych klasy "GameLoop".
 Szczególną uwagę trzeba zwrócić na klasę "GameLoop" która jest jedną wielką pętlą, umożliwiającą na ponowną grę, kiedy gracze zdecydują się ponownie zagrać, po uprzednio zakończonej sesji. W klasach potomnych tejże klasy ("GameProper", "Prize") mamy do czynienia z kolejnymi pętlami, a w "GameProper" aż z kilkoma zagnieżdżonymi, dzięki którym przy małym nakładzie kodu można wyznaczyć statki dla dwóch grach, zresetować współrzędne danego statku, jak również całą grę, w celu ponownego zagrania w nią.
@@ -37,10 +37,10 @@ Klasa "Game Credits" wyświetla informacje o zakończeniu gry, w tym podziękowa
 
 7. Klasy przestrzeni nazw "InputWorkProgram":
 W "InputWorkProgram" realizowane są wszytskie operacje związane z grą. Działanie programu w tej przestrzeni opiera się na tworzeniu danych instancji klas i wywoływaniu ich metod. Tak przedstawia się plan klas i kierunek wywoływania kodu odnośnie klas:
-`Game Intro,`
-`GameLoop, -----> GameProper, ---> BoardContentMaker,`
-`GameCredits      Prize            ShipBuildChecker,`
-                                  `ShipCannon`
+`Game Intro,                                          `
+`GameLoop, -----> GameProper, ---> BoardContentMaker, `
+`GameCredits      Prize            ShipBuildChecker,  `
+`                                  ShipCannon         `
 Zaczynając od samej góry program tworzy instancję klasy "GameIntro" i wywołuje jej metody. Następnie idzie do klasy "GameLoop" i robi dokładnie to samo, z tą różnicą, iż tworzy w niej instancje klas "GameProper" i Prize, gdzie wywołuje także ich metody. Po wywołaniu ich metod program przechodzi do "GameCredits", gdzie kończy się gra. W "GameProper" dzieje się to samo co w "GameLoop" - program tworzy instancje klas podomnych "BoardContentMaker", "ShipBuildChecker" i "ShipCannon" klasy nadrzędnej "GameProper".
 Poniżej znajduje się szczegółowy opis wszystkich klas i ich metod z przestrzeni nazw "InputWorkProgram".
 
