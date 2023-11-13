@@ -1,4 +1,4 @@
-##Dokumentacja
+Dokumentacja
 
 1. Opis ogólny projektu:
 Battleship to strategiczno-planszowa gra komputerowa dla dwóch osób. Każdy z graczy posiada po dwie plansze o wielkości, 10x10 pól. Pola oznaczone są poprzez współrzędne literami od "A" do "J" i liczbami "0" do "9". Każdy gracz ustawia swoje statki na planszy. Po ustawieniu statków zaczyna się bitwa, którą wygrywa ten gracz, który zatopi wszystkie statki swojego przeciwnika. Na drugim zaznacza trafione statki przeciwnika i oddane przez siebie strzały. Statki ustawiane są w pionie lub poziomie, w taki sposób, aby nie wychodziły poza planszę oraz nie nakładały się na siebie. Łącznie jest 7 statków o różnej długości. Długość zaczyna się od 2 pól, a kończy na 5 polach. Trafienie okrętu przeciwnika polega na strzale, który jest odgadnięciem położenia jakiegoś statku. Strzały oddawane są naprzemiennie, poprzez podanie współrzędnych pola (np. "B5"). Zatopienie statku ma miejsce wówczas, gdy gracz odgadnie położenie całego statku. O chybieniu informuje gracza znak "O" pojawiający się na polu, które ostrzeliwał. Trafienie jest oznaczane znakiem "X". Wygrywa ten, kto pierwszy zatopi wszystkie statki przeciwnika. 
@@ -54,6 +54,55 @@ W klasie "GameLoop" znajduje się jedna metoda o nazwie "activeGameLoop()". Słu
 Na początku instrukcji pętli program tworzy instancję klasy "GameProper", a następnie wywołuje jej pierwszą metodę – "setPlayerShips()". Metoda ta jest odpowiedzialna za wywołanie wszystkich niezbędnych zapytań oraz operacji z nimi związanych, które mają na celu pobranie od graczy informacji niezbędnych do ustawienia poszczególnych statków. Metoda ta zwraca tablicę trójwymiarową współrzędnych poszczególnych statków obu graczy do klasy "GameProper", a dokładniej do zmiennej "playerShipCoorData_AR", która jest przekazywana jako argument kolejnej metody tej instancji "GameProper") o nazwie „fire()”. Metoda „fire()” odpowiada za przeprowadzenie bitwy pomiędzy dwoma graczami. Dzięki przekazaniu trójwymiarowej tablicy współrzędnych program może na ich podstawie wykonać logikę strzelania gry według ustalonych dla niej instrukcji, w tejże metodzie. Po zakończeniu bitwy „fire()” zwraca informację o zwycięzcy gry do klasy "GameProper" do zmiennej "winner". Pętli gry utworzona zostaje instancja klasy "Prize", a następnie zostaje wywołana jej metoda "winnerInfo()" do której jest przekazywana zmienna "winner", zawierająca informację o zwycięzcy. Metoda "winnerInfo()" wyświetla określony tytułowy komunikat o wygranej (złożony z liter "B"), w zależności od wartości parametru tej metody, czyli informacji o graczu.
 
 10. Klasa "GameProper":
+Klasa "GameProper" zawiera dwie klasy: "setPlayersShips()" i "fight()". Obie te metody zwracają po jednej zmiennej do klasy nadrzędnej "GameLoop", do określonych w niej zmiennych, o których była już mowa.
+Metoda "setPlayersShips()" odpowiada za wszystkie zapytania i operacje dotyczące określania pozycji statków przez graczy oraz przekazywania tych informacji do metody "ShipBuildChecker" instancji "shipCoorBuildChecker", w celu walidacji danych (współrzędnych), i dodawania ich na bieżąco do tablicy współrzędnych statków graczy jako zbite łańcuchy znaków, a następnie do metody "updateBoardContent" klasy "BoardContentMaker" w celu aktualizacji planszy graczy i tablicy współrzędnych statków graczy.
+Na początku metody "setPlayersShips()" mamy deklarację zmiennych, z których trzy są tworzone w oparciu o wywołanie odpowiedniej metody z instancji "BoardContentMaker()". Następnie mamy pętlę, wywoływanie kodu dla bieżącego gracza. Warunkiem zatrzymania pętli jest wartość zmiennej "players", wynosząca więcej niż 2, czyli 3, co oznacza, zakończenie wybierania statków dla ostatniego drugiego gracza, kiedy to inkrementowana zmienna "players" wynosi 3. W pętli tej znajdują się odwołania do dwóch zmiennych z zakresu globalnego metody "setPlayersShips()" - "players" i "shipPage", które służą kolejno do przejścia do kolejnej serii zapytań o położenie statku oraz do wyzerowania stron odnośnie ustawiania statków. Następnie w ów pętli znajduje się kolejna pętla, która jest odpowiedzialna za powtarzanie kodu wyznaczania pozycji współrzędnych statku na planszy danego gracza. Kod ten jest powtarzany tyle razy, ile jest statków, czyli 7 dla każdego gracza z pętli nadrzędnej. Na końcu pętli nadrzędnej (graczy) znajduje się zwrócenie tablicy dwuwymiarowej do zmiennej metody "activeGameLoop", klasy "GameLoop".
+Początkiem pętli potomnej (statki) jest...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 11. Klasa "Prize"
 
@@ -62,16 +111,6 @@ Na początku instrukcji pętli program tworzy instancję klasy "GameProper", a n
 13. Klasa "ShipBuildChecker"
 
 14. Klasa "ShipCannon"
-
-
-
-
-
-
-
-
-
-
 
 15. Klasa "GameCredits":
 Klasa"GameCredits" zawiera tylko jedną metodę - "showCredits()", która wyświetla napis "GAME CREDITS", składający się ze znaków "B", za pod nim podziękowanie za grę, wraz z informacją o autorze gry. Na dole znajduje się komunikat, informujący o końcu programu, który nastąpi, jeśli zostanie naciśnięty klawisz "Enter".
