@@ -3,7 +3,10 @@
 using System;   /// Użycie podstawowej biblioteki C#.
 using OutputProgram;   /// Użycie przestrzeni wyjściowej.
 using InputWorkProgram;   /// Użycie przestrzeni wykonawczej.
-using System.Collections.Generic;   /// Użycie biblioteki, któa daje typ generyczny "List".
+using System.Collections.Generic;   /// Użycie biblioteki, któa daje typ generyczny "List".   /// DLECZEGO TA BIBLIOTEKA?
+/// Ta biblioteka była mi bardzo potrzebna, bo daje dostęp do typu generycznego "List", który można wykorzystać w celu utworzenia tablicy o elastycznej długości.
+/// Elastyczna długość tablicy umożliwia kasowanie indeksów tej tablicy, co jest wymagane w programi tej gry. Jednakże można byłoby to obejść, tworząc nową tablicę
+/// z odpowiednią liczbą indeksów i odpowiednio do nich przypadającymi wartościami, ale nie ma żadnego sensu utrudniać sobie życia i z tego powodu przypiąłem tą bibliotekę.
 
 /// Zrobiłem dwie przesrzenie nazw. Pierwsza jest na klasę główną z główną metodę Main(), która z klasą pełni funkcję tworzenia poszczególnych instancji następujących po sobie
 /// klas wykonawczyh, które pełnią rolę osobnych komponentów. Druga przestrzeń nazw zawiera ów klasy wynonawcze i inne klasy zwracające wartości do klas wykonawczych.
@@ -21,11 +24,11 @@ namespace OutputProgram   /// Przestrzeń wyjściowa - miejce deklaracji obiekt�
 
             /// Gra:
             GameLoop gameLoop = new GameLoop();
-            gameLoop.activeGameLoop();
+            gameLoop.activeGameLoop();   /// Pętla gry
 
             /// Napisy końcowe:
             GameCredits gameCredits = new GameCredits();
-            gameCredits.showCredits();
+            gameCredits.showCredits();   /// Napisy końcowe
         }
     }
 }
@@ -94,7 +97,7 @@ namespace InputWorkProgram   /// Przestrzeń wykonawcza - miejsce deklaracji kla
             Console.WriteLine("");
             Console.WriteLine("- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -");
             Console.WriteLine("");
-            Console.WriteLine("To continue with the ship positing, click ENTER key");
+            Console.WriteLine("To continue with the ships positing on the players boards, click ENTER key");
             Console.WriteLine("");
             Console.ReadLine();
         }
@@ -108,20 +111,13 @@ namespace InputWorkProgram   /// Przestrzeń wykonawcza - miejsce deklaracji kla
             while (isGameLoop == "yes")   /// Zapętlenie gry, w celu umożliwienia ponownego zagrania  w nią:
             {
                 /// Tworzenie instancji klasy GameMenu:
-                GameProper game = new GameProper();
+                GameProper gameProper = new GameProper();
 
                 /// Ustawianie statków:
-                (string[,], string[,,]) playersData_AR = game.setPlayersShips();
-                string[,] playersShipCoor_AR = new string[2, 7];
-                /// Użyłem tego typu tablicy ([,,]), gdyż wyświetlanie danych z tablic i wkładanie do nich zmodyfikowanych wartości jest 
-                /// łatwiejsze, niż w przypadku innych (do już określonych indeksowo na każdą zagnieżdżoną tablicę, nie tak jak w 
-                /// generyku List<typ>, gdzie swobodnie można dodawać wartości do indeksów tak jak w JS z .appendChild())
-                string[,,] playersBoardContent_AR = new string[2, 10, 10];
-                playersShipCoor_AR = playersData_AR.Item1;
-                playersBoardContent_AR = playersData_AR.Item2;
+                string[,] playersShipCoorData_AR = gameProper.setPlayersShips();
 
                 /// Walka:
-                string winner = game.fight(playersShipCoor_AR, playersBoardContent_AR);
+                string winner = gameProper.fight(playersShipCoorData_AR);
 
                 /// Nagroda:
                 Prize prize = new Prize();
@@ -158,7 +154,7 @@ namespace InputWorkProgram   /// Przestrzeń wykonawcza - miejsce deklaracji kla
     }
     public class GameProper : GameLoop
     {
-        public (string[,], string[,,]) setPlayersShips()
+        public string[,] setPlayersShips()
         {
             /// Tworzenie instancji klasy "BoardContentMaker" i wywołanie metoda odpowiadaojący za tablice związane z plansza:
             BoardContentMaker boardContentMaker_Obj = new BoardContentMaker();
@@ -612,15 +608,13 @@ namespace InputWorkProgram   /// Przestrzeń wykonawcza - miejsce deklaracji kla
                     shipPage += shipPageIncrement;
                 }
             }
-            return (playersShipCoor_AR, playersBoardContent_AR);
+            return (playersShipCoor_AR);
         }
-        public string fight(string[,] playersShipCoor_AR, string[,,] playersBoardContent_AR)
+        public string fight(string[,] playersShipCoor_AR)
         {
             /// Deklaracja głównych zmiennych:
             string[,] playersShips_AR_toConvert = new string[2, 7];
-            string[,,] playersBoards_AR = new string[2, 10, 10];
             playersShips_AR_toConvert = playersShipCoor_AR;
-            playersBoards_AR = playersBoardContent_AR;
             string winner = "";
 
             /// Konwersja tablicy [,] współrzędnych statków dla danego gracza na tablicę "List" w celu rozdzielenia stringowych "połączonych" 
