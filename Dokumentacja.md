@@ -96,15 +96,17 @@ Metoda „fight()” klasy „GameProper” odpowiada za wyświetlanie zapytań 
 4. Zmienna „playerReadLine” typu string przechowuje wartość, określającą gracza, który zaczyna bitwę jako pierwszy.
 5. Tablica typu string[,,] „playersBoardFight_AR” przechowuje stan plansz obu graczy podczas bitwy. Przyjmuje trzy wartości. Są nimi: początkowy znak „~” dla pól, które nie zostały ostrzeliwane, „X” dla pól na które przeprowadzono ostrzał i uszkodzono statek oraz „O”, które ostrzelano, ale nie nie trafiono w statek.
 6. Lista List<List<int>> „playersBoardFight_intToSplice_AR”przechowująca współrzędne liczbowe poszczególnych plansz dla danego gracza. Jest ona wykorzystywana do przeprowadzenia poprawnej walidacji w określeniu zgodności ostrzeliwanego pola względem możliwego znajdowania się tam części statku.
-Na początku pętli odpowiedzialnej za przeprowadzenie bitwy wyświetlane są plansze współrzędnych obu graczy. Pod nimi wyświetlane są informacje o statkach graczy, zawierające na początku wartości „??”. Wartości te znajdują się w trójwymiarowej liście o strukturze: gracz → statek → współrzędne → współrzędna. Dane te wyświetlane są względem graczy, tzn. dla gracza pierwszego są wyświetlane informacje o jego statkach. Tak samo jest w przypadku drugiego gracza. Wszystkie te zestawy danych są wyświetlane przy użyciu jednej pętli „for”. Statki obu graczy są rozdzielane od siebie odstępami odpowiedniej długości, względem długości przestrzeni zajmowanej przez wyświetlenie współrzędnych statków graczy. Przykładowo dla statków o długości 5 współrzędnych odstęp będzie mały, a przy statkach o długości 2 współrzędnych odstęp będzie duży. Decyzja o długości odstępu jest podejmowana w warunku instrukcji „switch”, która w tym przypadku skraca kod w przypadku użycia instrukcji „if/else” oraz przede wszystkim zwiększa czytelność kodu. Kiedy gracz zostanie wybrany, fragemnt kodu odpowiedzialny za to zapytanie i operacje z nim związane jest wyłączany z obiegu pętli. Włączony do obiegu zostaje kod, który jest odpowiedzialny za przeprowadzenie bitwy. Na początku tego kodu zmienna „attackPlayer” ma zmienianą wartość. Jeżeli wynosi 0, przyjmuje wartość 1, a jeśli wynosi 1, przyjmuje wartość 0. Zabieg ten ma na celu określenie wroga gracza, który rozpoczął pojedynek. Dzieje się tak, gdyż przed tą operacją zmienna „gamePlayer” przyjmuje wartość zmiennej „attackPlayer” – zmienne te mają wtedy taką samą wartość. W związku z tym faktem, jeżeli wartość „attackPlayer” nie uległaby zmianie, gracz atakujący swojego wroga w praktyce atakowałby samego siebie. Po tej operacji znajduje się zapytanie o wybór gracza, który zacznie bitwę. Po wyborze gracza następuje bitwa w której gracze strzelają na przemian do siebie w celu zatopienia wszystkich statków swojego przeciwnika. Dany gracz jest wówczas proszony o podanie współrzędnej pola planszy przeciwnika, które chce zaatakować. Po podaniu współrzędnej tego pola przechodzi ona pierwszy proces walidacji, gdzie sprawdzane jest czy współrzędna ta nie ma pustej wartości i czy ma odpowiednią długość. Po udanym pierwszym procesie wartość współrzędnej jest konwertowana z typu wartości „C2” na „22” i przechodzi drugi proces walidacji polegający na sprawdzeniu czy wartość ta pole to istnieje na planszy wroga oraz czy współrzędna ta nie została już wcześniej wybrana.. Po pomyślnym wyniku, współrzędna ta wkładana jest to metody „fire()” klasy”ShipCannon”, jako jeden z jej siedmiu argumentów.
+Na początku pętli odpowiedzialnej za przeprowadzenie bitwy wyświetlane są plansze współrzędnych obu graczy. Pod nimi wyświetlane są informacje o statkach graczy, zawierające na początku wartości „??”. Wartości te znajdują się w trójwymiarowej liście o strukturze: gracz → statek → współrzędne → współrzędna. Dane te wyświetlane są względem graczy, tzn. dla gracza pierwszego są wyświetlane informacje o jego statkach. Tak samo jest w przypadku drugiego gracza. Wszystkie te zestawy danych są wyświetlane przy użyciu jednej pętli „for”. Statki obu graczy są rozdzielane od siebie odstępami odpowiedniej długości, względem długości przestrzeni zajmowanej przez wyświetlenie współrzędnych statków graczy. Przykładowo dla statków o długości 5 współrzędnych odstęp będzie mały, a przy statkach o długości 2 współrzędnych odstęp będzie duży. Decyzja o długości odstępu jest podejmowana w warunku instrukcji „switch”, która w tym przypadku skraca kod w przypadku użycia instrukcji „if/else” oraz przede wszystkim zwiększa czytelność kodu. Kiedy gracz zostanie wybrany, fragemnt kodu odpowiedzialny za to zapytanie i operacje z nim związane jest wyłączany z obiegu pętli. Włączony do obiegu zostaje kod, który jest odpowiedzialny za przeprowadzenie bitwy. Na początku tego kodu zmienna „attackPlayer” ma zmienianą wartość. Jeżeli wynosi 0, przyjmuje wartość 1, a jeśli wynosi 1, przyjmuje wartość 0. Zabieg ten ma na celu określenie wroga gracza, który rozpoczął pojedynek. Dzieje się tak, gdyż przed tą operacją zmienna „gamePlayer” przyjmuje wartość zmiennej „attackPlayer” – zmienne te mają wtedy taką samą wartość. W związku z tym faktem, jeżeli wartość „attackPlayer” nie uległaby zmianie, gracz atakujący swojego wroga w praktyce atakowałby samego siebie. Po tej operacji znajduje się zapytanie o wybór gracza, który zacznie bitwę. Po wyborze gracza następuje bitwa w której gracze strzelają na przemian do siebie w celu zatopienia wszystkich statków swojego przeciwnika. Dany gracz jest wówczas proszony o podanie współrzędnej pola planszy przeciwnika, które chce zaatakować. Po podaniu współrzędnej tego pola przechodzi ona pierwszy proces walidacji, gdzie sprawdzane jest czy współrzędna ta nie ma pustej wartości i czy ma odpowiednią długość. Po udanym pierwszym procesie wartość współrzędnej jest konwertowana z typu wartości „C2” na „22” i przechodzi drugi proces walidacji polegający na sprawdzeniu czy wartość ta pole to istnieje na planszy wroga oraz czy współrzędna ta nie została już wcześniej wybrana.. Po pomyślnym wyniku, współrzędna ta wkładana jest to metody „fire()” klasy”ShipCannon”, jako jeden z jej siedmiu argumentów, gdzie jest przeprowadzana logika strzelania. Metoda „fire()” zwraca siedem argumentów, niezbędnych do prawidłowego przeprowadzania bitwy. Kiedy któryś z graczy zniszczy wszystkie statki u swojego przeciwnika – następuje koniec bitwy i określenie zwycięzcy. Zwycięzcę określa zwrócona z metody „fire()” zmienna „winner”. Zmienna ta jest zwracana z metody „fight()” klasy „GameProper” do klasy nadrzędnej „GameLoop” do zmiennej „winner” , znajdującej się w wywoływanej metodzie „activeGameLoop()”. Zmienna ta jest później transportowana do wywołania metody „winnerInfo()” instancji klasy „Prize” utworzonej w  tej metodzie („activeGameLoop”) klasy „GameLoop”
 
- wkładana jako jeden z argumentów metody „fire()” klasy „ShipCannon”.
-
-STRONA 970
+11. Klasa "Prize":
 
 
 
 
+
+
+
+STRONA 1005
 
 UWAGA!!!! ZMIEŃ OKREŚLENIE !!!TABLICA!!! W ODNIESIENIU DO !!!LIST!!! NA !!!LISTA!!!
 
@@ -151,13 +153,13 @@ UWAGA!!!! ZMIEŃ OKREŚLENIE !!!TABLICA!!! W ODNIESIENIU DO !!!LIST!!! NA !!!LIS
 
 
 
-11. Klasa "Prize"
 
-12. Klasa "BoardContentMaker"
 
-13. Klasa "ShipBuildChecker"
+12. Klasa "BoardContentMaker":
 
-14. Klasa "ShipCannon"
+13. Klasa "ShipBuildChecker":
+
+14. Klasa "ShipCannon":
 
 15. Klasa "GameCredits":
 Klasa"GameCredits" zawiera tylko jedną metodę. Jest nią "showCredits()", która wyświetla napis "GAME CREDITS", składający się ze znaków "B", za pod nim podziękowanie za grę, wraz z informacją o autorze gry. Na dole znajduje się komunikat, informujący o końcu programu, który nastąpi, jeśli zostanie naciśnięty klawisz "Enter".
