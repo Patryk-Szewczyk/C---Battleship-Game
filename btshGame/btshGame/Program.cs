@@ -3,7 +3,7 @@
 using System;   // Użycie podstawowej biblioteki C#.
 using OutputProgram;   // Użycie przestrzeni wyjściowej.
 using InputWorkProgram;   // Użycie przestrzeni wykonawczej.
-using System.Collections.Generic;   // Użycie biblioteki, któa daje typ generyczny "List".   /// DLECZEGO TA BIBLIOTEKA?
+using System.Collections.Generic;   // Użycie biblioteki, któa daje typ generyczny "List".   // DLECZEGO TA BIBLIOTEKA?
 // Ta biblioteka była mi bardzo potrzebna, bo daje dostęp do typu generycznego "List", który można wykorzystać w celu utworzenia tablicy o elastycznej długości.
 // Elastyczna długość tablicy umożliwia kasowanie indeksów tej tablicy, co jest wymagane w programi tej gry. Jednakże można byłoby to obejść, tworząc nową tablicę
 // z odpowiednią liczbą indeksów i odpowiednio do nich przypadającymi wartościami, ale nie ma żadnego sensu utrudniać sobie życia i z tego powodu przypiąłem tą bibliotekę.
@@ -172,7 +172,7 @@ namespace InputWorkProgram   // Przestrzeń wykonawcza - miejsce deklaracji klas
             bool isDirCoor = false;
             bool isDir = false;
             bool isBegAgn_FromDir = true;
-            bool isCoor = true;  // true - musi być niewidozne dopóki kierunke nie jest określony
+            bool isCoor = true;  // true - musi być niewidozne dopóki kierunek nie jest określony
             string firstCoor = "";
             string[] shipFullCoor = { "" };
             bool isDone = false;
@@ -280,7 +280,7 @@ namespace InputWorkProgram   // Przestrzeń wykonawcza - miejsce deklaracji klas
                                 Console.WriteLine("    ");   // prawa strona planszy
                                 if (i < 9)   // w iteracji dobijamy maksymalnie do 9, bo [i] ma być < 10
                                 {
-                                    Console.Write("     ");   /// lewa strona planszy
+                                    Console.Write("     ");   // lewa strona planszy
                                 }
                                 else if (i >= 9) { }
                             }
@@ -361,8 +361,8 @@ namespace InputWorkProgram   // Przestrzeń wykonawcza - miejsce deklaracji klas
                             // statku z "ShipCheckerBuildera" w przypadku niespełanienia warunków walidacji. Zastosowano ją w powyższym warunku, aby dokładniej
                             // określić w jakiej sytuacji warunek ten ma być spełniony, aby wykonać poniższe instrukcje.
                             // 
-                            //     UWAGA! {?} oznacza to co u góry zapisane, natopiast isDone jest dla wartością wyniku informacji o współrzędnych statku "?".
-                            //     Użyłem isDone, gdyż nie dało się tego zrobić na sanmym shipFullCoolp[], gdyż [bla bla bla] i z tego powodu musiałem zastosować tą zmienną
+                            // UWAGA! {?} oznacza to co u góry zapisane, natopiast isDone jest dla wartością wyniku informacji o współrzędnych statku "?".
+                            // Użyłem isDone, gdyż nie dało się tego zrobić na sanmym shipFullCoolp[], gdyż [bla bla bla] i z tego powodu musiałem zastosować tą zmienną
                         {
                             Console.Clear();
                             Console.WriteLine("");
@@ -442,7 +442,7 @@ namespace InputWorkProgram   // Przestrzeń wykonawcza - miejsce deklaracji klas
                                 Console.WriteLine("");
                                 Console.ReadLine();
                             }
-                            else if (firstCoor.Length == 2)   // Jeżeli wartość i odpowiednia długość jest, wprawdź poprawność wartości.
+                            else if (firstCoor.Length == 2)   // Jeżeli wartość i odpowiednia długość jest, wprowadź poprawność wartości.
                             {
                                 string letter = firstCoor.Substring(0, 1);
                                 string number = firstCoor.Substring(1, 1);
@@ -601,7 +601,7 @@ namespace InputWorkProgram   // Przestrzeń wykonawcza - miejsce deklaracji klas
                         Console.WriteLine("");
                         Console.ReadLine();
                         // Reset wszystkigo co potrzebne do ponownego ustawienia statków dla kolejnego gracza:
-                        isSetPlayerShipCoor = false;   /// ustawione współrzędne statków
+                        isSetPlayerShipCoor = false;   // ustawione współrzędne statków
                         isDir = false;   // usunięty kierunek ostatniego statku
                         isBegAgn_FromDir = true;
                         isCoor = true;   // Niewidoczne, bo najpierw trzeba ogarnąć kierunek, a potem wyświetlić zapytanie o współrzędną początkową
@@ -670,7 +670,7 @@ namespace InputWorkProgram   // Przestrzeń wykonawcza - miejsce deklaracji klas
                     List<int> onceShipCoor_int_AR = new List<int>();
                     for (int k = 0; k < playersShips_string_AR[i][j].Count; k++)   // współrzędne
                     {
-                        // Slicowanie, podmienianie liter na cyfry, łączenie i konwersja na int:
+                        // Podmienianie liter na cyfry, łączenie i konwersja na int:
                         string toSliceVal = playersShips_string_AR[i][j][k];
                         string sign_1_let = toSliceVal.Substring(0, 1);
                         string sign_2_num = toSliceVal.Substring(1, 1);
@@ -702,7 +702,7 @@ namespace InputWorkProgram   // Przestrzeń wykonawcza - miejsce deklaracji klas
             int gamePlayer = attackPlayer;
             string playerReadLine = "";
             bool isPlayerChoose = false;   // Do resetu do GAME AGAIN dodatkoweo swich ten uniemożliwia przejścia do strzelania, przed usunięciem wybierania gracza z konsoli.
-            bool isReturn = true;   // Switch - zrobiłem go, aby zatrzymywać się na tym samym graczu, kiedy poda niepoprawną współrzędną i poda współrzędną, którą już podał.
+            bool isReturn = true;   // Przełącznik - zrobiłem go, aby zatrzymywać się na tym samym graczu, kiedy poda niepoprawną współrzędną i poda współrzędną, którą już podał.
             bool isWinner = false;   // Jeżeli jest zwycięzca, to zatrzymaj zapytnia o atakowanie gracza i aktykuj komunikat o wygranej.
             BoardContentMaker boardContentMaker_Obj = new BoardContentMaker();
             // Tworzenie dwóch graficznych tablic na status walki dla graczy:
@@ -746,13 +746,11 @@ namespace InputWorkProgram   // Przestrzeń wykonawcza - miejsce deklaracji klas
                 Console.WriteLine("");
                 Console.WriteLine("- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -");
                 Console.WriteLine("");
-                // Zrobiłem to ręcznie, ponieważ nie
-                // Wziąłem zrobiłem to ręcznie, bo nie chciałem bawić się z wyznaczaniem odstępów względem długośći, a nie potrzebna jest tu aukurat pętla:
                 string[] space_AR = {"                   ", "              ", "         ", "    "};
                 for (int j = 0; j < 7; j++)
                 {
                     Console.Write("        " + (j + 1).ToString() + ". | ");
-                    for (int k = 0; k < playersShips_unknown_AR[0][j].Count; k++)   /// Poprzednio: "playersShips_string_AR"
+                    for (int k = 0; k < playersShips_unknown_AR[0][j].Count; k++)
                     {
                         // Zrobiłem to na dwie pętle, gyż chciałem mieć odstęp pomiędzy poszczególnyi statkami danego gracza oraz przejście do nowej linii,
                         // a to wszystko w tym samym zakresie (FORy).
@@ -767,7 +765,7 @@ namespace InputWorkProgram   // Przestrzeń wykonawcza - miejsce deklaracji klas
                         }
                     }
                     Console.Write(" |");
-                    // Użyłem switch'a, ponieważ mam dużo opcji z daną wartością do osiągnięcia za pomocą operatora porównania (==):
+                    // Użyłem instrukcji switch, ponieważ mam dużo opcji z daną wartością do osiągnięcia za pomocą operatora porównania (==):
                     switch (playersShips_unknown_AR[0][j].Count)
                     {
                         case 2:
@@ -805,16 +803,11 @@ namespace InputWorkProgram   // Przestrzeń wykonawcza - miejsce deklaracji klas
                 if (isWinner == true)
                 {
                     isFight = false;
-                    // "isFigth" jest odpowiedzialny za robienie pętli, w której są plansze
-                    // i informacje o statkach, graczy i z tego powidyj nie mogę użyć
-                    // bezpoścrednio switcha isFight. Gdybym go użył, pętal zakończyłaby
-                    // działanie, zanim pojawiłby się komunikat o wygranej.
-                    // Mogłem to obejść, nie robiąc takiej mechaniki, a
-                    // poprostu w metodzie fire() lub tej dać u dołu infrmacje o wygranej
-                    // kopiując plansze i informacje o statkach, ALE po co, skoro mogę
-                    // rozwiązać to, zaoszczędzając kilkadziesiąt linijek kodu?
-                    // Dodatkowo gdybym zrobił to w pętli z "isFight", to informacja o
-                    // wygranej wyświetliłąby sie po informacji o zapisanej wspólrzędnej, 
+                    // "isFigth" jest odpowiedzialny za robienie pętli, w której są plansze i informacje o statkach, graczy i z tego powidyj nie mogę użyć
+                    // bezpoścrednio switcha isFight. Gdybym go użył, pętal zakończyłaby działanie, zanim pojawiłby się komunikat o wygranej.
+                    // Mogłem to obejść, nie robiąc takiej mechaniki, a poprostu w metodzie fire() lub tej dać u dołu infrmacje o wygranej
+                    // kopiując plansze i informacje o statkach, ALE po co, skoro mogę rozwiązać to, zaoszczędzając kilkadziesiąt linijek kodu?
+                    // Dodatkowo gdybym zrobił to w pętli z "isFight", to informacja o wygranej wyświetliłąby sie po informacji o zapisanej wspólrzędnej, 
                     // a ja chcę ją mieś osobno.
                 }
                 if (isPlayerChoose == false && isFight == true)
@@ -826,8 +819,8 @@ namespace InputWorkProgram   // Przestrzeń wykonawcza - miejsce deklaracji klas
                     {
                         isPlayerChoose = true;
                         attackPlayer = 0;
-                        // Dlaczego 1, a nie zero i u dołu tak samo? Bo w atakowaniu wroga za każdym razem zmieniem tą zmienną: 0 > 1 > 0 > 1,
-                        // (odpowiedni indeks od razu) kiedy gracze atakują się nawzajem i nie chciałem robić dodatkowego tam bool'owego swicha.
+                        // Dlaczego 1, a nie zero i u dołu tak samo? Bo w atakowaniu wroga za każdym razem zmieniane tą zmienną: 0 -> 1 | 0 -> 1,
+                        // (odpowiedni indeks od razu) kiedy gracze atakują się nawzajem i nie chciałem robić dodatkowego tam bool'a.
                         Console.WriteLine("");
                         Console.WriteLine("You choose: PLAYER 1");
                         Console.WriteLine("");
@@ -1109,7 +1102,7 @@ namespace InputWorkProgram   // Przestrzeń wykonawcza - miejsce deklaracji klas
         {
             // Deklaracja tablicy trójwymiarowej o nieznanej liczbie wszystkich indeksów mieszczącej
             // wszstkie zestawy dostępnych pól na daną długość w zależności od kierunku statku:
-            List<List<List<int>>> mainArray = new List<List<List<int>>>();   /// kierunek -> długość -> zestaw niedostępnych pól
+            List<List<List<int>>> mainArray = new List<List<List<int>>>();   // kierunek -> długość -> zestaw niedostępnych pól -> niedstępne pole
             // Poszczególne zestawy dostępnych pól w danym kierunku statku w zależności od jego długości
             List<List<int>> length_B = new List<List<int>>();
             List<List<int>> length_R = new List<List<int>>();
@@ -1153,8 +1146,7 @@ namespace InputWorkProgram   // Przestrzeń wykonawcza - miejsce deklaracji klas
             List<List<int>> new_B_FusionVal_AR = new List<List<int>>();
             List<List<int>> new_R_FusionVal_AR = new List<List<int>>();
             // Łączenie poszczególnych tablic w celu uzyskania poprawnych zestawów dostępnych pól względem długości i statku:
-            // WYJAŚNIENIE: 
-            // Jeżeli mam statek o długości 3 i pionowej pozycji położenia, to kiedy kładę go na np. I7 i mam jako
+            // WYJAŚNIENIE: Jeżeli mam statek o długości 3 i pionowej pozycji położenia, to kiedy kładę go na np. I7 i mam jako
             // ogranicznik TYLKO tablicę odpowiadającej początkowi współrzędnej początkowej tego statku (przy długości 3 - linia pól H), 
             // która leżąc od dolnej krawędzi planszy znajdowałaby się na pozycji H7, to ogranicznik dotyczyłby tylko wyspółrzędnych z 
             // cyframi należącymi do H, a nie wszystkich pól w dół poczynając od H (H0 -> J9). Użytkownik kładąc więc statek na pozycji
@@ -1193,10 +1185,10 @@ namespace InputWorkProgram   // Przestrzeń wykonawcza - miejsce deklaracji klas
 
             return mainArray;
         }
-        public (string[,,], List<List<int>>) updateBoardContent(List<List<int>> fullIndex_AR, string[] shipFullCoor, string[,,] playersBoardContent_AR, int players, int shipPage)   /// przechowująca 
+        public (string[,,], List<List<int>>) updateBoardContent(List<List<int>> fullIndex_AR, string[] shipFullCoor, string[,,] playersBoardContent_AR, int players, int shipPage)
         {
             // Deklaracja gółwnych zmiennych:
-            List<List<int>> splicedBoard_AR = new List<List<int>>();   // RUCHOMA fizyczna tablica dostępnych pól na statki
+            List<List<int>> splicedBoard_AR = new List<List<int>>();   // RUCHOMA fizyczna lista dostępnych pól na statki
             splicedBoard_AR = fullIndex_AR;
             string[,,] outputBoardData = playersBoardContent_AR;   // STAŁA graficzna tablica na statki (zmiany w wartościach STAŁEJ tablicy)
             int player = players - 1;   // players będzie zawyżone o 1, bo od razu w pętli nastepuje inkrementacja, a indeksy zaczynają się od 0
@@ -1227,7 +1219,7 @@ namespace InputWorkProgram   // Przestrzeń wykonawcza - miejsce deklaracji klas
                 }
                 result_string.Add(fullCoor_string_1_num[i] + fullCoor_string_2_num[i]);
                 result_int = result_string.Select(x => int.Parse(x)).ToList();
-                // Aktualizowanie tablicy   /// UWAGA: "outputBoardData" to tablica dwuwymiarowa 10x10
+                // Aktualizowanie tablicy:   /// UWAGA: "outputBoardData" to tablica string[,,] o strukturze [2, 10, 10]
                 outputBoardData[player, int.Parse(fullCoor_string_1_num[i]), int.Parse(fullCoor_string_2_num[i])] = currentShip;   // np.: "6 "
             }
 
@@ -1273,7 +1265,7 @@ namespace InputWorkProgram   // Przestrzeń wykonawcza - miejsce deklaracji klas
             string dir = direction;
             string lgt = length;
             List<List<int>> fullIndex_AR = fullIndexArray;
-            string[] result = { firstCor };   /// Inicjowanie wyniku z tymczasową wartością, byle tylko spełaniała wymóg returnowania przed ogarnięciem wartości wynikowej
+            string[] result = { firstCor };   // Inicjowanie wyniku z tymczasową wartością, byle tylko spełaniała wymóg returnowania przed ogarnięciem wartości wynikowej
             List<List<List<int>>> dangerFieldsGroup_ARS = dangerFields;
 
             // Wyznaczanie odpowiedniej tabeli zakazanych pól w zależności od długości i kierunku położenia statku:
@@ -1340,7 +1332,7 @@ namespace InputWorkProgram   // Przestrzeń wykonawcza - miejsce deklaracji klas
                         incrVal = 1;
                     }
                     // Tworzenie dalszych współrzędnych:
-                    int nextCoor = fstCoor;   /// Utworzenie zmiennej przechowującej nową aktualną współrzędną (później w FORze)
+                    int nextCoor = fstCoor;   // Utworzenie zmiennej przechowującej nową aktualną współrzędną (później w FORze)
                     for (int k = 1; k < int.Parse(lgt); k++)
                     {
                         nextCoor += incrVal;
@@ -1479,7 +1471,7 @@ namespace InputWorkProgram   // Przestrzeń wykonawcza - miejsce deklaracji klas
     {
         public (List<List<List<int>>>, List<List<List<string>>>, string[,,], List<List<int>>, bool, string) fire(List<List<List<int>>> playersShips_int_AR, List<List<List<string>>> playersShips_string_AR, List<List<List<string>>> playersShips_unknown_AR, string[,,] playersBoardFight_AR, List<List<int>> playersBoardFight_intToSplice_AR, int fireCoorConv, int player)
         {
-            /// Deklaracja głównych zmiennych:
+            // Deklaracja głównych zmiennych:
             List<List<List<int>>> playerShips_Coor_AR = new List<List<List<int>>>();
             playerShips_Coor_AR = playersShips_int_AR;
             List<List<List<string>>> playerShip_Stat_AR = new List<List<List<string>>>();
@@ -1511,14 +1503,14 @@ namespace InputWorkProgram   // Przestrzeń wykonawcza - miejsce deklaracji klas
                 }
             }
 
-            // SPLICOWANIE tablicy List w celu uniknięcia nakładania się oznaczeń odnośnie statków:
+            // Usuwanie indeksów listy w celu uniknięcia nakładania się oznaczeń odnośnie statków:
             for (int i = 0; i < playerBoardFight_toSplice_AR[player].Count; i++)   // Czy wybrana współrzęnda jest w RUCHOMEJ tablicy dostępnych pól graficznego stanu biewy?
             {
                 if (fireCoorConv == playerBoardFight_toSplice_AR[player][i])
                 {
                     // Pole to istnieje - czyli strzał był dostępny:
                     
-                    // Splicowanie:
+                    // Usuwanie indeksów:
                     int startIndex_1 = playerBoardFight_toSplice_AR[player].IndexOf(fireCoorConv);
                     playerBoardFight_toSplice_AR[player].RemoveRange(startIndex_1, 1);
                     
@@ -1558,10 +1550,10 @@ namespace InputWorkProgram   // Przestrzeń wykonawcza - miejsce deklaracji klas
                             playersBoard_Fight_AR[player, fireCoorConv_s1, fireCoorConv_s2] = "X ";
                         }
 
-                        // Splicowanie RUCHOMEJ tablicy intowej:
+                        // Usuwanie indeksu RUCHOMEJ tablicy intowej:
                         int[,] allShipsLength_AR = new int[2, 7];
                         // Tablica na długości ainekdów statków w tablicy splicowanej - w celu ustalenia czy 
-                        // dany statek jest zatopiony (jeśli jego długość w tablicy wynosi 0 [splicowanie])
+                        // dany statek jest zatopiony (jeśli jego długość w tablicy wynosi 0 [usuwanie indeksu])
                         for (int x = 0; x < 7; x++)
                         {
                             for (int y = 0; y < playerShips_Coor_AR[player][x].Count; y++)
