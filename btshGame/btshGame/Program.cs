@@ -703,6 +703,7 @@ namespace InputWorkProgram   // Przestrzeń wykonawcza - miejsce deklaracji klas
             string playerReadLine = "";
             bool isPlayerChoose = false;   // Do resetu do GAME AGAIN dodatkoweo swich ten uniemożliwia przejścia do strzelania, przed usunięciem wybierania gracza z konsoli.
             bool isReturn = true;   // Przełącznik - zrobiłem go, aby zatrzymywać się na tym samym graczu, kiedy poda niepoprawną współrzędną i poda współrzędną, którą już podał.
+            bool isMiss = true;   // Jeżeli gracz trafił wroga, następny strzał będzie tego bracza. Gracz strzela dokpóki nie trafi. Jeżeli nie trafi, strzelać zaczyna wróg. I odnośnie wroga jest tak samo.
             bool isWinner = false;   // Jeżeli jest zwycięzca, to zatrzymaj zapytnia o atakowanie gracza i aktykuj komunikat o wygranej.
             BoardContentMaker boardContentMaker_Obj = new BoardContentMaker();
             // Tworzenie dwóch graficznych tablic na status walki dla graczy:
@@ -819,6 +820,7 @@ namespace InputWorkProgram   // Przestrzeń wykonawcza - miejsce deklaracji klas
                     {
                         isPlayerChoose = true;
                         attackPlayer = 0;
+                        gamePlayer = 1;
                         // Dlaczego 1, a nie zero i u dołu tak samo? Bo w atakowaniu wroga za każdym razem zmieniane tą zmienną: 0 -> 1 | 0 -> 1,
                         // (odpowiedni indeks od razu) kiedy gracze atakują się nawzajem i nie chciałem robić dodatkowego tam bool'a.
                         Console.WriteLine("");
@@ -832,6 +834,7 @@ namespace InputWorkProgram   // Przestrzeń wykonawcza - miejsce deklaracji klas
                     {
                         isPlayerChoose = true;
                         attackPlayer = 1;
+                        gamePlayer = 0;
                         Console.WriteLine("");
                         Console.WriteLine("You choose: PLAYER 2");
                         Console.WriteLine("");
@@ -854,15 +857,21 @@ namespace InputWorkProgram   // Przestrzeń wykonawcza - miejsce deklaracji klas
                     if (isReturn == true)
                     {
                         isReturn = false;
-                        gamePlayer = attackPlayer;
-                        if (attackPlayer == 0)
+                        // "isMiss" - jeżeli gracz trafił wroga, następny strzał będzie tego bracza. Gracz strzela dokpóki nie trafi.
+                        // Jeżeli nie trafi, strzelać zaczyna wróg. I odnośnie wroga jest tak samo.
+                        if (isMiss == true)
                         {
-                            attackPlayer = 1;
+                            gamePlayer = attackPlayer;
+                            if (attackPlayer == 0)
+                            {
+                                attackPlayer = 1;
+                            }
+                            else if (attackPlayer == 1)
+                            {
+                                attackPlayer = 0;
+                            }
                         }
-                        else if (attackPlayer == 1)
-                        {
-                            attackPlayer = 0;
-                        }
+                        else { }
                     }
                     else { }
                     Console.WriteLine("PLAYER " + (gamePlayer + 1).ToString());
@@ -959,13 +968,14 @@ namespace InputWorkProgram   // Przestrzeń wykonawcza - miejsce deklaracji klas
 
                                 // Tworzenie instancji klasy strzelania i odpalanie medoty odpowiedzialnej za logikę strzelania:
                                 ShipCannon shipCannon = new ShipCannon();
-                                (List<List<List<int>>>, List<List<List<string>>>, string[,,], List<List<int>>, bool, string) tuples_2 = shipCannon.fire(playersShips_int_AR, playersShips_string_AR, playersShips_unknown_AR, playersBoardFight_AR, playersBoardFight_intToSplice_AR, fireCoorConv, attackPlayer);
+                                (List<List<List<int>>>, List<List<List<string>>>, string[,,], List<List<int>>, bool, bool, string) tuples_2 = shipCannon.fire(playersShips_int_AR, playersShips_string_AR, playersShips_unknown_AR, playersBoardFight_AR, playersBoardFight_intToSplice_AR, fireCoorConv, attackPlayer);
                                 playersShips_int_AR = tuples_2.Item1;
                                 playersShips_unknown_AR = tuples_2.Item2;
                                 playersBoardFight_AR = tuples_2.Item3;
                                 playersBoardFight_intToSplice_AR = tuples_2.Item4;
-                                isWinner = tuples_2.Item5;
-                                winner = tuples_2.Item6;
+                                isMiss = tuples_2.Item5;
+                                isWinner = tuples_2.Item6;
+                                winner = tuples_2.Item7;
                             }
                             else if (isIn_avalLet_AR == false || isIn_avalNum_AR == false)
                             {
@@ -1469,7 +1479,7 @@ namespace InputWorkProgram   // Przestrzeń wykonawcza - miejsce deklaracji klas
     }
     public class ShipCannon : GameProper
     {
-        public (List<List<List<int>>>, List<List<List<string>>>, string[,,], List<List<int>>, bool, string) fire(List<List<List<int>>> playersShips_int_AR, List<List<List<string>>> playersShips_string_AR, List<List<List<string>>> playersShips_unknown_AR, string[,,] playersBoardFight_AR, List<List<int>> playersBoardFight_intToSplice_AR, int fireCoorConv, int player)
+        public (List<List<List<int>>>, List<List<List<string>>>, string[,,], List<List<int>>, bool, bool, string) fire(List<List<List<int>>> playersShips_int_AR, List<List<List<string>>> playersShips_string_AR, List<List<List<string>>> playersShips_unknown_AR, string[,,] playersBoardFight_AR, List<List<int>> playersBoardFight_intToSplice_AR, int fireCoorConv, int player)
         {
             // Deklaracja głównych zmiennych:
             List<List<List<int>>> playerShips_Coor_AR = new List<List<List<int>>>();
@@ -1487,6 +1497,7 @@ namespace InputWorkProgram   // Przestrzeń wykonawcza - miejsce deklaracji klas
 
             // Logika strzelania:
             bool isHit = false;
+            bool isMiss = false;
             for (int i = 0; i < 7; i++)
             {
                 for (int j = 0; j < playerShips_Coor_AR[player][i].Count; j++)
@@ -1501,6 +1512,13 @@ namespace InputWorkProgram   // Przestrzeń wykonawcza - miejsce deklaracji klas
                         // PUDŁO
                     }
                 }
+            }
+            if (isHit == true)   // Jednorazowe wyznaczanie wartości "isMiss":
+            {
+                isMiss = false;
+            }
+            else {
+                isMiss = true;
             }
 
             // Usuwanie indeksów listy w celu uniknięcia nakładania się oznaczeń odnośnie statków:
@@ -1607,7 +1625,7 @@ namespace InputWorkProgram   // Przestrzeń wykonawcza - miejsce deklaracji klas
                     // Pole to nie istnieje czyli strzał był niedostępny:
                 }
             }
-            return (playerShips_Coor_AR, unknownSign_AR, playersBoard_Fight_AR, playerBoardFight_toSplice_AR, isWinner, winner);
+            return (playerShips_Coor_AR, unknownSign_AR, playersBoard_Fight_AR, playerBoardFight_toSplice_AR, isMiss, isWinner, winner);
         }
     }
 }
