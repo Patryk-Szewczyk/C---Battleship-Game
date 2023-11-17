@@ -702,6 +702,7 @@ namespace InputWorkProgram   // Przestrzeń wykonawcza - miejsce deklaracji klas
             int gamePlayer = attackPlayer;
             string playerReadLine = "";
             bool isPlayerChoose = false;   // Do resetu do GAME AGAIN dodatkoweo swich ten uniemożliwia przejścia do strzelania, przed usunięciem wybierania gracza z konsoli.
+            bool isSetBeginPlayer_FirstTime = false;
             bool isReturn = true;   // Przełącznik - zrobiłem go, aby zatrzymywać się na tym samym graczu, kiedy poda niepoprawną współrzędną i poda współrzędną, którą już podał.
             bool isMiss = true;   // Jeżeli gracz trafił wroga, następny strzał będzie tego bracza. Gracz strzela dokpóki nie trafi. Jeżeli nie trafi, strzelać zaczyna wróg. I odnośnie wroga jest tak samo.
             bool isWinner = false;   // Jeżeli jest zwycięzca, to zatrzymaj zapytnia o atakowanie gracza i aktykuj komunikat o wygranej.
@@ -716,7 +717,37 @@ namespace InputWorkProgram   // Przestrzeń wykonawcza - miejsce deklaracji klas
             {
                 Console.Clear();
                 Console.WriteLine("");
-                Console.WriteLine("                  PLAYER 1                         PLAYER 2              ");
+                if (isPlayerChoose == true)
+                {
+                    if (isMiss == true)
+                    {
+                        isSetBeginPlayer_FirstTime = true;
+                        if (gamePlayer == 1)   // Odwrotność - bo zamiana "gamePlayer" i "attackPlayer" znajduje się na dole
+                        {
+                            Console.WriteLine("                 > PLAYER 1                        PLAYER 2              ");
+                        }
+                        else if (gamePlayer == 0)
+                        {
+                            Console.WriteLine("                  PLAYER 1                        > PLAYER 2              ");
+                        }
+                    }
+                    if (isMiss == false)
+                    {
+                        isSetBeginPlayer_FirstTime = true;
+                        if (gamePlayer == 0)
+                        {
+                            Console.WriteLine("                 > PLAYER 1                        PLAYER 2              ");
+                        }
+                        else if (gamePlayer == 1)
+                        {
+                            Console.WriteLine("                  PLAYER 1                        > PLAYER 2              ");
+                        }
+                    }
+                }
+                else 
+                {
+                    Console.WriteLine("                  PLAYER 1                         PLAYER 2              ");
+                }
                 Console.WriteLine("                                                                         ");
                 Console.WriteLine("            0 1 2 3 4 5 6 7 8 9              0 1 2 3 4 5 6 7 8 9         ");
                 Console.WriteLine("            -------------------              -------------------         ");
@@ -874,121 +905,125 @@ namespace InputWorkProgram   // Przestrzeń wykonawcza - miejsce deklaracji klas
                         else { }
                     }
                     else { }
-                    Console.WriteLine("PLAYER " + (gamePlayer + 1).ToString());
-                    Console.WriteLine("");
-                    Console.WriteLine("Attack: PLAYER " + (attackPlayer + 1));
-                    Console.WriteLine("Choose field, which you want attack.");
-                    Console.WriteLine("Write value from A0 to J9:");
-                    Console.WriteLine("");
-                    string fireCoor = Console.ReadLine();
-                    if (fireCoor == null)   // Sprawdzenie czy współrzędna początkowa nie jest pusta.
+                    if (isSetBeginPlayer_FirstTime == true)   // Jeżeli zostanie wskazany gracz, który zaczyna grę:
                     {
-                        isReturn = false;
+                        Console.WriteLine("PLAYER " + (gamePlayer + 1).ToString());
                         Console.WriteLine("");
-                        Console.WriteLine("You can\'t left empty value.");
+                        Console.WriteLine("Attack: PLAYER " + (attackPlayer + 1));
+                        Console.WriteLine("Choose field, which you want attack.");
+                        Console.WriteLine("Write value from A0 to J9:");
                         Console.WriteLine("");
-                        Console.WriteLine("Click ENTER key to continue:");
-                        Console.WriteLine("");
-                        Console.ReadLine();
-
-                    }
-                    else if (fireCoor != null)
-                    {
-                        if (fireCoor.Length != 2)   // Sprawdzenie czy współrzędna początkowa ma odpowiednią długość.
+                        string fireCoor = Console.ReadLine();
+                        if (fireCoor == null)   // Sprawdzenie czy współrzędna początkowa nie jest pusta.
                         {
                             isReturn = false;
                             Console.WriteLine("");
-                            Console.WriteLine("Your value\'s length is uncorrect.");
+                            Console.WriteLine("You can\'t left empty value.");
                             Console.WriteLine("");
                             Console.WriteLine("Click ENTER key to continue:");
                             Console.WriteLine("");
                             Console.ReadLine();
+
                         }
-                        else if (fireCoor.Length == 2)   // Jeżeli wartość i odpowiednia długość jest, wprawdź poprawność wartości.
+                        else if (fireCoor != null)
                         {
-                            string letter = fireCoor.Substring(0, 1);
-                            string number = fireCoor.Substring(1, 1);
-                            string[] avalLet_AR = { "A", "B", "C", "D", "E", "F", "G", "H", "I", "J" };
-                            string[] avalNum_AR = { "0", "1", "2", "3", "4", "5", "6", "7", "8", "9" };
-                            bool isIn_avalLet_AR = false;
-                            bool isIn_avalNum_AR = false;
-                            for (int i = 0; i < avalLet_AR.Length; i++)
-                            {
-                                // Sprawdzenie czy pierwszy substringowany indeks współrzędnej początekowej istnieje w tablicy liter:
-                                if (avalLet_AR[i] == letter)
-                                {
-                                    isIn_avalLet_AR = true;
-                                }
-                                else { }
-                                // Sprawdzenie czy drugi substringowany indeks współrzędnej początekowej istnieje w tablicy cyfr:
-                                if (avalNum_AR[i] == number)
-                                {
-                                    isIn_avalNum_AR = true;
-                                }
-                                else { }
-                            }
-                            if (isIn_avalLet_AR == true && isIn_avalNum_AR == true)
-                            {
-                                // Konwersja: "D2" -> "32" (część potrzebnych rzeczy znajduje się na górze)
-                                string letToNum = "";
-                                string joinVal = "";
-                                int fireCoorConv = 0;
-                                for (int i = 0; i < avalLet_AR.Length; i++)
-                                {
-                                    if (letter == avalLet_AR[i])
-                                    {
-                                        letToNum = avalNum_AR[i];
-                                        joinVal = letToNum + number;
-                                        fireCoorConv = int.Parse(joinVal);
-                                    }
-                                    else { }
-                                }
-
-                                // Sprawdzanie czy wybrana współrzędna istnieje w tablicy współrzędnych: (tablica stringoaw [,,])
-                                if (playersBoardFight_AR[attackPlayer, int.Parse(letToNum), int.Parse(number)] == "X " || playersBoardFight_AR[attackPlayer, int.Parse(letToNum), int.Parse(number)] == "O ")
-                                {
-                                    isReturn = false;
-                                    Console.WriteLine("");
-                                    Console.WriteLine("You already attacked this field.");
-                                    Console.WriteLine("");
-                                    Console.WriteLine("Click ENTER key to continue:");
-                                    Console.WriteLine("");
-                                    Console.ReadLine();
-                                }
-                                else
-                                {
-                                    isReturn = true;
-                                    Console.WriteLine("");
-                                    Console.WriteLine("Choosed coordinate: " + fireCoor.ToString());
-                                    Console.WriteLine("");
-                                    Console.WriteLine("Click ENTER key to continue:");
-                                    Console.WriteLine("");
-                                    Console.ReadLine();
-                                }
-
-                                // Tworzenie instancji klasy strzelania i odpalanie medoty odpowiedzialnej za logikę strzelania:
-                                ShipCannon shipCannon = new ShipCannon();
-                                (List<List<List<int>>>, List<List<List<string>>>, string[,,], List<List<int>>, bool, bool, string) tuples_2 = shipCannon.fire(playersShips_int_AR, playersShips_string_AR, playersShips_unknown_AR, playersBoardFight_AR, playersBoardFight_intToSplice_AR, fireCoorConv, attackPlayer);
-                                playersShips_int_AR = tuples_2.Item1;
-                                playersShips_unknown_AR = tuples_2.Item2;
-                                playersBoardFight_AR = tuples_2.Item3;
-                                playersBoardFight_intToSplice_AR = tuples_2.Item4;
-                                isMiss = tuples_2.Item5;
-                                isWinner = tuples_2.Item6;
-                                winner = tuples_2.Item7;
-                            }
-                            else if (isIn_avalLet_AR == false || isIn_avalNum_AR == false)
+                            if (fireCoor.Length != 2)   // Sprawdzenie czy współrzędna początkowa ma odpowiednią długość.
                             {
                                 isReturn = false;
                                 Console.WriteLine("");
-                                Console.WriteLine("This area NOT exists in enemy board!");
+                                Console.WriteLine("Your value\'s length is uncorrect.");
                                 Console.WriteLine("");
                                 Console.WriteLine("Click ENTER key to continue:");
                                 Console.WriteLine("");
                                 Console.ReadLine();
                             }
+                            else if (fireCoor.Length == 2)   // Jeżeli wartość i odpowiednia długość jest, wprawdź poprawność wartości.
+                            {
+                                string letter = fireCoor.Substring(0, 1);
+                                string number = fireCoor.Substring(1, 1);
+                                string[] avalLet_AR = { "A", "B", "C", "D", "E", "F", "G", "H", "I", "J" };
+                                string[] avalNum_AR = { "0", "1", "2", "3", "4", "5", "6", "7", "8", "9" };
+                                bool isIn_avalLet_AR = false;
+                                bool isIn_avalNum_AR = false;
+                                for (int i = 0; i < avalLet_AR.Length; i++)
+                                {
+                                    // Sprawdzenie czy pierwszy substringowany indeks współrzędnej początekowej istnieje w tablicy liter:
+                                    if (avalLet_AR[i] == letter)
+                                    {
+                                        isIn_avalLet_AR = true;
+                                    }
+                                    else { }
+                                    // Sprawdzenie czy drugi substringowany indeks współrzędnej początekowej istnieje w tablicy cyfr:
+                                    if (avalNum_AR[i] == number)
+                                    {
+                                        isIn_avalNum_AR = true;
+                                    }
+                                    else { }
+                                }
+                                if (isIn_avalLet_AR == true && isIn_avalNum_AR == true)
+                                {
+                                    // Konwersja: "D2" -> "32" (część potrzebnych rzeczy znajduje się na górze)
+                                    string letToNum = "";
+                                    string joinVal = "";
+                                    int fireCoorConv = 0;
+                                    for (int i = 0; i < avalLet_AR.Length; i++)
+                                    {
+                                        if (letter == avalLet_AR[i])
+                                        {
+                                            letToNum = avalNum_AR[i];
+                                            joinVal = letToNum + number;
+                                            fireCoorConv = int.Parse(joinVal);
+                                        }
+                                        else { }
+                                    }
+
+                                    // Sprawdzanie czy wybrana współrzędna istnieje w tablicy współrzędnych: (tablica stringoaw [,,])
+                                    if (playersBoardFight_AR[attackPlayer, int.Parse(letToNum), int.Parse(number)] == "X " || playersBoardFight_AR[attackPlayer, int.Parse(letToNum), int.Parse(number)] == "O ")
+                                    {
+                                        isReturn = false;
+                                        Console.WriteLine("");
+                                        Console.WriteLine("You already attacked this field.");
+                                        Console.WriteLine("");
+                                        Console.WriteLine("Click ENTER key to continue:");
+                                        Console.WriteLine("");
+                                        Console.ReadLine();
+                                    }
+                                    else
+                                    {
+                                        isReturn = true;
+                                        Console.WriteLine("");
+                                        Console.WriteLine("Choosed coordinate: " + fireCoor.ToString());
+                                        Console.WriteLine("");
+                                        Console.WriteLine("Click ENTER key to continue:");
+                                        Console.WriteLine("");
+                                        Console.ReadLine();
+                                    }
+
+                                    // Tworzenie instancji klasy strzelania i odpalanie medoty odpowiedzialnej za logikę strzelania:
+                                    ShipCannon shipCannon = new ShipCannon();
+                                    (List<List<List<int>>>, List<List<List<string>>>, string[,,], List<List<int>>, bool, bool, string) tuples_2 = shipCannon.fire(playersShips_int_AR, playersShips_string_AR, playersShips_unknown_AR, playersBoardFight_AR, playersBoardFight_intToSplice_AR, fireCoorConv, attackPlayer);
+                                    playersShips_int_AR = tuples_2.Item1;
+                                    playersShips_unknown_AR = tuples_2.Item2;
+                                    playersBoardFight_AR = tuples_2.Item3;
+                                    playersBoardFight_intToSplice_AR = tuples_2.Item4;
+                                    isMiss = tuples_2.Item5;
+                                    isWinner = tuples_2.Item6;
+                                    winner = tuples_2.Item7;
+                                }
+                                else if (isIn_avalLet_AR == false || isIn_avalNum_AR == false)
+                                {
+                                    isReturn = false;
+                                    Console.WriteLine("");
+                                    Console.WriteLine("This area NOT exists in enemy board!");
+                                    Console.WriteLine("");
+                                    Console.WriteLine("Click ENTER key to continue:");
+                                    Console.WriteLine("");
+                                    Console.ReadLine();
+                                }
+                            }
                         }
                     }
+                    else { }
                 }
                 if (isFight == false)
                 {
