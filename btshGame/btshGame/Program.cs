@@ -91,9 +91,11 @@ namespace InputWorkProgram   // Przestrzeń wykonawcza - miejsce deklaracji klas
             Console.WriteLine("12. If you sink enemy ship, this ship coordinates emerge under boards in players ships info.");
             Console.WriteLine("13. To attack an opponent, the player must enter coordinates such like: \"H8\".");
             Console.WriteLine("14. Players shooting together by turns.");
-            Console.WriteLine("15. The winner is this one who defeats his enemy.");
-            Console.WriteLine("16. The winner get prize in the image of 10 000 $");
-            Console.WriteLine("17. After game players can play game again or get in game credits.");
+            Console.WriteLine("15. If some players hits your enemy, this player can shoot again. This activity repeat as much");
+            Console.WriteLine("    times how many this player hits your enemy's ships.");
+            Console.WriteLine("16. The winner is this one who defeats his enemy.");
+            Console.WriteLine("17. The winner get prize in the image of 10 000 $");
+            Console.WriteLine("18. After game players can play game again or get in game credits.");
             Console.WriteLine("");
             Console.WriteLine("- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -");
             Console.WriteLine("");
@@ -702,7 +704,7 @@ namespace InputWorkProgram   // Przestrzeń wykonawcza - miejsce deklaracji klas
             int gamePlayer = attackPlayer;
             string playerReadLine = "";
             bool isPlayerChoose = false;   // Do resetu do GAME AGAIN dodatkoweo swich ten uniemożliwia przejścia do strzelania, przed usunięciem wybierania gracza z konsoli.
-            bool isSetBeginPlayer_FirstTime = false;
+            bool isSetBeginPlayer_FirstTime = false;   // Jeżeli zostanie wybrany gracz -> pętla wykonuje się ponownie -> wskazywana jest plansza gracz grającego -> do obiegu wchodzi bitwa.
             bool isReturn = true;   // Przełącznik - zrobiłem go, aby zatrzymywać się na tym samym graczu, kiedy poda niepoprawną współrzędną i poda współrzędną, którą już podał.
             bool isMiss = true;   // Jeżeli gracz trafił wroga, następny strzał będzie tego bracza. Gracz strzela dokpóki nie trafi. Jeżeli nie trafi, strzelać zaczyna wróg. I odnośnie wroga jest tak samo.
             bool isWinner = false;   // Jeżeli jest zwycięzca, to zatrzymaj zapytnia o atakowanie gracza i aktykuj komunikat o wygranej.
@@ -724,23 +726,23 @@ namespace InputWorkProgram   // Przestrzeń wykonawcza - miejsce deklaracji klas
                         isSetBeginPlayer_FirstTime = true;
                         if (gamePlayer == 1)   // Odwrotność - bo zamiana "gamePlayer" i "attackPlayer" znajduje się na dole
                         {
-                            Console.WriteLine("                 > PLAYER 1                        PLAYER 2              ");
+                            Console.WriteLine("                > PLAYER 1                         PLAYER 2              ");
                         }
                         else if (gamePlayer == 0)
                         {
-                            Console.WriteLine("                  PLAYER 1                        > PLAYER 2              ");
+                            Console.WriteLine("                  PLAYER 1                       > PLAYER 2              ");
                         }
                     }
-                    if (isMiss == false)
+                    else if (isMiss == false)
                     {
                         isSetBeginPlayer_FirstTime = true;
                         if (gamePlayer == 0)
                         {
-                            Console.WriteLine("                 > PLAYER 1                        PLAYER 2              ");
+                            Console.WriteLine("                > PLAYER 1                         PLAYER 2              ");
                         }
                         else if (gamePlayer == 1)
                         {
-                            Console.WriteLine("                  PLAYER 1                        > PLAYER 2              ");
+                            Console.WriteLine("                  PLAYER 1                       > PLAYER 2              ");
                         }
                     }
                 }
@@ -997,18 +999,17 @@ namespace InputWorkProgram   // Przestrzeń wykonawcza - miejsce deklaracji klas
                                         Console.WriteLine("Click ENTER key to continue:");
                                         Console.WriteLine("");
                                         Console.ReadLine();
+                                        // Tworzenie instancji klasy strzelania i odpalanie medoty odpowiedzialnej za logikę strzelania:
+                                        ShipCannon shipCannon = new ShipCannon();
+                                        (List<List<List<int>>>, List<List<List<string>>>, string[,,], List<List<int>>, bool, bool, string) tuples_2 = shipCannon.fire(playersShips_int_AR, playersShips_string_AR, playersShips_unknown_AR, playersBoardFight_AR, playersBoardFight_intToSplice_AR, fireCoorConv, attackPlayer);
+                                        playersShips_int_AR = tuples_2.Item1;
+                                        playersShips_unknown_AR = tuples_2.Item2;
+                                        playersBoardFight_AR = tuples_2.Item3;
+                                        playersBoardFight_intToSplice_AR = tuples_2.Item4;
+                                        isMiss = tuples_2.Item5;
+                                        isWinner = tuples_2.Item6;
+                                        winner = tuples_2.Item7;
                                     }
-
-                                    // Tworzenie instancji klasy strzelania i odpalanie medoty odpowiedzialnej za logikę strzelania:
-                                    ShipCannon shipCannon = new ShipCannon();
-                                    (List<List<List<int>>>, List<List<List<string>>>, string[,,], List<List<int>>, bool, bool, string) tuples_2 = shipCannon.fire(playersShips_int_AR, playersShips_string_AR, playersShips_unknown_AR, playersBoardFight_AR, playersBoardFight_intToSplice_AR, fireCoorConv, attackPlayer);
-                                    playersShips_int_AR = tuples_2.Item1;
-                                    playersShips_unknown_AR = tuples_2.Item2;
-                                    playersBoardFight_AR = tuples_2.Item3;
-                                    playersBoardFight_intToSplice_AR = tuples_2.Item4;
-                                    isMiss = tuples_2.Item5;
-                                    isWinner = tuples_2.Item6;
-                                    winner = tuples_2.Item7;
                                 }
                                 else if (isIn_avalLet_AR == false || isIn_avalNum_AR == false)
                                 {
